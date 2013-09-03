@@ -1,4 +1,4 @@
 iban4j
 ======
 
-A Java library International Bank Account Number (IBAN) generation
+A Java library for International Bank Account Number (IBAN) generation
