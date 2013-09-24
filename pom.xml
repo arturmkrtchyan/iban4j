@@ -24,6 +24,12 @@
         <developerConnection>scm:git:git@github.com:arturmkrtchyan/iban4j.git</developerConnection>
         <url>scm:git:git@github.com:arturmkrtchyan/iban4j.git</url>
     </scm>
+    
+    <developers>
+        <developer>
+            <name>Artur Mkrtchyan</name>
+        </developer>
+    </developers>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
