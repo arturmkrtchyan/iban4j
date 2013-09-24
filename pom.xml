@@ -27,6 +27,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jdkVersion>1.5</jdkVersion>
     </properties>
 
     <dependencies>
@@ -37,5 +38,19 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    
+    <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <encoding>${project.build.sourceEncoding}</encoding>
+              <source>${jdkVersion}</source>
+              <target>${jdkVersion}</target>
+            </configuration>
+          </plugin>
+        </plugins>
+    </build>
 
 </project>
