@@ -4,3 +4,5 @@ jdk:
   - oraclejdk7
   - openjdk6
   - oraclejdk6
+  - openjdk5
+  - oraclejdk5
