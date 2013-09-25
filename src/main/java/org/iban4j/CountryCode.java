@@ -740,7 +740,7 @@ public enum CountryCode
     private final String name;
     private final String alpha3;
 
-    private CountryCode(String name, String alpha3)
+    private CountryCode(final String name, final String alpha3)
     {
         this.name = name;
         this.alpha3 = alpha3;
@@ -760,12 +760,10 @@ public enum CountryCode
 
 
     /**
-     * Get the <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2"
-     * >ISO 3166-1 alpha-2</a> code.
+     * Get the <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a> code.
      *
      * @return
-     *         The <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2"
-     *         >ISO 3166-1 alpha-2</a> code.
+     *         The <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a> code.
      */
     public String getAlpha2()
     {
@@ -774,12 +772,10 @@ public enum CountryCode
 
 
     /**
-     * Get the <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3"
-     * >ISO 3166-1 alpha-3</a> code.
+     * Get the <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3">ISO 3166-1 alpha-3</a> code.
      *
      * @return
-     *         The <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3"
-     *         >ISO 3166-1 alpha-3</a> code.
+     *         The <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3">ISO 3166-1 alpha-3</a> code.
      */
     public String getAlpha3()
     {
@@ -792,15 +788,14 @@ public enum CountryCode
      * <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3">alpha-3</a> code.
      *
      * @param code
-     *         An ISO 3166-1 <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2"
-     *         >alpha-2</a> or <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3"
-     *         >alpha-3</a> code.
+     *         An ISO 3166-1 <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">alpha-2</a> or
+     *         <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3">alpha-3</a> code.
      *
      * @return
      *         A CountryCode instance, or null if not found.
      *
      */
-    public static CountryCode getByCode(String code)
+    public static CountryCode getByCode(final String code)
     {
         if (code == null)
         {
@@ -810,12 +805,10 @@ public enum CountryCode
         switch (code.length())
         {
             case 2:
-                code = code.toUpperCase();
-                return getByAlpha2Code(code);
+                return getByAlpha2Code(code.toUpperCase());
 
             case 3:
-                code = code.toUpperCase();
-                return getByAlpha3Code(code);
+                return getByAlpha3Code(code.toUpperCase());
 
             default:
                 return null;
@@ -823,7 +816,7 @@ public enum CountryCode
     }
 
 
-    private static CountryCode getByAlpha2Code(String code)
+    private static CountryCode getByAlpha2Code(final String code)
     {
         try
         {
@@ -836,7 +829,7 @@ public enum CountryCode
     }
 
 
-    private static CountryCode getByAlpha3Code(String code)
+    private static CountryCode getByAlpha3Code(final String code)
     {
         return alpha3Map.get(code);
     }
