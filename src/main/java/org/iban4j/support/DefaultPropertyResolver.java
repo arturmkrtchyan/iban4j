@@ -12,6 +12,10 @@ public class DefaultPropertyResolver implements PropertyResolver {
         resolve(propertyFileName);
     }
 
+    public DefaultPropertyResolver(Properties properties) {
+        this.properties = properties;
+    }
+
     private void resolve(String propertyFileName) throws IOException {
         InputStream is = getClass().getClassLoader().getResourceAsStream(propertyFileName);
         properties = new Properties();
