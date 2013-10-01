@@ -10,8 +10,23 @@ public class CountryCodeTest {
     public void getByCodeWithAlpha2CodeShouldReturnCountry() {
         for (CountryCode code : CountryCode.values()) {
             CountryCode newCode = CountryCode.getByCode(code.getAlpha2());
-            assertThat(code, is(equalTo(newCode)));
+            assertThat(newCode, is(equalTo(code)));
+        }
+    }
 
+    @Test
+    public void getByCodeWithLowerCaseAlpha2CodeShouldReturnCountry() {
+        for (CountryCode code : CountryCode.values()) {
+            CountryCode newCode = CountryCode.getByCode(code.getAlpha2().toLowerCase());
+            assertThat(newCode, is(equalTo(code)));
+        }
+    }
+
+    @Test
+    public void getByCodeWithUpperCaseAlpha2CodeShouldReturnCountry() {
+        for (CountryCode code : CountryCode.values()) {
+            CountryCode newCode = CountryCode.getByCode(code.getAlpha2().toUpperCase());
+            assertThat(newCode, is(equalTo(code)));
         }
     }
 
@@ -19,8 +34,23 @@ public class CountryCodeTest {
     public void getByCodeWithAlpha3CodeShouldReturnCountryCode() {
         for (CountryCode code : CountryCode.values()) {
             CountryCode newCode = CountryCode.getByCode(code.getAlpha3());
-            assertThat(code, is(equalTo(newCode)));
+            assertThat(newCode, is(equalTo(code)));
+        }
+    }
 
+    @Test
+    public void getByCodeWithLowerCaseAlpha3CodeShouldReturnCountry() {
+        for (CountryCode code : CountryCode.values()) {
+            CountryCode newCode = CountryCode.getByCode(code.getAlpha3().toLowerCase());
+            assertThat(newCode, is(equalTo(code)));
+        }
+    }
+
+    @Test
+    public void getByCodeWithUpperCaseAlpha3CodeShouldReturnCountry() {
+        for (CountryCode code : CountryCode.values()) {
+            CountryCode newCode = CountryCode.getByCode(code.getAlpha3().toUpperCase());
+            assertThat(newCode, is(equalTo(code)));
         }
     }
 
@@ -50,16 +80,16 @@ public class CountryCodeTest {
 
     @Test
     public void getNameWithDECodeShouldReturnGermany() {
-        assertThat("Germany", is(equalTo(CountryCode.DE.getName())));
+        assertThat(CountryCode.DE.getName(), is(equalTo("Germany")));
     }
 
     @Test
     public void getAlpha2WithDECodeShouldReturnGermany() {
-        assertThat("DE", is(equalTo(CountryCode.DE.getAlpha2())));
+        assertThat(CountryCode.DE.getAlpha2(), is(equalTo("DE")));
     }
 
     @Test
     public void getAlpha3WithDECodeShouldReturnGermany() {
-        assertThat("DEU", is(equalTo(CountryCode.DE.getAlpha3())));
+        assertThat(CountryCode.DE.getAlpha3(), is(equalTo("DEU")));
     }
 }

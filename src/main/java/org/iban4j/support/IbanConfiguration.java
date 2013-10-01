@@ -4,6 +4,6 @@ import org.iban4j.CountryCode;
 
 public interface IbanConfiguration {
 
-    String getStructure(CountryCode countryCode);
+    IbanStructure getStructure(CountryCode countryCode);
 
 }

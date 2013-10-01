@@ -8,18 +8,8 @@ public class DefaultPropertyResolver implements PropertyResolver {
 
     private Properties properties;
 
-    public DefaultPropertyResolver(String propertyFileName) throws IOException {
-        resolve(propertyFileName);
-    }
-
     public DefaultPropertyResolver(Properties properties) {
         this.properties = properties;
-    }
-
-    private void resolve(String propertyFileName) throws IOException {
-        InputStream is = getClass().getClassLoader().getResourceAsStream(propertyFileName);
-        properties = new Properties();
-        properties.load(is);
     }
 
     public String getProperty(String key) {
