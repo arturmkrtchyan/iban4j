@@ -7,9 +7,11 @@ import java.util.Map;
 public class IbanStructure {
 
     private Map<IbanStructureEntry.EntryType, IbanStructureEntry> entries;
+    private String rawStructure;
 
-    private IbanStructure(Map<IbanStructureEntry.EntryType, IbanStructureEntry> entries) {
+    private IbanStructure(Map<IbanStructureEntry.EntryType, IbanStructureEntry> entries, String rawStructure) {
         this.entries = entries;
+        this.rawStructure = rawStructure;
     }
 
     public static IbanStructure valueOf(final String structure) throws IllegalArgumentException {
@@ -40,7 +42,7 @@ public class IbanStructure {
         } catch (Exception e) {
             throw new IllegalArgumentException("Invalid IBAN Structure is passed: " + structure, e);
         }
-        return new IbanStructure(entries);
+        return new IbanStructure(entries, structure);
     }
 
     private static IbanStructureEntry parseStructureEntry(final String entry) {
@@ -63,5 +65,12 @@ public class IbanStructure {
     private static int parseEntryLength(final String entry) {
         String lengthStr = entry.substring(0, entry.length() - 1);
         return Integer.valueOf(lengthStr);
+    }
+
+    @Override
+    public String toString() {
+        return "IbanStructure{" +
+                "rawStructure='" + rawStructure + '\'' +
+                '}';
     }
 }
