@@ -1,6 +1,10 @@
 package org.iban4j;
 
-public final class Iban {
+import java.io.Serializable;
+
+public final class Iban implements Serializable {
+
+    private static final long serialVersionUID = 3507561504372065317L;
 
     private final String value;
 
@@ -14,8 +18,8 @@ public final class Iban {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Integer) {
-            return value.equals(((Iban)obj).toString());
+        if (obj instanceof Iban) {
+            return value.equals(((Iban)obj).value);
         }
         return false;
     }
