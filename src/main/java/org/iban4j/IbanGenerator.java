@@ -2,5 +2,5 @@ package org.iban4j;
 
 public interface IbanGenerator {
 
-    Iban generate();
+    Iban generate(String accountNumber);
 }

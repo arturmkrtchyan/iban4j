@@ -6,31 +6,34 @@ public final class Iban implements Serializable {
 
     private static final long serialVersionUID = 3507561504372065317L;
 
-    private final String value;
+    private CountryCode countryCode;
+    private String checkDigit;
+    private Bban bban;
 
-    public Iban(String value) {
-        this.value = value;
+    public Iban(CountryCode countryCode, String checkDigit, Bban bban) {
+        this.countryCode = countryCode;
+        this.checkDigit = checkDigit;
+        this.bban = bban;
     }
 
-    private static Iban valueOf(String value) {
-        return null;
+    public CountryCode getCountryCode() {
+        return countryCode;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Iban) {
-            return value.equals(((Iban)obj).value);
-        }
-        return false;
+    public String getCheckDigit() {
+        return checkDigit;
     }
 
-    @Override
-    public int hashCode() {
-        return value.hashCode();
+    public Bban getBban() {
+        return bban;
     }
 
     @Override
     public String toString() {
-        return value;
+        return new StringBuilder()
+                .append(countryCode.name())
+                .append(checkDigit)
+                .append(bban.toString())
+                .toString();
     }
 }

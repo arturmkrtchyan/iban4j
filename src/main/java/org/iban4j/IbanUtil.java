@@ -5,11 +5,15 @@ public class IbanUtil {
     private static final long MOD = 97;
     private static final long MAX = 999999999;
 
-    static CheckDigit calculateCheckDigit(String iban) {
+    static String calculateCheckDigit(Iban iban) {
+        return calculateCheckDigit(iban.toString());
+    }
+
+    private static String calculateCheckDigit(String iban) {
         int modResult = calculateMod(iban);
         int checkDigitIntValue = (98 - modResult);
         String checkDigit = Integer.toString(checkDigitIntValue);
-        return new CheckDigit(checkDigitIntValue > 9 ? checkDigit : "0" + checkDigit);
+        return checkDigitIntValue > 9 ? checkDigit : "0" + checkDigit;
     }
 
     private static int calculateMod(String iban) {
