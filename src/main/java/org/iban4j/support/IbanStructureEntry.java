@@ -5,11 +5,17 @@ public class IbanStructureEntry {
     private EntryType entryType;
     private EntryCharacterType characterType;
     private int length;
+    private String defaultValue;
 
     IbanStructureEntry(EntryType entryType, EntryCharacterType characterType, int length) {
+        this(entryType, characterType, length, null);
+    }
+
+    IbanStructureEntry(EntryType entryType, EntryCharacterType characterType, int length, String defaultValue) {
         this.entryType = entryType;
         this.characterType = characterType;
         this.length = length;
+        this.defaultValue = defaultValue;
     }
 
     public EntryType getEntryType() {
@@ -22,6 +28,14 @@ public class IbanStructureEntry {
 
     public int getLength() {
         return length;
+    }
+
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+
+    public boolean hasDefaultValue() {
+        return defaultValue != null;
     }
 
     public enum EntryType {

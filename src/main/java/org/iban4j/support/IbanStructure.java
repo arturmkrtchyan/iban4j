@@ -6,6 +6,10 @@ import java.util.Map;
 
 public class IbanStructure {
 
+    private static final String DEFAULT_VALUE_SPLITTER = ":";
+    private static final String CHARACTER_TYPE_SPLITTER = "!";
+    private static final String ENTRY_SPLITTER = " ";
+
     private Map<IbanStructureEntry.EntryType, IbanStructureEntry> entries;
     private String rawStructure;
 
@@ -34,7 +38,7 @@ public class IbanStructure {
         Map<IbanStructureEntry.EntryType, IbanStructureEntry> entries =
                 new HashMap<IbanStructureEntry.EntryType, IbanStructureEntry>();
         try {
-            String[] entriesStr = structure.split(" ");
+            String[] entriesStr = structure.split(ENTRY_SPLITTER);
             for (String entryStr : entriesStr) {
                 IbanStructureEntry entry = parseStructureEntry(entryStr);
                 entries.put(entry.getEntryType(), entry);
@@ -46,11 +50,19 @@ public class IbanStructure {
     }
 
     private static IbanStructureEntry parseStructureEntry(final String entry) {
-        String[] parts = entry.split("!");
+        String[] parts = entry.split(CHARACTER_TYPE_SPLITTER);
         IbanStructureEntry.EntryCharacterType characterType = parseCharacterType(parts[1]);
+        String entryDefaultValue = null;
+
+        if(hasDefaultValue(parts[0])) {
+            String[] valueParts = parts[0].split(DEFAULT_VALUE_SPLITTER);
+            entryDefaultValue = parts[1];
+            parts[0] = valueParts[0];
+        }
+
         IbanStructureEntry.EntryType entryType = parseEntryType(parts[0]);
         int length = parseEntryLength(parts[0]);
-        return new IbanStructureEntry(entryType, characterType, length);
+        return new IbanStructureEntry(entryType, characterType, length, entryDefaultValue);
     }
 
     private static IbanStructureEntry.EntryCharacterType parseCharacterType(final String type) {
@@ -65,6 +77,10 @@ public class IbanStructure {
     private static int parseEntryLength(final String entry) {
         String lengthStr = entry.substring(0, entry.length() - 1);
         return Integer.valueOf(lengthStr);
+    }
+
+    private static boolean hasDefaultValue(final String entry) {
+        return entry.contains(DEFAULT_VALUE_SPLITTER);
     }
 
     @Override
