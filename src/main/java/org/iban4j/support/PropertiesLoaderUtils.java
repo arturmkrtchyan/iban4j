@@ -9,7 +9,7 @@ class PropertiesLoaderUtils {
     private PropertiesLoaderUtils() {
     }
 
-    public static Properties loadProperties(String path) throws IOException {
+    static Properties loadProperties(String path) throws IOException {
         Properties properties = new Properties();
         InputStream is = PropertiesLoaderUtils.class.getClassLoader().getResourceAsStream(path);
 

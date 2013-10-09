@@ -59,7 +59,14 @@ public final class Bban implements Serializable {
 
     @Override
     public String toString() {
-        return "TODO";
+        return "Bban{" +
+                "bankCode='" + bankCode + '\'' +
+                ", branchCode='" + branchCode + '\'' +
+                ", nationalCheckDigit='" + nationalCheckDigit + '\'' +
+                ", accountType='" + accountType + '\'' +
+                ", ownerAccountType='" + ownerAccountType + '\'' +
+                ", accountNumber='" + accountNumber + '\'' +
+                '}';
     }
 
     public static class Builder {

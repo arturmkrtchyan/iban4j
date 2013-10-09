@@ -18,7 +18,7 @@ public class IbanStructureCache {
         } catch (IOException e) {
             throw new IllegalStateException("Can not find configuration file", e);
         }
-        return new PropertyBasedIbanConfiguration(properties);
+        return new IbanConfiguration(properties);
     }
 
     public static IbanStructure getStructure(CountryCode countryCode) {

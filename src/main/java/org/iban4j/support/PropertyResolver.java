@@ -1,11 +1,28 @@
 package org.iban4j.support;
 
-interface PropertyResolver {
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
-    String getProperty(String key);
+class PropertyResolver {
 
-    int getIntProperty(String key) throws NumberFormatException;
+    private Properties properties;
 
-    String[] getProperties(String key);
+    PropertyResolver(Properties properties) {
+        this.properties = properties;
+    }
 
+    public String getProperty(String key) {
+        return properties.getProperty(key);
+    }
+
+    public int getIntProperty(String key) throws NumberFormatException {
+        String value = properties.getProperty(key);
+        return Integer.parseInt(value);
+    }
+
+    public String[] getProperties(String key) {
+        String value = properties.getProperty(key);
+        return value.split("[,]");
+    }
 }
