@@ -1,8 +1,6 @@
 package org.iban4j.support;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class IbanStructure {
 
@@ -10,10 +8,10 @@ public class IbanStructure {
     private static final String CHARACTER_TYPE_SPLITTER = "!";
     private static final String ENTRY_SPLITTER = " ";
 
-    private Map<IbanStructureEntry.EntryType, IbanStructureEntry> entries;
+    private Map<String, IbanStructureEntry> entries;
     private String rawStructure;
 
-    private IbanStructure(Map<IbanStructureEntry.EntryType, IbanStructureEntry> entries, String rawStructure) {
+    private IbanStructure(Map<String, IbanStructureEntry> entries, String rawStructure) {
         this.entries = entries;
         this.rawStructure = rawStructure;
     }
@@ -23,25 +21,33 @@ public class IbanStructure {
     }
 
     public boolean hasEntry(final IbanStructureEntry.EntryType entryType) {
-        return entries.containsKey(entryType);
+        return entries.containsKey(entryType.name());
     }
 
-    public Collection<IbanStructureEntry> getEntries() {
-        return entries.values();
+    public List<IbanStructureEntry> getEntries() {
+        return Collections.unmodifiableList(new LinkedList<IbanStructureEntry>(entries.values()));
+    }
+
+    public Collection<IbanStructureEntry> getBbanEntries() {
+        LinkedList<IbanStructureEntry> tmpEntries = new LinkedList<IbanStructureEntry>(entries.values());
+        return Collections.unmodifiableList(tmpEntries.subList(1, tmpEntries.size()));
     }
 
     public IbanStructureEntry getEntry(final IbanStructureEntry.EntryType entryType) {
-        return entries.get(entryType);
+        return entries.get(entryType.name());
+    }
+
+    public String getEntryDefaultValue(final IbanStructureEntry.EntryType entryType) {
+        return entries.get(entryType.name()).getDefaultValue();
     }
 
     private static IbanStructure parseStructure(final String structure) throws IllegalArgumentException {
-        Map<IbanStructureEntry.EntryType, IbanStructureEntry> entries =
-                new HashMap<IbanStructureEntry.EntryType, IbanStructureEntry>();
+        Map<String, IbanStructureEntry> entries = new LinkedHashMap<String, IbanStructureEntry>();
         try {
             String[] entriesStr = structure.split(ENTRY_SPLITTER);
             for (String entryStr : entriesStr) {
                 IbanStructureEntry entry = parseStructureEntry(entryStr);
-                entries.put(entry.getEntryType(), entry);
+                entries.put(entry.getEntryType().name(), entry);
             }
         } catch (Exception e) {
             throw new IllegalArgumentException("Invalid IBAN Structure is passed: " + structure, e);

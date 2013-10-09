@@ -1,6 +1,6 @@
 package org.iban4j.support;
 
-public interface PropertyResolver {
+interface PropertyResolver {
 
     String getProperty(String key);
 

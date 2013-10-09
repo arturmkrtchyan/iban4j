@@ -10,10 +10,11 @@ public final class Iban implements Serializable {
     private String checkDigit;
     private Bban bban;
 
-    public Iban(CountryCode countryCode, String checkDigit, Bban bban) {
+    public Iban(CountryCode countryCode, Bban bban) throws IbanFormatException {
         this.countryCode = countryCode;
-        this.checkDigit = checkDigit;
         this.bban = bban;
+        this.checkDigit = IbanUtil.calculateCheckDigit(this);
+        // TODO validation
     }
 
     public CountryCode getCountryCode() {
@@ -28,12 +29,34 @@ public final class Iban implements Serializable {
         return bban;
     }
 
+    public static Iban valueOf() throws IbanFormatException {
+        return null;
+    }
+
     @Override
     public String toString() {
         return new StringBuilder()
                 .append(countryCode.name())
                 .append(checkDigit)
-                .append(bban.toString())
+                .append(bban.format(countryCode))
                 .toString();
+    }
+
+    public static void main(String[] args) {
+        Bban bban = new Bban.Builder()
+                .bankCode("19043")
+                .accountNumber("00234573201")
+                .build();
+        Iban iban = new Iban(CountryCode.AT, bban);
+        System.out.println(iban);
+
+        bban = new Bban.Builder()
+                .bankCode("0002")
+                .branchCode("0123")
+                .accountNumber("12345678901")
+                .nationalCheckDigit("54")
+                .build();
+        iban = new Iban(CountryCode.PT, bban);
+        System.out.println(iban);
     }
 }

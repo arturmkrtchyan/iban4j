@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class PropertiesLoaderUtils {
+class PropertiesLoaderUtils {
 
     private PropertiesLoaderUtils() {
     }

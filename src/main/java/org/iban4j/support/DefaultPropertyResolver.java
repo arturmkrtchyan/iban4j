@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class DefaultPropertyResolver implements PropertyResolver {
+class DefaultPropertyResolver implements PropertyResolver {
 
     private Properties properties;
 

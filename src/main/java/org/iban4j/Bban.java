@@ -1,5 +1,9 @@
 package org.iban4j;
 
+import org.iban4j.support.IbanStructure;
+import org.iban4j.support.IbanStructureCache;
+import org.iban4j.support.IbanStructureEntry;
+
 import java.io.Serializable;
 
 public final class Bban implements Serializable {
@@ -20,6 +24,37 @@ public final class Bban implements Serializable {
         this.accountType = builder.accountType;
         this.ownerAccountType = builder.ownerAccountType;
         this.accountNumber = builder.accountNumber;
+    }
+
+    public String format(CountryCode countryCode) {
+        StringBuilder sb = new StringBuilder();
+        IbanStructure structure = IbanStructureCache.getStructure(countryCode);
+        for(IbanStructureEntry entry : structure.getBbanEntries()) {
+            switch (entry.getEntryType()) {
+
+                case k:
+                    break;
+                case b:
+                    sb.append(bankCode);
+                    break;
+                case s:
+                    sb.append(branchCode);
+                    break;
+                case c:
+                    sb.append(accountNumber);
+                    break;
+                case x:
+                    sb.append(nationalCheckDigit);
+                    break;
+                case t:
+                    sb.append(accountType);
+                    break;
+                case n:
+                    sb.append(ownerAccountType);
+                    break;
+            }
+        }
+        return sb.toString();
     }
 
     @Override

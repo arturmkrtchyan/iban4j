@@ -4,7 +4,7 @@ import org.iban4j.CountryCode;
 
 import java.util.Properties;
 
-public class PropertyBasedIbanConfiguration implements IbanConfiguration {
+class PropertyBasedIbanConfiguration implements IbanConfiguration {
     
     private static final String IBAN_STRUCTURE_SUFFIX = ".structure";
     
