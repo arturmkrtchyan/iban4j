@@ -19,7 +19,7 @@ public class IbanStructureCache {
     private static IbanConfiguration doConfigure() throws IllegalStateException {
         Properties properties = null;
         try {
-            properties = PropertiesLoaderUtils.loadProperties(DEFAULT_PROPERTIES_FILE);
+            properties = PropertiesLoaderUtil.loadProperties(DEFAULT_PROPERTIES_FILE);
         } catch (IOException e) {
             throw new IllegalStateException("Can not find configuration file", e);
         }
