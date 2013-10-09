@@ -14,8 +14,8 @@ public final class Bban implements Serializable {
     private String branchCode;
     private String nationalCheckDigit;
     private String accountType;
-    private String ownerAccountType;
     private String accountNumber;
+    private String ownerAccountType;
 
     private Bban(Builder builder) {
         this.bankCode = builder.bankCode;
@@ -27,8 +27,12 @@ public final class Bban implements Serializable {
     }
 
     public String format(CountryCode countryCode) {
+        IbanStructure structure = IbanStructureCache.getStructure(countryCode.getAlpha2());
+        return format(structure);
+    }
+
+    protected String format(IbanStructure structure) {
         StringBuilder sb = new StringBuilder();
-        IbanStructure structure = IbanStructureCache.getStructure(countryCode);
         for(IbanStructureEntry entry : structure.getBbanEntries()) {
             switch (entry.getEntryType()) {
 

@@ -1,7 +1,5 @@
 package org.iban4j.support;
 
-import org.iban4j.CountryCode;
-
 import java.io.IOException;
 import java.util.Properties;
 
@@ -11,6 +9,13 @@ public class IbanStructureCache {
 
     private static IbanConfiguration configuration = doConfigure();
 
+    private IbanStructureCache() {
+    }
+
+    public static IbanStructure getStructure(String countryCode) {
+        return configuration.getStructure(countryCode);
+    }
+
     private static IbanConfiguration doConfigure() throws IllegalStateException {
         Properties properties = null;
         try {
@@ -19,10 +24,6 @@ public class IbanStructureCache {
             throw new IllegalStateException("Can not find configuration file", e);
         }
         return new IbanConfiguration(properties);
-    }
-
-    public static IbanStructure getStructure(CountryCode countryCode) {
-        return configuration.getStructure(countryCode);
     }
 
 

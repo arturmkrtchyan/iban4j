@@ -18,8 +18,8 @@ class IbanConfiguration {
         this.propertyResolver = propertyResolver;
     }
 
-    public IbanStructure getStructure(CountryCode countryCode) {
-        String key = countryCode.getAlpha2().toLowerCase() + IBAN_STRUCTURE_SUFFIX;
+    public IbanStructure getStructure(String countryCode) {
+        String key = countryCode.toLowerCase() + IBAN_STRUCTURE_SUFFIX;
         String structure = propertyResolver.getProperty(key);
         return IbanStructure.valueOf(structure);
     }
