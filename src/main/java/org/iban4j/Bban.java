@@ -16,6 +16,8 @@ public final class Bban implements Serializable {
     private String accountType;
     private String accountNumber;
     private String ownerAccountType;
+    private String identificationNumber;
+
 
     private Bban(Builder builder) {
         this.bankCode = builder.bankCode;
@@ -24,6 +26,7 @@ public final class Bban implements Serializable {
         this.accountType = builder.accountType;
         this.ownerAccountType = builder.ownerAccountType;
         this.accountNumber = builder.accountNumber;
+        this.identificationNumber = builder.identificationNumber;
     }
 
     public String format(CountryCode countryCode) {
@@ -56,6 +59,9 @@ public final class Bban implements Serializable {
                 case n:
                     sb.append(ownerAccountType);
                     break;
+                case i:
+                    sb.append(identificationNumber);
+                    break;
             }
         }
         return sb.toString();
@@ -80,6 +86,7 @@ public final class Bban implements Serializable {
         private String accountType;
         private String ownerAccountType;
         private String accountNumber;
+        private String identificationNumber;
 
         public Builder bankCode(String bankCode) {
             this.bankCode = bankCode;
@@ -108,6 +115,11 @@ public final class Bban implements Serializable {
 
         public Builder accountNumber(String accountNumber) {
             this.accountNumber = accountNumber;
+            return this;
+        }
+
+        public Builder identificationNumber(String identificationNumber) {
+            this.identificationNumber = identificationNumber;
             return this;
         }
 

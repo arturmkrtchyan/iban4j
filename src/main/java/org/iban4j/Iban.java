@@ -59,5 +59,14 @@ public final class Iban implements Serializable {
                 .build();
         iban = new Iban(CountryCode.PT, bban);
         System.out.println(iban);
+
+        bban = new Bban.Builder()
+                .bankCode("0159")
+                .branchCode("26")
+                .accountNumber("007654")
+                .identificationNumber("5510730339")
+                .build();
+        iban = new Iban(CountryCode.IS, bban);
+        System.out.println(iban);
     }
 }

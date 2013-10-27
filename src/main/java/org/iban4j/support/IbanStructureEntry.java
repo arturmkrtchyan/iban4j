@@ -45,7 +45,8 @@ public class IbanStructureEntry {
         c, // account number
         x, // national check digit
         t, // account type (Cheque account, Savings account etc)
-        n; // owner account number ("1", "2" etc)
+        n, // owner account number ("1", "2" etc)
+        i; // identification number
     }
 
     public enum EntryCharacterType {
