@@ -1,3 +1,15 @@
+/* Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.iban4j;
 
 import java.io.Serializable;
@@ -41,32 +53,5 @@ public final class Iban implements Serializable {
                 .append(checkDigit)
                 .append(bban.format(countryCode))
                 .toString();
-    }
-
-    public static void main(String[] args) {
-        Bban bban = new Bban.Builder()
-                .bankCode("19043")
-                .accountNumber("00234573201")
-                .build();
-        Iban iban = new Iban(CountryCode.AT, bban);
-        System.out.println(iban);
-
-        bban = new Bban.Builder()
-                .bankCode("0002")
-                .branchCode("0123")
-                .accountNumber("12345678901")
-                .nationalCheckDigit("54")
-                .build();
-        iban = new Iban(CountryCode.PT, bban);
-        System.out.println(iban);
-
-        bban = new Bban.Builder()
-                .bankCode("0159")
-                .branchCode("26")
-                .accountNumber("007654")
-                .identificationNumber("5510730339")
-                .build();
-        iban = new Iban(CountryCode.IS, bban);
-        System.out.println(iban);
     }
 }
