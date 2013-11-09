@@ -12,33 +12,43 @@
  */
 package org.iban4j;
 
-import org.iban4j.Bban;
-import org.iban4j.CountryCode;
-import org.iban4j.Iban;
-
-public class IbanUtil {
+public final class IbanUtil {
 
     private static final String DEFAULT_CHECK_DIGIT = "00";
     private static final long MOD = 97;
     private static final long MAX = 999999999;
 
-    public static String calculateCheckDigit(Iban iban) {
-        return calculateCheckDigit(iban.getCountryCode(), iban.getBban());
+    private IbanUtil() {
     }
 
     public static String calculateCheckDigit(CountryCode countryCode, Bban bban) {
+        return calculateCheckDigit(countryCode, bban.format(countryCode));
+    }
+
+    public static String calculateCheckDigit(CountryCode countryCode, String bban) {
         StringBuilder sb = new StringBuilder()
                 .append(countryCode.name())
                 .append(DEFAULT_CHECK_DIGIT)
-                .append(bban.format(countryCode));
+                .append(bban);
         return calculateCheckDigit(sb.toString());
     }
 
-    private static String calculateCheckDigit(String iban) {
-        int modResult = calculateMod(iban);
+    public static String calculateCheckDigit(String iban) {
+        String reformattedIban = removeCheckDigit(iban);
+        int modResult = calculateMod(reformattedIban);
         int checkDigitIntValue = (98 - modResult);
         String checkDigit = Integer.toString(checkDigitIntValue);
         return checkDigitIntValue > 9 ? checkDigit : "0" + checkDigit;
+    }
+
+    /**
+     * Returns an iban with default check digit.
+     *
+     * @param iban The iban
+     * @return The iban without the check digit
+     */
+    protected static String removeCheckDigit(String iban) {
+        return iban.substring(0, 2) + DEFAULT_CHECK_DIGIT + iban.substring(4);
     }
 
     private static int calculateMod(String iban) {

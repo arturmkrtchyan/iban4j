@@ -25,7 +25,7 @@ public final class Iban implements Serializable {
     public Iban(CountryCode countryCode, Bban bban) throws IbanFormatException {
         this.countryCode = countryCode;
         this.bban = bban;
-        this.checkDigit = IbanUtil.calculateCheckDigit(this);
+        this.checkDigit = IbanUtil.calculateCheckDigit(countryCode, bban);
         // TODO validation
     }
 

@@ -12,6 +12,51 @@
  */
 package org.iban4j;
 
+import org.junit.Test;
+import org.junit.experimental.runners.Enclosed;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+import java.util.Collection;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
+@RunWith(Enclosed.class)
 public class IbanUtilTest {
+
+    @RunWith(Parameterized.class)
+    public static class ValidCheckDigitCalculationTest {
+
+        private CountryCode countryCode;
+        private Bban bban;
+        private String expectedIbanString;
+
+        public ValidCheckDigitCalculationTest(CountryCode countryCode, Bban bban, String expectedIbanString) {
+            this.countryCode = countryCode;
+            this.bban = bban;
+            this.expectedIbanString = expectedIbanString;
+        }
+
+        @Test
+        public void checkDigitCalculationWithCountryCodeAndBbanShouldReturnCheckDigit() {
+            String checkDigit = IbanUtil.calculateCheckDigit(countryCode, bban);
+            assertThat(checkDigit, is(equalTo(expectedIbanString.substring(2, 4))));
+        }
+
+        @Parameterized.Parameters
+        public static Collection<Object[]> ibanParameters() {
+            return TestDataHelper.getIbanData();
+        }
+    }
+
+    public static class InvalidCheckDigitCalculationTest {
+
+        @Test(expected = IllegalArgumentException.class)
+        public void checkDigitCalculationWithInvalidBbanShouldThrowException() {
+            IbanUtil.calculateCheckDigit(CountryCode.AT, "0159260+076545510730339");
+        }
+    }
 
 }
