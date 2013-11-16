@@ -17,6 +17,7 @@ import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -51,11 +52,25 @@ public class IbanUtilTest {
         }
     }
 
+    @RunWith(Parameterized.class)
     public static class InvalidCheckDigitCalculationTest {
 
+
+        private Character invalidCharacter;
+
+        public InvalidCheckDigitCalculationTest(Character invalidCharacter) {
+            this.invalidCharacter = invalidCharacter;
+        }
+
         @Test(expected = IllegalArgumentException.class)
-        public void checkDigitCalculationWithInvalidBbanShouldThrowException() {
-            IbanUtil.calculateCheckDigit(CountryCode.AT, "0159260+076545510730339");
+        public void checkDigitCalculationWithNonNumericBbanShouldThrowException() {
+            IbanUtil.calculateCheckDigit(CountryCode.AT, "0159260" + invalidCharacter + "076545510730339");
+        }
+
+        @Parameterized.Parameters
+        public static Collection<Character[]> invalidCharacters() {
+            return Arrays.asList(new Character[][]{ {'\u216C'}, {'+'} });
+
         }
     }
 
