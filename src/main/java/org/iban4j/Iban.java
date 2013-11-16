@@ -22,7 +22,7 @@ public final class Iban implements Serializable {
     private String checkDigit;
     private Bban bban;
 
-    public Iban(CountryCode countryCode, Bban bban) throws IbanFormatException {
+    public Iban(final CountryCode countryCode, final Bban bban) throws IbanFormatException {
         this.countryCode = countryCode;
         this.bban = bban;
         this.checkDigit = IbanUtil.calculateCheckDigit(countryCode, bban);

@@ -31,7 +31,7 @@ public final class Bban implements Serializable {
     private String identificationNumber;
 
 
-    private Bban(Builder builder) {
+    private Bban(final Builder builder) {
         this.bankCode = builder.bankCode;
         this.branchCode = builder.branchCode;
         this.nationalCheckDigit = builder.nationalCheckDigit;
@@ -41,12 +41,12 @@ public final class Bban implements Serializable {
         this.identificationNumber = builder.identificationNumber;
     }
 
-    public String format(CountryCode countryCode) {
+    public String format(final CountryCode countryCode) {
         IbanStructure structure = IbanStructureCache.getStructure(countryCode.getAlpha2());
         return format(structure);
     }
 
-    protected String format(IbanStructure structure) {
+    protected String format(final IbanStructure structure) {
         StringBuilder sb = new StringBuilder();
         for(IbanStructureEntry entry : structure.getBbanEntries()) {
             switch (entry.getEntryType()) {
@@ -100,37 +100,37 @@ public final class Bban implements Serializable {
         private String accountNumber;
         private String identificationNumber;
 
-        public Builder bankCode(String bankCode) {
+        public Builder bankCode(final String bankCode) {
             this.bankCode = bankCode;
             return this;
         }
 
-        public Builder branchCode(String branchCode) {
+        public Builder branchCode(final String branchCode) {
             this.branchCode = branchCode;
             return this;
         }
 
-        public Builder nationalCheckDigit(String nationalCheckDigit) {
+        public Builder nationalCheckDigit(final String nationalCheckDigit) {
             this.nationalCheckDigit = nationalCheckDigit;
             return this;
         }
 
-        public Builder accountType(String accountType) {
+        public Builder accountType(final String accountType) {
             this.accountType = accountType;
             return this;
         }
 
-        public Builder ownerAccountType(String ownerAccountType) {
+        public Builder ownerAccountType(final String ownerAccountType) {
             this.ownerAccountType = ownerAccountType;
             return this;
         }
 
-        public Builder accountNumber(String accountNumber) {
+        public Builder accountNumber(final String accountNumber) {
             this.accountNumber = accountNumber;
             return this;
         }
 
-        public Builder identificationNumber(String identificationNumber) {
+        public Builder identificationNumber(final String identificationNumber) {
             this.identificationNumber = identificationNumber;
             return this;
         }

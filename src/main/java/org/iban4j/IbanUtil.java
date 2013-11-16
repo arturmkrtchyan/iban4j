@@ -21,11 +21,11 @@ public final class IbanUtil {
     private IbanUtil() {
     }
 
-    public static String calculateCheckDigit(CountryCode countryCode, Bban bban) {
+    public static String calculateCheckDigit(final CountryCode countryCode, final Bban bban) {
         return calculateCheckDigit(countryCode, bban.format(countryCode));
     }
 
-    public static String calculateCheckDigit(CountryCode countryCode, String bban) {
+    public static String calculateCheckDigit(final CountryCode countryCode, final String bban) {
         StringBuilder sb = new StringBuilder()
                 .append(countryCode.name())
                 .append(DEFAULT_CHECK_DIGIT)
@@ -33,7 +33,7 @@ public final class IbanUtil {
         return calculateCheckDigit(sb.toString());
     }
 
-    public static String calculateCheckDigit(String iban) {
+    public static String calculateCheckDigit(final String iban) {
         String reformattedIban = removeCheckDigit(iban);
         int modResult = calculateMod(reformattedIban);
         int checkDigitIntValue = (98 - modResult);
@@ -47,11 +47,11 @@ public final class IbanUtil {
      * @param iban The iban
      * @return The iban without the check digit
      */
-    protected static String removeCheckDigit(String iban) {
+    private static String removeCheckDigit(final String iban) {
         return iban.substring(0, 2) + DEFAULT_CHECK_DIGIT + iban.substring(4);
     }
 
-    private static int calculateMod(String iban) {
+    private static int calculateMod(final String iban) {
         String reformattedIban = iban.substring(4) + iban.substring(0, 4);
         long total = 0;
         for (int i = 0; i < reformattedIban.length(); i++) {

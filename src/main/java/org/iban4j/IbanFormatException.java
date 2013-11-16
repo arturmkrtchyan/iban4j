@@ -34,7 +34,7 @@ public class IbanFormatException extends IllegalArgumentException {
      *
      * @param s the detail message.
      */
-    public IbanFormatException(String s) {
+    public IbanFormatException(final String s) {
         super(s);
     }
 }
