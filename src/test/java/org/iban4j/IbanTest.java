@@ -25,19 +25,16 @@ import static org.junit.Assert.assertThat;
 @RunWith(Parameterized.class)
 public class IbanTest {
 
-    private CountryCode countryCode;
-    private Bban bban;
+    private Iban iban;
     private String expectedIbanString;
 
-    public IbanTest(CountryCode countryCode, Bban bban, String expectedIbanString) {
-        this.countryCode = countryCode;
-        this.bban = bban;
+    public IbanTest(Iban iban, String expectedIbanString) {
+        this.iban = iban;
         this.expectedIbanString = expectedIbanString;
     }
 
     @Test
     public void ibanConstructionWithSupportedCountriesShouldReturnIban() {
-        Iban iban = new Iban(countryCode, bban);
         assertThat(iban.toString(), is(equalTo(expectedIbanString)));
     }
 

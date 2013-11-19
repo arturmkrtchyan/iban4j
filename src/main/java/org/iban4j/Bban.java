@@ -18,7 +18,7 @@ import org.iban4j.support.IbanStructureEntry;
 
 import java.io.Serializable;
 
-public final class Bban implements Serializable {
+final class Bban implements Serializable {
 
     private static final long serialVersionUID = 8748285872603350092L;
 
@@ -46,7 +46,7 @@ public final class Bban implements Serializable {
         return format(structure);
     }
 
-    protected String format(final IbanStructure structure) {
+    private String format(final IbanStructure structure) {
         StringBuilder sb = new StringBuilder();
         for(IbanStructureEntry entry : structure.getBbanEntries()) {
             switch (entry.getEntryType()) {
@@ -79,6 +79,34 @@ public final class Bban implements Serializable {
         return sb.toString();
     }
 
+    public String getBankCode() {
+        return bankCode;
+    }
+
+    public String getBranchCode() {
+        return branchCode;
+    }
+
+    public String getNationalCheckDigit() {
+        return nationalCheckDigit;
+    }
+
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public String getOwnerAccountType() {
+        return ownerAccountType;
+    }
+
+    public String getIdentificationNumber() {
+        return identificationNumber;
+    }
+
     @Override
     public String toString() {
         return "Bban{" +
@@ -91,7 +119,7 @@ public final class Bban implements Serializable {
                 '}';
     }
 
-    public static class Builder {
+    static class Builder {
         private String bankCode;
         private String branchCode;
         private String nationalCheckDigit;

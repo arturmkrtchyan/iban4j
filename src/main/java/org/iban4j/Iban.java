@@ -22,10 +22,10 @@ public final class Iban implements Serializable {
     private String checkDigit;
     private Bban bban;
 
-    public Iban(final CountryCode countryCode, final Bban bban) throws IbanFormatException {
-        this.countryCode = countryCode;
-        this.bban = bban;
-        this.checkDigit = IbanUtil.calculateCheckDigit(countryCode, bban);
+    private Iban(Builder builder) throws IbanFormatException {
+        countryCode = builder.countryCode;
+        bban = builder.buildBban();
+        checkDigit = IbanUtil.calculateCheckDigit(countryCode, bban);
         // TODO validation
     }
 
@@ -37,8 +37,32 @@ public final class Iban implements Serializable {
         return checkDigit;
     }
 
-    public Bban getBban() {
-        return bban;
+    public String getAccountNumber() {
+        return bban.getAccountNumber();
+    }
+
+    public String getBankCode() {
+        return bban.getBankCode();
+    }
+
+    public String getBranchCode() {
+        return bban.getBranchCode();
+    }
+
+    public String getNationalCheckDigit() {
+        return bban.getNationalCheckDigit();
+    }
+
+    public String getAccountType() {
+        return bban.getAccountType();
+    }
+
+    public String getOwnerAccountType() {
+        return bban.getOwnerAccountType();
+    }
+
+    public String getIdentificationNumber() {
+        return bban.getIdentificationNumber();
     }
 
     public static Iban valueOf() throws IbanFormatException {
@@ -54,4 +78,64 @@ public final class Iban implements Serializable {
                 .append(bban.format(countryCode))
                 .toString();
     }
+
+
+    public static class Builder {
+
+        private Bban.Builder bbanBuilder;
+        private CountryCode countryCode;
+
+        public Builder() {
+            bbanBuilder = new Bban.Builder();
+        }
+
+        public Builder countryCode(final CountryCode countryCode) {
+            this.countryCode = countryCode;
+            return this;
+        }
+
+        public Builder bankCode(final String bankCode) {
+            bbanBuilder.bankCode(bankCode);
+            return this;
+        }
+
+        public Builder branchCode(final String branchCode) {
+            bbanBuilder.branchCode(branchCode);
+            return this;
+        }
+
+        public Builder accountNumber(final String accountNumber) {
+            bbanBuilder.accountNumber(accountNumber);
+            return this;
+        }
+
+        public Builder nationalCheckDigit(final String nationalCheckDigit) {
+            bbanBuilder.nationalCheckDigit(nationalCheckDigit);
+            return this;
+        }
+
+        public Builder accountType(final String accountType) {
+            bbanBuilder.accountType(accountType);
+            return this;
+        }
+
+        public Builder ownerAccountType(final String ownerAccountType) {
+            bbanBuilder.ownerAccountType(ownerAccountType);
+            return this;
+        }
+
+        public Builder identificationNumber(final String identificationNumber) {
+            bbanBuilder.identificationNumber(identificationNumber);
+            return this;
+        }
+
+        public Iban build() {
+            return new Iban(this);
+        }
+
+        private Bban buildBban() {
+            return bbanBuilder.build();
+        }
+    }
+
 }

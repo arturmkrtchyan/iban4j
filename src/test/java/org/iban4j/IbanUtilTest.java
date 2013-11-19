@@ -30,19 +30,17 @@ public class IbanUtilTest {
     @RunWith(Parameterized.class)
     public static class ValidCheckDigitCalculationTest {
 
-        private CountryCode countryCode;
-        private Bban bban;
+        private Iban iban;
         private String expectedIbanString;
 
-        public ValidCheckDigitCalculationTest(CountryCode countryCode, Bban bban, String expectedIbanString) {
-            this.countryCode = countryCode;
-            this.bban = bban;
+        public ValidCheckDigitCalculationTest(Iban iban, String expectedIbanString) {
+            this.iban = iban;
             this.expectedIbanString = expectedIbanString;
         }
 
         @Test
         public void checkDigitCalculationWithCountryCodeAndBbanShouldReturnCheckDigit() {
-            String checkDigit = IbanUtil.calculateCheckDigit(countryCode, bban);
+            String checkDigit = IbanUtil.calculateCheckDigit(iban.getCountryCode(), iban.getBban());
             assertThat(checkDigit, is(equalTo(expectedIbanString.substring(2, 4))));
         }
 
