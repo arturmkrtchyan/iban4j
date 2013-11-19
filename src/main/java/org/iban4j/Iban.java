@@ -71,7 +71,7 @@ public final class Iban implements Serializable {
     }
 
     // TODO for future releases
-    private Bban getBban() {
+    protected Bban getBban() {
         return bban;
     }
 
