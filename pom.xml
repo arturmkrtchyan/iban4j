@@ -1,3 +1,17 @@
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -22,7 +36,7 @@
     <scm>
         <connection>scm:git:git@github.com:arturmkrtchyan/iban4j.git</connection>
         <developerConnection>scm:git:git@github.com:arturmkrtchyan/iban4j.git</developerConnection>
-        <url>scm:git:git@github.com:arturmkrtchyan/iban4j.git</url>
+        <url>git@github.com:arturmkrtchyan/iban4j.git</url>
     </scm>
 
     <developers>
@@ -30,6 +44,14 @@
             <name>Artur Mkrtchyan</name>
         </developer>
     </developers>
+
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -53,6 +75,23 @@
 
     <build>
         <plugins>
+
+            <!-- Bundle sources -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Compilation -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -63,6 +102,9 @@
                     <target>${jdkVersion}</target>
                 </configuration>
             </plugin>
+
+
+            <!-- SureFire testing -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -77,8 +119,10 @@
                         <exclude>**/IT*.java</exclude>
                     </excludes>
                 </configuration>
-
             </plugin>
+
+
+            <!-- Code coverage -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -122,21 +166,39 @@
                     </execution>
                 </executions>
             </plugin>
+
+
+
         </plugins>
     </build>
 
+    <!-- TODO Signing with gpg -->
+
     <reporting>
         <plugins>
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
                 <version>2.5.2</version>
             </plugin>
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jdepend-maven-plugin</artifactId>
                 <version>2.0-beta-2</version>
             </plugin>
+
+            <!-- Generating Javadoc -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <configuration>
+                    <excludePackageNames>*.support</excludePackageNames>
+                </configuration>
+            </plugin>
+
         </plugins>
     </reporting>
 
