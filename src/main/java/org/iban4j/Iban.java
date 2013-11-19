@@ -65,7 +65,11 @@ public final class Iban implements Serializable {
         return bban.getIdentificationNumber();
     }
 
-    public static Iban valueOf() throws IbanFormatException {
+    protected Bban getBban() {
+        return bban;
+    }
+
+    protected static Iban valueOf() throws IbanFormatException {
         // TODO implement
         return null;
     }
