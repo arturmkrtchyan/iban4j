@@ -12,6 +12,9 @@
  */
 package org.iban4j;
 
+/**
+ * Iban Utility Class
+ */
 public final class IbanUtil {
 
     private static final String DEFAULT_CHECK_DIGIT = "00";
@@ -21,24 +24,31 @@ public final class IbanUtil {
     private IbanUtil() {
     }
 
-    public static String calculateCheckDigit(final CountryCode countryCode, final Bban bban) {
-        return calculateCheckDigit(countryCode, bban.format(countryCode));
-    }
-
-    public static String calculateCheckDigit(final CountryCode countryCode, final String bban) {
-        StringBuilder sb = new StringBuilder()
-                .append(countryCode.name())
-                .append(DEFAULT_CHECK_DIGIT)
-                .append(bban);
-        return calculateCheckDigit(sb.toString());
-    }
-
+    /**
+     * Calculates Iban
+     * <a href="http://en.wikipedia.org/wiki/ISO_13616#Generating_IBAN_check_digits">Check Digit</a>.
+     *
+     * @param iban string value
+     * @return  check digit as String
+     */
     public static String calculateCheckDigit(final String iban) {
         String reformattedIban = removeCheckDigit(iban);
         int modResult = calculateMod(reformattedIban);
         int checkDigitIntValue = (98 - modResult);
         String checkDigit = Integer.toString(checkDigitIntValue);
         return checkDigitIntValue > 9 ? checkDigit : "0" + checkDigit;
+    }
+
+    protected static String calculateCheckDigit(final CountryCode countryCode, final Bban bban) {
+        return calculateCheckDigit(countryCode, bban.format(countryCode));
+    }
+
+    protected static String calculateCheckDigit(final CountryCode countryCode, final String bban) {
+        StringBuilder sb = new StringBuilder()
+                .append(countryCode.name())
+                .append(DEFAULT_CHECK_DIGIT)
+                .append(bban);
+        return calculateCheckDigit(sb.toString());
     }
 
     /**
@@ -51,6 +61,14 @@ public final class IbanUtil {
         return iban.substring(0, 2) + DEFAULT_CHECK_DIGIT + iban.substring(4);
     }
 
+
+    /**
+     * Calculates
+     * <a href="http://en.wikipedia.org/wiki/ISO_13616#Modulo_operation_on_IBAN">Iban Modulo</a>.
+     *
+     * @param iban String value
+     * @return modulo 97
+     */
     private static int calculateMod(final String iban) {
         String reformattedIban = iban.substring(4) + iban.substring(0, 4);
         long total = 0;

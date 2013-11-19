@@ -14,6 +14,11 @@ package org.iban4j;
 
 import java.io.Serializable;
 
+/**
+ * International Bank Account Number
+ *
+ * <a href="http://en.wikipedia.org/wiki/ISO_13616">ISO_13616</a>.
+ */
 public final class Iban implements Serializable {
 
     private static final long serialVersionUID = 3507561504372065317L;
@@ -26,7 +31,7 @@ public final class Iban implements Serializable {
         countryCode = builder.countryCode;
         bban = builder.buildBban();
         checkDigit = IbanUtil.calculateCheckDigit(countryCode, bban);
-        // TODO validation
+        // TODO validation, add to next version
     }
 
     public CountryCode getCountryCode() {
@@ -83,7 +88,9 @@ public final class Iban implements Serializable {
                 .toString();
     }
 
-
+    /**
+     * Iban Builder Class
+     */
     public static class Builder {
 
         private Bban.Builder bbanBuilder;
@@ -133,7 +140,14 @@ public final class Iban implements Serializable {
             return this;
         }
 
-        public Iban build() {
+        /**
+         * Builds new iban instance
+         *
+         * @return new iban instance
+         * @throws IbanFormatException if values are not parsable by Iban Specification
+         * <a href="http://en.wikipedia.org/wiki/ISO_13616">ISO_13616</a>
+         */
+        public Iban build() throws IbanFormatException {
             return new Iban(this);
         }
 

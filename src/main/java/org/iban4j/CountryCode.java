@@ -15,6 +15,11 @@ package org.iban4j;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Country Code Enum
+ *
+ * <a href="http://en.wikipedia.org/wiki/ISO_3166-1">ISO 3166-1</a> country code.
+ */
 public enum CountryCode {
 
     AD("Andorra", "AND"),
@@ -737,6 +742,10 @@ public enum CountryCode {
     ZW("Zimbabwe", "ZWE"),;
 
 
+    /**
+     * Country alpha3 code map, maps alpha3 codes to country codes
+     * <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3">ISO 3166-3 alpha-3</a> code.
+     */
     private static final Map<String, CountryCode> alpha3Map = new HashMap<String, CountryCode>();
 
     static {
@@ -745,8 +754,15 @@ public enum CountryCode {
         }
     }
 
-
+    /**
+     * Country name
+     */
     private final String name;
+
+    /**
+     * Country alpha3 code
+     * <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3">ISO 3166-3 alpha-3</a> code.
+     */
     private final String alpha3;
 
     private CountryCode(final String name, final String alpha3) {
@@ -810,7 +826,13 @@ public enum CountryCode {
         }
     }
 
-
+    /**
+     * Get a CountryCode that corresponds to the given ISO 3166-1
+     * <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">alpha-2</a> code.
+     *
+     * @param code An ISO 3166-1 <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">alpha-2</a> code.
+     * @return A CountryCode instance, or null if not found.
+     */
     private static CountryCode getByAlpha2Code(final String code) {
         try {
             return Enum.valueOf(CountryCode.class, code);
@@ -819,7 +841,13 @@ public enum CountryCode {
         }
     }
 
-
+    /**
+     * Get a CountryCode that corresponds to the given ISO 3166-1
+     * <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3">alpha-3</a> code.
+     *
+     * @param code An ISO 3166-1 <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3">alpha-3</a> code.
+     * @return A CountryCode instance, or null if not found.
+     */
     private static CountryCode getByAlpha3Code(final String code) {
         return alpha3Map.get(code);
     }

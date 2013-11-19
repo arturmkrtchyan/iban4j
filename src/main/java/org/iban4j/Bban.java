@@ -18,6 +18,9 @@ import org.iban4j.support.IbanStructureEntry;
 
 import java.io.Serializable;
 
+/**
+ * Basic Bank Account Number Class
+ */
 final class Bban implements Serializable {
 
     private static final long serialVersionUID = 8748285872603350092L;
