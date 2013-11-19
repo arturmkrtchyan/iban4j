@@ -17,7 +17,7 @@ import java.util.Map;
 
 /**
  * Country Code Enum
- *
+ * <p/>
  * <a href="http://en.wikipedia.org/wiki/ISO_3166-1">ISO 3166-1</a> country code.
  */
 public enum CountryCode {

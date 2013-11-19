@@ -29,7 +29,7 @@ public final class IbanUtil {
      * <a href="http://en.wikipedia.org/wiki/ISO_13616#Generating_IBAN_check_digits">Check Digit</a>.
      *
      * @param iban string value
-     * @return  check digit as String
+     * @return check digit as String
      */
     public static String calculateCheckDigit(final String iban) {
         String reformattedIban = removeCheckDigit(iban);
@@ -84,7 +84,7 @@ public final class IbanUtil {
             }
 
         }
-        return (int)(total % MOD);
+        return (int) (total % MOD);
     }
 
 

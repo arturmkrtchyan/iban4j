@@ -70,11 +70,13 @@ public final class Iban implements Serializable {
         return bban.getIdentificationNumber();
     }
 
-    protected Bban getBban() {
+    // TODO for future releases
+    private Bban getBban() {
         return bban;
     }
 
-    protected static Iban valueOf() throws IbanFormatException {
+    // TODO for future releases
+    private static Iban valueOf() throws IbanFormatException {
         // TODO implement
         return null;
     }

@@ -44,7 +44,7 @@ final class Bban implements Serializable {
         this.identificationNumber = builder.identificationNumber;
     }
 
-    public String format(final CountryCode countryCode) {
+    protected String format(final CountryCode countryCode) {
         IbanStructure structure = IbanStructureCache.getStructure(countryCode.getAlpha2());
         return format(structure);
     }
@@ -82,31 +82,31 @@ final class Bban implements Serializable {
         return sb.toString();
     }
 
-    public String getBankCode() {
+    protected String getBankCode() {
         return bankCode;
     }
 
-    public String getBranchCode() {
+    protected String getBranchCode() {
         return branchCode;
     }
 
-    public String getNationalCheckDigit() {
+    protected String getNationalCheckDigit() {
         return nationalCheckDigit;
     }
 
-    public String getAccountType() {
+    protected String getAccountType() {
         return accountType;
     }
 
-    public String getAccountNumber() {
+    protected String getAccountNumber() {
         return accountNumber;
     }
 
-    public String getOwnerAccountType() {
+    protected String getOwnerAccountType() {
         return ownerAccountType;
     }
 
-    public String getIdentificationNumber() {
+    protected String getIdentificationNumber() {
         return identificationNumber;
     }
 
