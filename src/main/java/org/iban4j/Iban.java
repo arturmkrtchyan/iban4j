@@ -1,4 +1,7 @@
-/* Licensed under the Apache License, Version 2.0 (the "License");
+/*
+ * Copyright 2013 Artur Mkrtchyan
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -32,6 +35,12 @@ public final class Iban implements Serializable {
         bban = builder.buildBban();
         checkDigit = IbanUtil.calculateCheckDigit(countryCode, bban);
         // TODO validation, add to next version
+    }
+
+    private Iban(CountryCode countryCode,  String checkDigit, Bban bban) throws IbanFormatException {
+        this.countryCode = countryCode;
+        this.checkDigit = checkDigit;
+        this.bban = bban;
     }
 
     public CountryCode getCountryCode() {
@@ -76,8 +85,11 @@ public final class Iban implements Serializable {
     }
 
     // TODO for future releases
-    private static Iban valueOf() throws IbanFormatException {
-        // TODO implement
+    private static Iban valueOf(String iban) throws IbanFormatException {
+        CountryCode countryCode = CountryCode.getByCode(iban.substring(0, 2));
+        String checkDigit = iban.substring(2, 4);
+//        Bban bban = Bban.valueOf(iban.substring);
+//        return new Iban(countryCode, checkDigit, bban);
         return null;
     }
 
