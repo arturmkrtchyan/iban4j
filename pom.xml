@@ -1,4 +1,6 @@
 <!--
+  Copyright 2013 Artur Mkrtchyan
+
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
@@ -18,7 +20,7 @@
 
     <groupId>org.iban4j</groupId>
     <artifactId>iban4j</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>iban4j</name>
@@ -56,6 +58,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdkVersion>1.5</jdkVersion>
+        <skipSigning>true</skipSigning>
     </properties>
 
     <dependencies>
@@ -168,6 +171,24 @@
             </plugin>
 
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipSigning}</skip>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
 
         </plugins>
     </build>
@@ -201,5 +222,21 @@
 
         </plugins>
     </reporting>
+
+    <profiles>
+        <profile>
+            <id>develope</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>release</id>
+                <properties>
+                    <skipSigning>false</skipSigning>
+                </properties>
+        </profile>
+    </profiles>
+
 
 </project>
