@@ -19,11 +19,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * Utility which helps to load properties file.
+ */
 class PropertiesLoaderUtil {
 
     private PropertiesLoaderUtil() {
     }
 
+    /**
+     * Loads and returns properties object.
+     *
+     * @param path to properties file
+     * @return properties object
+     * @throws IOException
+     */
     static Properties loadProperties(String path) throws IOException {
         Properties properties = new Properties();
         InputStream is = PropertiesLoaderUtil.class.getClassLoader().getResourceAsStream(path);

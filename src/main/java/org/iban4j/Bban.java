@@ -16,8 +16,8 @@
 package org.iban4j;
 
 import org.iban4j.support.IbanStructure;
-import org.iban4j.support.IbanStructureCache;
 import org.iban4j.support.IbanStructureEntry;
+import org.iban4j.support.IbanStructureResolver;
 
 import java.io.Serializable;
 
@@ -47,8 +47,8 @@ final class Bban implements Serializable {
         this.identificationNumber = builder.identificationNumber;
     }
 
-    protected String format(final CountryCode countryCode) {
-        IbanStructure structure = IbanStructureCache.getStructure(countryCode.getAlpha2());
+    public String format(final CountryCode countryCode) {
+        IbanStructure structure = IbanStructureResolver.getStructure(countryCode.getAlpha2());
         return format(structure);
     }
 
@@ -85,31 +85,31 @@ final class Bban implements Serializable {
         return sb.toString();
     }
 
-    protected String getBankCode() {
+    public String getBankCode() {
         return bankCode;
     }
 
-    protected String getBranchCode() {
+    public String getBranchCode() {
         return branchCode;
     }
 
-    protected String getNationalCheckDigit() {
+    public String getNationalCheckDigit() {
         return nationalCheckDigit;
     }
 
-    protected String getAccountType() {
+    public String getAccountType() {
         return accountType;
     }
 
-    protected String getAccountNumber() {
+    public String getAccountNumber() {
         return accountNumber;
     }
 
-    protected String getOwnerAccountType() {
+    public String getOwnerAccountType() {
         return ownerAccountType;
     }
 
-    protected String getIdentificationNumber() {
+    public String getIdentificationNumber() {
         return identificationNumber;
     }
 

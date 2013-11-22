@@ -17,6 +17,9 @@ package org.iban4j.support;
 
 import java.util.*;
 
+/**
+ * Class which represents iban structure
+ */
 public class IbanStructure {
 
     private static final String DEFAULT_VALUE_SPLITTER = ":";
@@ -26,37 +29,73 @@ public class IbanStructure {
     private Map<String, IbanStructureEntry> entries;
     private String rawStructure;
 
-    private IbanStructure(Map<String, IbanStructureEntry> entries, String rawStructure) {
+    private IbanStructure(final Map<String, IbanStructureEntry> entries, final String rawStructure) {
         this.entries = entries;
         this.rawStructure = rawStructure;
     }
 
+    /**
+     * Creates instance of iban structure.
+     *
+     * @param structure string representation.
+     * @return iban structure instance.
+     * @throws IllegalArgumentException if structure can't be parsed.
+     */
     public static IbanStructure valueOf(final String structure) throws IllegalArgumentException {
         return parseStructure(structure);
     }
 
+    /**
+     * Checks if structure has specified entry.
+     *
+     * @param entryType
+     * @return true if structure has specified entry.
+     */
     public boolean hasEntry(final IbanStructureEntry.EntryType entryType) {
         return entries.containsKey(entryType.name());
     }
 
+    /**
+     * Returns list of structure entries.
+     *
+     * @return list of structure entries
+     */
     public List<IbanStructureEntry> getEntries() {
         return Collections.unmodifiableList(new LinkedList<IbanStructureEntry>(entries.values()));
     }
 
+    /**
+     * Returns list of structure bban entries.
+     *
+     * @return bban entries
+     */
     public Collection<IbanStructureEntry> getBbanEntries() {
         LinkedList<IbanStructureEntry> tmpEntries = new LinkedList<IbanStructureEntry>(entries.values());
         return Collections.unmodifiableList(tmpEntries.subList(1, tmpEntries.size()));
     }
 
+    /**
+     * Returns entry for specified entry type.
+     *
+     * @param entryType
+     * @return entry for specified entry type.
+     */
     public IbanStructureEntry getEntry(final IbanStructureEntry.EntryType entryType) {
         return entries.get(entryType.name());
     }
 
+    /**
+     * Returns entry's default value.
+     *
+     * @param entryType
+     * @return entry's default value.
+     */
     public String getEntryDefaultValue(final IbanStructureEntry.EntryType entryType) {
         return entries.get(entryType.name()).getDefaultValue();
     }
 
     private static IbanStructure parseStructure(final String structure) throws IllegalArgumentException {
+        // it's important to have linked hash map to keep insertion order
         Map<String, IbanStructureEntry> entries = new LinkedHashMap<String, IbanStructureEntry>();
         try {
             String[] entriesStr = structure.split(ENTRY_SPLITTER);

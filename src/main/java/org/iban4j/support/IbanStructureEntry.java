@@ -15,6 +15,9 @@
  */
 package org.iban4j.support;
 
+/**
+ * Iban Structure Entry representation.
+ */
 public class IbanStructureEntry {
 
     private EntryType entryType;
@@ -22,11 +25,16 @@ public class IbanStructureEntry {
     private int length;
     private String defaultValue;
 
-    IbanStructureEntry(EntryType entryType, EntryCharacterType characterType, int length) {
+    IbanStructureEntry(final EntryType entryType,
+                       final EntryCharacterType characterType,
+                       final int length) {
         this(entryType, characterType, length, null);
     }
 
-    IbanStructureEntry(EntryType entryType, EntryCharacterType characterType, int length, String defaultValue) {
+    IbanStructureEntry(final EntryType entryType,
+                       final EntryCharacterType characterType,
+                       final int length,
+                       final String defaultValue) {
         this.entryType = entryType;
         this.characterType = characterType;
         this.length = length;

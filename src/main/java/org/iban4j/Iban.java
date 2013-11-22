@@ -30,14 +30,14 @@ public final class Iban implements Serializable {
     private String checkDigit;
     private Bban bban;
 
-    private Iban(Builder builder) throws IbanFormatException {
+    private Iban(final Builder builder) throws IbanFormatException {
         countryCode = builder.countryCode;
         bban = builder.buildBban();
         checkDigit = IbanUtil.calculateCheckDigit(countryCode, bban);
         // TODO validation, add to next version
     }
 
-    private Iban(CountryCode countryCode,  String checkDigit, Bban bban) throws IbanFormatException {
+    private Iban(final CountryCode countryCode, final String checkDigit, final Bban bban) throws IbanFormatException {
         this.countryCode = countryCode;
         this.checkDigit = checkDigit;
         this.bban = bban;
@@ -85,7 +85,7 @@ public final class Iban implements Serializable {
     }
 
     // TODO for future releases
-    private static Iban valueOf(String iban) throws IbanFormatException {
+    private static Iban valueOf(final String iban) throws IbanFormatException {
         CountryCode countryCode = CountryCode.getByCode(iban.substring(0, 2));
         String checkDigit = iban.substring(2, 4);
 //        Bban bban = Bban.valueOf(iban.substring);

@@ -18,28 +18,39 @@ package org.iban4j.support;
 import java.io.IOException;
 import java.util.Properties;
 
-public class IbanStructureCache {
+/**
+ * Iban Structure Resolver.
+ */
+public class IbanStructureResolver {
 
     private static final String DEFAULT_PROPERTIES_FILE = "iban.properties";
 
-    private static IbanConfiguration configuration = doConfigure();
+    private static final String IBAN_STRUCTURE_SUFFIX = ".structure";
 
-    private IbanStructureCache() {
+    private static PropertyResolver propertyResolver = configurePropertyResolver();
+
+    private IbanStructureResolver() {
     }
 
-    public static IbanStructure getStructure(String countryCode) {
-        return configuration.getStructure(countryCode);
+    /**
+     * Returns iban structure for specified country code.
+     *
+     * @param countryCode
+     * @return iban structure for specified country code.
+     */
+    public static IbanStructure getStructure(final String countryCode) {
+        String key = countryCode.toLowerCase() + IBAN_STRUCTURE_SUFFIX;
+        String structure = propertyResolver.getProperty(key);
+        return IbanStructure.valueOf(structure);
     }
 
-    private static IbanConfiguration doConfigure() throws IllegalStateException {
+    private static PropertyResolver configurePropertyResolver() throws IllegalStateException {
         Properties properties = null;
         try {
             properties = PropertiesLoaderUtil.loadProperties(DEFAULT_PROPERTIES_FILE);
         } catch (IOException e) {
             throw new IllegalStateException("Can not find configuration file", e);
         }
-        return new IbanConfiguration(properties);
+        return new PropertyResolver(properties);
     }
-
-
 }
