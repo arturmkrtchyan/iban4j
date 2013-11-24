@@ -43,7 +43,7 @@ public class IbanUtilTest {
 
         @Test
         public void checkDigitCalculationWithCountryCodeAndBbanShouldReturnCheckDigit() {
-            String checkDigit = IbanUtil.calculateCheckDigit(iban.getCountryCode(), iban.getBban());
+            String checkDigit = IbanUtil.calculateCheckDigit(iban);
             assertThat(checkDigit, is(equalTo(expectedIbanString.substring(2, 4))));
         }
 
@@ -65,7 +65,8 @@ public class IbanUtilTest {
 
         @Test(expected = IllegalArgumentException.class)
         public void checkDigitCalculationWithNonNumericBbanShouldThrowException() {
-            IbanUtil.calculateCheckDigit(CountryCode.AT, "0159260" + invalidCharacter + "076545510730339");
+
+            IbanUtil.calculateCheckDigit("AT000159260" + invalidCharacter + "076545510730339");
         }
 
         @Parameterized.Parameters

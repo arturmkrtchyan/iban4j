@@ -15,6 +15,10 @@
  */
 package org.iban4j;
 
+import org.iban4j.support.IbanStructure;
+import org.iban4j.support.IbanStructureEntry;
+import org.iban4j.support.IbanStructureResolver;
+
 import java.io.Serializable;
 
 /**
@@ -26,21 +30,32 @@ public final class Iban implements Serializable {
 
     private static final long serialVersionUID = 3507561504372065317L;
 
+    public static final String DEFAULT_CHECK_DIGIT = "00";
+
     private CountryCode countryCode;
     private String checkDigit;
-    private Bban bban;
+    private String bankCode;
+    private String branchCode;
+    private String nationalCheckDigit;
+    private String accountType;
+    private String accountNumber;
+    private String ownerAccountType;
+    private String identificationNumber;
 
     private Iban(final Builder builder) throws IbanFormatException {
-        countryCode = builder.countryCode;
-        bban = builder.buildBban();
-        checkDigit = IbanUtil.calculateCheckDigit(countryCode, bban);
-        // TODO validation, add to next version
-    }
 
-    private Iban(final CountryCode countryCode, final String checkDigit, final Bban bban) throws IbanFormatException {
-        this.countryCode = countryCode;
-        this.checkDigit = checkDigit;
-        this.bban = bban;
+        this.countryCode = builder.countryCode;
+        this.bankCode = builder.bankCode;
+        this.branchCode = builder.branchCode;
+        this.nationalCheckDigit = builder.nationalCheckDigit;
+        this.accountType = builder.accountType;
+        this.ownerAccountType = builder.ownerAccountType;
+        this.accountNumber = builder.accountNumber;
+        this.identificationNumber = builder.identificationNumber;
+
+        checkDigit = DEFAULT_CHECK_DIGIT;
+        checkDigit = IbanUtil.calculateCheckDigit(this);
+        // TODO validation, add to next version
     }
 
     public CountryCode getCountryCode() {
@@ -52,45 +67,79 @@ public final class Iban implements Serializable {
     }
 
     public String getAccountNumber() {
-        return bban.getAccountNumber();
+        return accountNumber;
     }
 
     public String getBankCode() {
-        return bban.getBankCode();
+        return bankCode;
     }
 
     public String getBranchCode() {
-        return bban.getBranchCode();
+        return branchCode;
     }
 
     public String getNationalCheckDigit() {
-        return bban.getNationalCheckDigit();
+        return nationalCheckDigit;
     }
 
     public String getAccountType() {
-        return bban.getAccountType();
+        return accountType;
     }
 
     public String getOwnerAccountType() {
-        return bban.getOwnerAccountType();
+        return ownerAccountType;
     }
 
     public String getIdentificationNumber() {
-        return bban.getIdentificationNumber();
+        return identificationNumber;
     }
 
-    // TODO for future releases
-    protected Bban getBban() {
-        return bban;
-    }
+
 
     // TODO for future releases
     private static Iban valueOf(final String iban) throws IbanFormatException {
         CountryCode countryCode = CountryCode.getByCode(iban.substring(0, 2));
         String checkDigit = iban.substring(2, 4);
-//        Bban bban = Bban.valueOf(iban.substring);
 //        return new Iban(countryCode, checkDigit, bban);
         return null;
+    }
+
+    protected String format() {
+        IbanStructure structure = IbanStructureResolver.getStructure(countryCode.getAlpha2());
+        return format(structure);
+    }
+
+    private String format(final IbanStructure structure) {
+        StringBuilder sb = new StringBuilder();
+        for(IbanStructureEntry entry : structure.getBbanEntries()) {
+            switch (entry.getEntryType()) {
+
+                case k:
+                    break;
+                case b:
+                    sb.append(bankCode);
+                    break;
+                case s:
+                    sb.append(branchCode);
+                    break;
+                case c:
+                    sb.append(accountNumber);
+                    break;
+                case x:
+                    sb.append(nationalCheckDigit);
+                    break;
+                case t:
+                    sb.append(accountType);
+                    break;
+                case n:
+                    sb.append(ownerAccountType);
+                    break;
+                case i:
+                    sb.append(identificationNumber);
+                    break;
+            }
+        }
+        return sb.toString();
     }
 
     @Override
@@ -98,7 +147,7 @@ public final class Iban implements Serializable {
         return new StringBuilder()
                 .append(countryCode.name())
                 .append(checkDigit)
-                .append(bban.format(countryCode))
+                .append(format())
                 .toString();
     }
 
@@ -107,11 +156,17 @@ public final class Iban implements Serializable {
      */
     public static class Builder {
 
-        private Bban.Builder bbanBuilder;
         private CountryCode countryCode;
+        private String checkDigit;
+        private String bankCode;
+        private String branchCode;
+        private String nationalCheckDigit;
+        private String accountType;
+        private String accountNumber;
+        private String ownerAccountType;
+        private String identificationNumber;
 
         public Builder() {
-            bbanBuilder = new Bban.Builder();
         }
 
         public Builder countryCode(final CountryCode countryCode) {
@@ -120,37 +175,37 @@ public final class Iban implements Serializable {
         }
 
         public Builder bankCode(final String bankCode) {
-            bbanBuilder.bankCode(bankCode);
+            this.bankCode = bankCode;
             return this;
         }
 
         public Builder branchCode(final String branchCode) {
-            bbanBuilder.branchCode(branchCode);
+            this.branchCode = branchCode;
             return this;
         }
 
         public Builder accountNumber(final String accountNumber) {
-            bbanBuilder.accountNumber(accountNumber);
+            this.accountNumber = accountNumber;
             return this;
         }
 
         public Builder nationalCheckDigit(final String nationalCheckDigit) {
-            bbanBuilder.nationalCheckDigit(nationalCheckDigit);
+            this.nationalCheckDigit = nationalCheckDigit;
             return this;
         }
 
         public Builder accountType(final String accountType) {
-            bbanBuilder.accountType(accountType);
+            this.accountType = accountType;
             return this;
         }
 
         public Builder ownerAccountType(final String ownerAccountType) {
-            bbanBuilder.ownerAccountType(ownerAccountType);
+            this.ownerAccountType = ownerAccountType;
             return this;
         }
 
         public Builder identificationNumber(final String identificationNumber) {
-            bbanBuilder.identificationNumber(identificationNumber);
+            this.identificationNumber = identificationNumber;
             return this;
         }
 
@@ -163,10 +218,6 @@ public final class Iban implements Serializable {
          */
         public Iban build() throws IbanFormatException {
             return new Iban(this);
-        }
-
-        private Bban buildBban() {
-            return bbanBuilder.build();
         }
     }
 

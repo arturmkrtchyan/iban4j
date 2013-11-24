@@ -20,7 +20,7 @@ package org.iban4j;
  */
 public final class IbanUtil {
 
-    private static final String DEFAULT_CHECK_DIGIT = "00";
+
     private static final long MOD = 97;
     private static final long MAX = 999999999;
 
@@ -42,16 +42,8 @@ public final class IbanUtil {
         return checkDigitIntValue > 9 ? checkDigit : "0" + checkDigit;
     }
 
-    protected static String calculateCheckDigit(final CountryCode countryCode, final Bban bban) {
-        return calculateCheckDigit(countryCode, bban.format(countryCode));
-    }
-
-    protected static String calculateCheckDigit(final CountryCode countryCode, final String bban) {
-        StringBuilder sb = new StringBuilder()
-                .append(countryCode.name())
-                .append(DEFAULT_CHECK_DIGIT)
-                .append(bban);
-        return calculateCheckDigit(sb.toString());
+    protected static String calculateCheckDigit(final Iban iban) {
+        return calculateCheckDigit(iban.toString());
     }
 
     /**
@@ -61,7 +53,7 @@ public final class IbanUtil {
      * @return The iban without the check digit
      */
     private static String removeCheckDigit(final String iban) {
-        return iban.substring(0, 2) + DEFAULT_CHECK_DIGIT + iban.substring(4);
+        return iban.substring(0, 2) + Iban.DEFAULT_CHECK_DIGIT + iban.substring(4);
     }
 
 
