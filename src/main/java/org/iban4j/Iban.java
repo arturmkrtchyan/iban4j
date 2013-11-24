@@ -15,6 +15,7 @@
  */
 package org.iban4j;
 
+import org.iban4j.support.Assert;
 import org.iban4j.support.IbanStructure;
 import org.iban4j.support.IbanStructureEntry;
 import org.iban4j.support.IbanStructureResolver;
@@ -32,18 +33,24 @@ public final class Iban implements Serializable {
 
     public static final String DEFAULT_CHECK_DIGIT = "00";
 
-    private CountryCode countryCode;
+    private final CountryCode countryCode;
     private String checkDigit;
-    private String bankCode;
-    private String branchCode;
-    private String nationalCheckDigit;
-    private String accountType;
-    private String accountNumber;
-    private String ownerAccountType;
-    private String identificationNumber;
+    private final String bankCode;
+    private final String branchCode;
+    private final String nationalCheckDigit;
+    private final String accountType;
+    private final String accountNumber;
+    private final String ownerAccountType;
+    private final String identificationNumber;
 
-    private Iban(final Builder builder) throws IbanFormatException {
+    private final IbanStructure structure;
 
+    /**
+     * Creates iban with default check digit.
+     *
+     * @param builder Builder
+     */
+    private Iban(final Builder builder) {
         this.countryCode = builder.countryCode;
         this.bankCode = builder.bankCode;
         this.branchCode = builder.branchCode;
@@ -52,10 +59,9 @@ public final class Iban implements Serializable {
         this.ownerAccountType = builder.ownerAccountType;
         this.accountNumber = builder.accountNumber;
         this.identificationNumber = builder.identificationNumber;
+        this.checkDigit = DEFAULT_CHECK_DIGIT;
 
-        checkDigit = DEFAULT_CHECK_DIGIT;
-        checkDigit = IbanUtil.calculateCheckDigit(this);
-        // TODO validation, add to next version
+        this.structure = IbanStructureResolver.getStructure(countryCode.getAlpha2());
     }
 
     public CountryCode getCountryCode() {
@@ -104,17 +110,13 @@ public final class Iban implements Serializable {
         return null;
     }
 
-    protected String format() {
-        IbanStructure structure = IbanStructureResolver.getStructure(countryCode.getAlpha2());
-        return format(structure);
-    }
-
-    private String format(final IbanStructure structure) {
-        StringBuilder sb = new StringBuilder();
-        for(IbanStructureEntry entry : structure.getBbanEntries()) {
+    private String format() {
+        StringBuilder sb = new StringBuilder(countryCode.getAlpha2());
+        for(IbanStructureEntry entry : structure.getEntries()) {
             switch (entry.getEntryType()) {
 
                 case k:
+                    sb.append(checkDigit);
                     break;
                 case b:
                     sb.append(bankCode);
@@ -142,22 +144,21 @@ public final class Iban implements Serializable {
         return sb.toString();
     }
 
+    private void validateLength() {
+
+    }
+
     @Override
     public String toString() {
-        return new StringBuilder()
-                .append(countryCode.name())
-                .append(checkDigit)
-                .append(format())
-                .toString();
+        return format();
     }
 
     /**
      * Iban Builder Class
      */
-    public static class Builder {
+    public final static class Builder {
 
         private CountryCode countryCode;
-        private String checkDigit;
         private String bankCode;
         private String branchCode;
         private String nationalCheckDigit;
@@ -210,14 +211,28 @@ public final class Iban implements Serializable {
         }
 
         /**
-         * Builds new iban instance
+         * Builds new iban instance.
          *
-         * @return new iban instance
-         * @throws IbanFormatException if values are not parsable by Iban Specification
+         * @return new iban instance.
+         * @throws IbanFormatException, IllegalArgumentException if values are not parsable by Iban Specification
          * <a href="http://en.wikipedia.org/wiki/ISO_13616">ISO_13616</a>
          */
-        public Iban build() throws IbanFormatException {
-            return new Iban(this);
+        public Iban build() throws IbanFormatException, IllegalArgumentException {
+
+            Assert.notNull(countryCode, "countryCode is required; it cannot be null");
+            Assert.notNull(bankCode, "bankCode is required; it cannot be null");
+            Assert.notNull(accountNumber, "accountNumber is required; it cannot be null");
+
+            // iban instance with default check digit
+            Iban iban = new Iban(this);
+
+            // replace default check digit with calculated check digit
+            iban.checkDigit = IbanUtil.calculateCheckDigit(iban);
+
+            // validate iban
+            IbanUtil.validate(iban);
+
+            return iban;
         }
     }
 

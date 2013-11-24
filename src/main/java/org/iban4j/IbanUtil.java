@@ -15,6 +15,9 @@
  */
 package org.iban4j;
 
+import org.iban4j.support.IbanStructure;
+import org.iban4j.support.IbanStructureResolver;
+
 /**
  * Iban Utility Class
  */
@@ -40,6 +43,20 @@ public final class IbanUtil {
         int checkDigitIntValue = (98 - modResult);
         String checkDigit = Integer.toString(checkDigitIntValue);
         return checkDigitIntValue > 9 ? checkDigit : "0" + checkDigit;
+    }
+
+    public static void validate(Iban iban) throws IbanFormatException {
+        IbanStructure structure = IbanStructureResolver.getStructure(iban.getCountryCode().getAlpha2());
+        int expectedLength = structure.getIbanLength();
+        int realLength = iban.toString().length();
+        if (expectedLength != realLength) {
+            throw new IbanFormatException("[" + iban + "] length is " +
+                    realLength + ", expected IBAN length is: " + expectedLength);
+        }
+    }
+
+    protected static void validate(String iban) throws IbanFormatException {
+        // TODO use valueOf
     }
 
     protected static String calculateCheckDigit(final Iban iban) {

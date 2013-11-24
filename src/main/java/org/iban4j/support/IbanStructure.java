@@ -25,6 +25,7 @@ public class IbanStructure {
     private static final String DEFAULT_VALUE_SPLITTER = ":";
     private static final String CHARACTER_TYPE_SPLITTER = "!";
     private static final String ENTRY_SPLITTER = " ";
+    private static final int COUNTRY_CODE_LENGTH = 2;
 
     private Map<String, IbanStructureEntry> entries;
     private String rawStructure;
@@ -65,13 +66,18 @@ public class IbanStructure {
     }
 
     /**
-     * Returns list of structure bban entries.
+     * Returns the length of iban.
      *
-     * @return bban entries
+     * @return int length
      */
-    public Collection<IbanStructureEntry> getBbanEntries() {
-        LinkedList<IbanStructureEntry> tmpEntries = new LinkedList<IbanStructureEntry>(entries.values());
-        return Collections.unmodifiableList(tmpEntries.subList(1, tmpEntries.size()));
+    public int getIbanLength() {
+        int length = COUNTRY_CODE_LENGTH;
+
+        for(IbanStructureEntry entry : entries.values()) {
+            length += entry.getLength();
+        }
+
+        return length;
     }
 
     /**
