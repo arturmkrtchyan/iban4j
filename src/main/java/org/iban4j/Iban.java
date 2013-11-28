@@ -212,10 +212,12 @@ public final class Iban implements Serializable {
          * Builds new iban instance.
          *
          * @return new iban instance.
-         * @throws IbanFormatException, IllegalArgumentException if values are not parsable by Iban Specification
-         * <a href="http://en.wikipedia.org/wiki/ISO_13616">ISO_13616</a>
+         * @throws IbanFormatException, IllegalArgumentException, UnsupportedCountryException
+         *  if values are not parsable by Iban Specification
+         *  <a href="http://en.wikipedia.org/wiki/ISO_13616">ISO_13616</a>
          */
-        public Iban build() throws IbanFormatException, IllegalArgumentException {
+        public Iban build() throws IbanFormatException,
+                IllegalArgumentException, UnsupportedCountryException {
 
             Assert.notNull(countryCode, "countryCode is required; it cannot be null");
             Assert.notNull(bankCode, "bankCode is required; it cannot be null");

@@ -16,49 +16,47 @@
 package org.iban4j;
 
 /**
- * Thrown to indicate that the application has attempted to convert
- * a string to Iban, but that the string does not
- * have the appropriate format.
+ * Thrown to indicate that requested country is not supported.
  */
-public class IbanFormatException extends RuntimeException {
+public class UnsupportedCountryException extends RuntimeException {
 
-    private static final long serialVersionUID = 4385766780446382504L;
+    private static final long serialVersionUID = -5193286194898199366L;
 
     /**
-     * Constructs a <code>IbanFormatException</code> with no detail message.
+     * Constructs a <code>UnsupportedCountryException</code> with no detail message and cause.
      */
-    public IbanFormatException() {
+    public UnsupportedCountryException() {
         super();
     }
 
     /**
-     * Constructs a <code>IbanFormatException</code> with the
+     * Constructs a <code>UnsupportedCountryException</code> with the
      * specified detail message.
      *
      * @param s the detail message.
      */
-    public IbanFormatException(final String s) {
+    public UnsupportedCountryException(final String s) {
         super(s);
     }
 
     /**
-     * Constructs a <code>IbanFormatException</code> with the
+     * Constructs a <code>UnsupportedCountryException</code> with the
      * specified detail message and cause.
      *
      * @param s the detail message.
      * @param t the cause.
      */
-    public IbanFormatException(final String s, final Throwable t) {
+    public UnsupportedCountryException(final String s, final Throwable t) {
         super(s, t);
     }
 
     /**
-     * Constructs a <code>IbanFormatException</code> with the
+     * Constructs a <code>UnsupportedCountryException</code> with the
      * specified cause.
      *
      * @param t the cause.
      */
-    public IbanFormatException(final Throwable t) {
+    public UnsupportedCountryException(final Throwable t) {
         super(t);
     }
 }
