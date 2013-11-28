@@ -15,7 +15,10 @@
  */
 package org.iban4j.support;
 
-public class Assert {
+public final class Assert {
+
+    private Assert() {
+    }
 
     /**
      * Assert that an object is not null.
@@ -24,7 +27,7 @@ public class Assert {
      * @param message to use if the assertion fails
      * @throws IllegalArgumentException if the object is null
      */
-    public static void notNull(Object object, String message) throws IllegalArgumentException {
+    public static void notNull(final Object object, final String message) throws IllegalArgumentException {
         if (object == null) {
             throw new IllegalArgumentException(message);
         }

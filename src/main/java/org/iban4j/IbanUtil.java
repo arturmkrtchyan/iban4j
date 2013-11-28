@@ -45,7 +45,13 @@ public final class IbanUtil {
         return checkDigitIntValue > 9 ? checkDigit : "0" + checkDigit;
     }
 
-    public static void validate(Iban iban) throws IbanFormatException {
+    /**
+     * Validates iban.
+     *
+     * @param iban to be validated.
+     * @throws IbanFormatException if iban is invalid.
+     */
+    public static void validate(final Iban iban) throws IbanFormatException {
         IbanStructure structure = IbanStructureResolver.getStructure(iban.getCountryCode().getAlpha2());
         int expectedLength = structure.getIbanLength();
         int realLength = iban.toString().length();
@@ -53,6 +59,8 @@ public final class IbanUtil {
             throw new IbanFormatException("[" + iban + "] length is " +
                     realLength + ", expected IBAN length is: " + expectedLength);
         }
+
+        // TODO add validation for each entry
     }
 
     protected static void validate(String iban) throws IbanFormatException {

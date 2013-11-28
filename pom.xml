@@ -79,21 +79,6 @@
     <build>
         <plugins>
 
-            <!-- Bundle sources -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.2.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
             <!-- Compilation -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -170,7 +155,42 @@
                 </executions>
             </plugin>
 
+            <!-- Bundle sources during verify phase -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
+            <!-- Generating Javadoc during verify phase -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <excludePackageNames>*.support</excludePackageNames>
+                </configuration>
+            </plugin>
+
+            <!-- GPG Signing during verify phase -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
@@ -189,11 +209,16 @@
                 </executions>
             </plugin>
 
+            <!-- Releasing -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.4.2</version>
+            </plugin>
+
 
         </plugins>
     </build>
-
-    <!-- TODO Signing with gpg -->
 
     <reporting>
         <plugins>
@@ -210,32 +235,35 @@
                 <version>2.0-beta-2</version>
             </plugin>
 
-            <!-- Generating Javadoc -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
-                <configuration>
-                    <excludePackageNames>*.support</excludePackageNames>
-                </configuration>
-            </plugin>
-
         </plugins>
     </reporting>
 
     <profiles>
+
         <profile>
             <id>develope</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
         </profile>
+
+        <!--
+         This profile will be activated when the value of maven property performRelease is true.
+         When you use maven-release-plugin and run mvn release:perform, the property value will be set to true.
+         -->
         <profile>
             <id>release</id>
-                <properties>
-                    <skipSigning>false</skipSigning>
-                </properties>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <properties>
+                <skipSigning>false</skipSigning>
+            </properties>
         </profile>
+
     </profiles>
 
 

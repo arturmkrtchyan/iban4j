@@ -59,6 +59,8 @@ public final class Iban implements Serializable {
         this.ownerAccountType = builder.ownerAccountType;
         this.accountNumber = builder.accountNumber;
         this.identificationNumber = builder.identificationNumber;
+
+        // initialize with default check digit
         this.checkDigit = DEFAULT_CHECK_DIGIT;
 
         this.structure = IbanStructureResolver.getStructure(countryCode.getAlpha2());
@@ -142,10 +144,6 @@ public final class Iban implements Serializable {
             }
         }
         return sb.toString();
-    }
-
-    private void validateLength() {
-
     }
 
     @Override
