@@ -35,6 +35,12 @@ How to validate IBAN
       </dependency>
 ```
 
+
+#### References
+
+- http://www.swift.com/dsp/resources/documents/IBAN_Registry.pdf
+- http://en.wikipedia.org/wiki/IBAN
+
 ## License
 Copyright 2013 Artur Mkrtchyan.
 
