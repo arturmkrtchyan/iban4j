@@ -15,8 +15,12 @@
  */
 package org.iban4j;
 
+import org.iban4j.support.Assert;
 import org.iban4j.support.IbanStructure;
+import org.iban4j.support.IbanStructureEntry;
 import org.iban4j.support.IbanStructureResolver;
+
+import java.util.List;
 
 /**
  * Iban Utility Class
@@ -52,19 +56,72 @@ public final class IbanUtil {
      * @throws IbanFormatException if iban is invalid.
      */
     public static void validate(final Iban iban) throws IbanFormatException {
-        IbanStructure structure = IbanStructureResolver.getStructure(iban.getCountryCode().getAlpha2());
+        validate(iban.toString());
+    }
+
+    /**
+     * Validates iban.
+     *
+     * @param iban to be validated.
+     * @throws IbanFormatException if iban is invalid.
+     */
+    public static void validate(String iban) throws IbanFormatException {
+
+        IbanStructure structure = getIbanStructure(iban);
+
+        try {
+            validateIbanLength(iban, structure);
+            validateIbanEntries(iban, structure);
+        } catch (Exception e) {
+            throw new IbanFormatException(e);
+        }
+    }
+
+    private static IbanStructure getIbanStructure(String iban) {
+        String countryCode = iban.substring(0, 2);
+        return IbanStructureResolver.getStructure(countryCode);
+    }
+
+    private static void validateIbanLength(String iban, IbanStructure structure) {
         int expectedLength = structure.getIbanLength();
-        int realLength = iban.toString().length();
+        int realLength = iban.length();
         if (expectedLength != realLength) {
             throw new IbanFormatException("[" + iban + "] length is " +
                     realLength + ", expected IBAN length is: " + expectedLength);
         }
-
-        // TODO add validation for each entry
     }
 
-    protected static void validate(String iban) throws IbanFormatException {
-        // TODO use valueOf
+    private static void validateIbanEntries(String iban, IbanStructure structure) {
+        int ibanEntryOffset = 2;
+        List<IbanStructureEntry> entries = structure.getEntries();
+        for(IbanStructureEntry entry : entries) {
+            int entryLength = entry.getLength();
+            String entryValue = iban.substring(ibanEntryOffset, ibanEntryOffset + entryLength);
+
+            // validate length
+            Assert.hasLength(entryValue, entryLength, "Invalid bank code length.");
+            ibanEntryOffset = ibanEntryOffset + entryLength;
+
+            // validate character type
+            switch (entry.getCharacterType()) {
+                case a:
+                    for(char ch: entryValue.toCharArray()) {
+                        Assert.isTrue(Character.isUpperCase(ch), "[" + entryValue + "] must contain only digits");
+                    }
+                    break;
+                case c:
+                    for(char ch: entryValue.toCharArray()) {
+                        Assert.isTrue(Character.isLetterOrDigit(ch), "[" + entryValue + "] must contain only digits");
+                    }
+                    break;
+                case n:
+                    for(char ch: entryValue.toCharArray()) {
+                        Assert.isTrue(Character.isDigit(ch), "[" + entryValue + "] must contain only digits");
+                    }
+                    break;
+
+            }
+        }
     }
 
     protected static String calculateCheckDigit(final Iban iban) {
@@ -106,6 +163,5 @@ public final class IbanUtil {
         }
         return (int) (total % MOD);
     }
-
 
 }

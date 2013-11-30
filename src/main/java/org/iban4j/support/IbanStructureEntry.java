@@ -75,8 +75,7 @@ public class IbanStructureEntry {
     public enum EntryCharacterType {
         n,  // Digits (numeric characters 0 to 9 only)
         a,  // Upper case letters (alphabetic characters A-Z only)
-        c,  // upper and lower case alphanumeric characters (A-Z, a-z and 0-9)
-        e;  // blank space
+        c;  // upper and lower case alphanumeric characters (A-Z, a-z and 0-9)
     }
 }
 

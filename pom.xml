@@ -241,7 +241,7 @@
     <profiles>
 
         <profile>
-            <id>develope</id>
+            <id>develop</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>

@@ -21,6 +21,22 @@ public final class Assert {
     }
 
     /**
+     * Assert a boolean expression, throwing {@code IllegalArgumentException}
+     * if the test result is {@code false}.
+     *
+     * <pre class="code">Assert.isTrue(i &gt; 0, "The value must be greater than zero");</pre>
+     *
+     * @param expression a boolean expression
+     * @param message the exception message to use if the assertion fails
+     * @throws IllegalArgumentException if expression is {@code false}
+     */
+    public static void isTrue(boolean expression, String message) {
+        if (!expression) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    /**
      * Assert that an object is not null.
      *
      * @param object to check
@@ -29,6 +45,22 @@ public final class Assert {
      */
     public static void notNull(final Object object, final String message) throws IllegalArgumentException {
         if (object == null) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    /**
+     * Assert that the given String has expected length.
+     * <pre class="code">Assert.hasLength(name, 8, "The length of name must be 8");</pre>
+     *
+     * @param text the String to check
+     * @param length the expected length
+     * @param message the exception message to use if the assertion fails
+     * @throws IllegalArgumentException if the string doesn't have expected length.
+     */
+    public static void hasLength(String text, int length, String message) {
+        Assert.notNull(text, message);
+        if (text.length() != length) {
             throw new IllegalArgumentException(message);
         }
     }
