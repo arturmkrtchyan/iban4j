@@ -63,7 +63,7 @@ public final class Iban implements Serializable {
         // initialize with default check digit
         this.checkDigit = DEFAULT_CHECK_DIGIT;
 
-        this.structure = IbanStructureResolver.getStructure(countryCode.getAlpha2());
+        this.structure = builder.structure;
     }
 
     public CountryCode getCountryCode() {
@@ -164,6 +164,7 @@ public final class Iban implements Serializable {
         private String accountNumber;
         private String ownerAccountType;
         private String identificationNumber;
+        private IbanStructure structure;
 
         public Builder() {
         }
@@ -219,9 +220,17 @@ public final class Iban implements Serializable {
         public Iban build() throws IbanFormatException,
                 IllegalArgumentException, UnsupportedCountryException {
 
+            // null checks
             Assert.notNull(countryCode, "countryCode is required; it cannot be null");
             Assert.notNull(bankCode, "bankCode is required; it cannot be null");
             Assert.notNull(accountNumber, "accountNumber is required; it cannot be null");
+
+            // throw exception if country is not supported
+            try {
+                structure = IbanStructureResolver.getStructure(countryCode.getAlpha2());
+            } catch (IllegalArgumentException e) {
+                throw new UnsupportedCountryException(e);
+            }
 
             // iban instance with default check digit
             Iban iban = new Iban(this);

@@ -37,10 +37,12 @@ public class IbanStructureResolver {
      *
      * @param countryCode
      * @return iban structure for specified country code.
+     * @throws IllegalArgumentException if there is no structure defined for specified country.
      */
     public static IbanStructure getStructure(final String countryCode) {
         String key = countryCode.toLowerCase() + IBAN_STRUCTURE_SUFFIX;
         String structure = propertyResolver.getProperty(key);
+        Assert.notNull(structure, "Structure is not defined for specified country.");
         return IbanStructure.valueOf(structure);
     }
 

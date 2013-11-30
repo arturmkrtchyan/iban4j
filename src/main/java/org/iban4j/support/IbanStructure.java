@@ -40,9 +40,9 @@ public class IbanStructure {
      *
      * @param structure string representation.
      * @return iban structure instance.
-     * @throws IllegalArgumentException if structure can't be parsed.
+     * @throws IllegalStateException if structure can't be parsed.
      */
-    public static IbanStructure valueOf(final String structure) throws IllegalArgumentException {
+    public static IbanStructure valueOf(final String structure) throws IllegalStateException {
         return parseStructure(structure);
     }
 
@@ -100,7 +100,7 @@ public class IbanStructure {
         return entries.get(entryType.name()).getDefaultValue();
     }
 
-    private static IbanStructure parseStructure(final String structure) throws IllegalArgumentException {
+    private static IbanStructure parseStructure(final String structure) throws IllegalStateException {
         // it's important to have linked hash map to keep insertion order
         Map<String, IbanStructureEntry> entries = new LinkedHashMap<String, IbanStructureEntry>();
         try {
@@ -110,7 +110,7 @@ public class IbanStructure {
                 entries.put(entry.getEntryType().name(), entry);
             }
         } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid IBAN Structure is passed: " + structure, e);
+            throw new IllegalStateException("Invalid IBAN Structure: " + structure, e);
         }
         return new IbanStructure(entries, structure);
     }
