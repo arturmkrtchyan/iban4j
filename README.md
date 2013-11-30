@@ -3,9 +3,10 @@ iban4j [![Build Status](https://travis-ci.org/arturmkrtchyan/iban4j.png)](https:
 
 A Java library for International Bank Account Number (<a href="http://en.wikipedia.org/wiki/ISO_13616" target="_blank">IBAN</a>) generation
 
-##### Here are some quick examples:
 
-How to generat IBAN
+#### Here are some quick examples:
+
+How to generate IBAN
 
 ```java
  Iban iban = new Iban.Builder()
@@ -25,7 +26,7 @@ How to validate IBAN
         }
 ```
 
-##### Maven dependency: 
+#### Maven dependency: 
 ```
       <dependency>
           <groupId>org.iban4j</groupId>
