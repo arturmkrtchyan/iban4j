@@ -90,5 +90,23 @@ public class IbanTest {
                     .build();
         }
 
+        @Test(expected = IbanFormatException.class)
+        public void ibanConstructionWithInvalidCharacterShouldThrowException() {
+            new Iban.Builder()
+                    .countryCode(CountryCode.AT)
+                    .bankCode("19043")
+                    .accountNumber("A0234573201")
+                    .build();
+        }
+
+        @Test(expected = IbanFormatException.class)
+        public void ibanConstructionWithShortBankCodeShouldThrowException() {
+            new Iban.Builder()
+                    .countryCode(CountryCode.AT)
+                    .bankCode("1904")
+                    .accountNumber("A0234573201")
+                    .build();
+        }
+
     }
 }
