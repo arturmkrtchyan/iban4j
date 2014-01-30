@@ -108,5 +108,37 @@ public class IbanTest {
                     .build();
         }
 
+        @Test
+        public void ibansWithSameDataShouldBeEqual() {
+            Iban iban1 = new Iban.Builder()
+                            .countryCode(CountryCode.AT)
+                            .bankCode("1904")
+                            .accountNumber("102345732012")
+                            .build();
+            Iban iban2 = new Iban.Builder()
+                    .countryCode(CountryCode.AT)
+                    .bankCode("1904")
+                    .accountNumber("102345732012")
+                    .build();
+
+            assertThat(iban1, is(equalTo(iban2)));
+        }
+
+        @Test
+        public void ibansWithSameDataShouldHaveSameHashCode() {
+            Iban iban1 = new Iban.Builder()
+                    .countryCode(CountryCode.AT)
+                    .bankCode("1904")
+                    .accountNumber("102345732012")
+                    .build();
+            Iban iban2 = new Iban.Builder()
+                    .countryCode(CountryCode.AT)
+                    .bankCode("1904")
+                    .accountNumber("102345732012")
+                    .build();
+
+            assertThat(iban1.hashCode(), is(equalTo(iban2.hashCode())));
+        }
+
     }
 }

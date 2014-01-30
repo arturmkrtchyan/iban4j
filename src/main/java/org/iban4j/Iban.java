@@ -45,6 +45,9 @@ public final class Iban implements Serializable {
 
     private final IbanStructure structure;
 
+    // Cache string value of the iban
+    private String value;
+
     /**
      * Creates iban with default check digit.
      *
@@ -151,6 +154,19 @@ public final class Iban implements Serializable {
         return format();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Iban) {
+            return value.equals(((Iban)obj).value);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
+
     /**
      * Iban Builder Class
      */
@@ -240,6 +256,9 @@ public final class Iban implements Serializable {
 
             // validate iban
             IbanUtil.validate(iban);
+
+            // pre-genrate and cache iban string value
+            iban.value = iban.format();
 
             return iban;
         }
