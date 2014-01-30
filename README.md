@@ -31,7 +31,7 @@ How to validate IBAN
       <dependency>
           <groupId>org.iban4j</groupId>
           <artifactId>iban4j</artifactId>
-          <version>1.0.1</version>
+          <version>1.0.2</version>
       </dependency>
 ```
 
