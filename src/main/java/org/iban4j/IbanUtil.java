@@ -67,10 +67,12 @@ public final class IbanUtil {
      */
     public static void validate(String iban) throws IbanFormatException {
 
+        // FIXME -> PERF: optimize performance of this method -> 100 ms
         IbanStructure structure = getIbanStructure(iban);
 
         try {
             validateIbanLength(iban, structure);
+            // FIXME -> PERF: optimize performance of this method -> 70 ms
             validateIbanEntries(iban, structure);
         } catch (Exception e) {
             throw new IbanFormatException(e);
