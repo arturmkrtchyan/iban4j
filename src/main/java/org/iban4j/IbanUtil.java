@@ -17,7 +17,7 @@ package org.iban4j;
 
 import org.iban4j.bban.BbanStructure;
 import org.iban4j.bban.BbanStructureEntry;
-import org.iban4j.support.*;
+import org.iban4j.support.Assert;
 
 /**
  * Iban Utility Class

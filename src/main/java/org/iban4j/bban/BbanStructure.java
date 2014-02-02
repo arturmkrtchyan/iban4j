@@ -16,8 +16,8 @@
 package org.iban4j.bban;
 
 import org.iban4j.CountryCode;
+import java.util.EnumMap;
 
-import java.util.*;
 
 /**
  * Class which represents bban structure
