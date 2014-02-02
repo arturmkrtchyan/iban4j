@@ -15,10 +15,9 @@
  */
 package org.iban4j;
 
-import org.iban4j.support.Assert;
-import org.iban4j.support.IbanStructure;
-import org.iban4j.support.IbanStructureEntry;
-import org.iban4j.support.IbanStructureResolver;
+import org.iban4j.bban.BbanStructure;
+import org.iban4j.bban.BbanStructureEntry;
+import org.iban4j.support.*;
 
 import java.io.Serializable;
 
@@ -43,7 +42,7 @@ public final class Iban implements Serializable {
     private final String ownerAccountType;
     private final String identificationNumber;
 
-    private final IbanStructure structure;
+    private final BbanStructure bbanStructure;
 
     // Cache string value of the iban
     private String value;
@@ -66,7 +65,7 @@ public final class Iban implements Serializable {
         // initialize with default check digit
         this.checkDigit = DEFAULT_CHECK_DIGIT;
 
-        this.structure = builder.structure;
+        this.bbanStructure = builder.bbanStructure;
     }
 
     public CountryCode getCountryCode() {
@@ -106,7 +105,6 @@ public final class Iban implements Serializable {
     }
 
 
-
     // TODO for future releases
     private static Iban valueOf(final String iban) throws IbanFormatException {
         CountryCode countryCode = CountryCode.getByCode(iban.substring(0, 2));
@@ -115,14 +113,22 @@ public final class Iban implements Serializable {
         return null;
     }
 
+    // TODO for future releases
+    private String getBban() {
+        return formatBban();
+    }
+
     private String format() {
         StringBuilder sb = new StringBuilder(countryCode.getAlpha2());
-        for(IbanStructureEntry entry : structure.getEntries()) {
-            switch (entry.getEntryType()) {
+        sb.append(checkDigit);
+        sb.append(formatBban());
+        return sb.toString();
+    }
 
-                case k:
-                    sb.append(checkDigit);
-                    break;
+    private String formatBban() {
+        StringBuilder sb = new StringBuilder();
+        for(BbanStructureEntry entry : bbanStructure.getEntries()) {
+            switch (entry.getEntryType()) {
                 case b:
                     sb.append(bankCode);
                     break;
@@ -180,7 +186,7 @@ public final class Iban implements Serializable {
         private String accountNumber;
         private String ownerAccountType;
         private String identificationNumber;
-        private IbanStructure structure;
+        private BbanStructure bbanStructure;
 
         public Builder() {
         }
@@ -241,11 +247,10 @@ public final class Iban implements Serializable {
             Assert.notNull(bankCode, "bankCode is required; it cannot be null");
             Assert.notNull(accountNumber, "accountNumber is required; it cannot be null");
 
-            // throw exception if country is not supported
-            try {
-                structure = IbanStructureResolver.getStructure(countryCode.getAlpha2());
-            } catch (IllegalArgumentException e) {
-                throw new UnsupportedCountryException(e);
+            bbanStructure = BbanStructure.forCountry(countryCode);
+
+            if(bbanStructure == null) {
+                throw new UnsupportedCountryException();
             }
 
             // iban instance with default check digit
@@ -254,11 +259,13 @@ public final class Iban implements Serializable {
             // replace default check digit with calculated check digit
             iban.checkDigit = IbanUtil.calculateCheckDigit(iban);
 
-            // validate iban
-            IbanUtil.validate(iban);
-
             // pre-genrate and cache iban string value
             iban.value = iban.format();
+
+            // validate iban
+            IbanUtil.validate(iban.value);
+
+
 
             return iban;
         }

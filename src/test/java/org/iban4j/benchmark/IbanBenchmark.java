@@ -1,5 +1,5 @@
-package org.iban4j.benchmark;
 
+package org.iban4j.benchmark;
 
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;
@@ -11,7 +11,7 @@ import org.junit.rules.TestRule;
 
 public class IbanBenchmark {
 
-    public static final long LOOPS_COUNT = 100000;
+    public static final long LOOPS_COUNT = 1000000;
 
     @Rule
     public TestRule benchmarkRun = new BenchmarkRule();

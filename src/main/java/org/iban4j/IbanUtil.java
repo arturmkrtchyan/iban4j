@@ -15,12 +15,9 @@
  */
 package org.iban4j;
 
-import org.iban4j.support.Assert;
-import org.iban4j.support.IbanStructure;
-import org.iban4j.support.IbanStructureEntry;
-import org.iban4j.support.IbanStructureResolver;
-
-import java.util.List;
+import org.iban4j.bban.BbanStructure;
+import org.iban4j.bban.BbanStructureEntry;
+import org.iban4j.support.*;
 
 /**
  * Iban Utility Class
@@ -54,7 +51,10 @@ public final class IbanUtil {
      *
      * @param iban to be validated.
      * @throws IbanFormatException if iban is invalid.
+     *
+     * @deprecated use {@link #validate(String)} instead.
      */
+    @Deprecated
     public static void validate(final Iban iban) throws IbanFormatException {
         validate(iban.toString());
     }
@@ -64,39 +64,41 @@ public final class IbanUtil {
      *
      * @param iban to be validated.
      * @throws IbanFormatException if iban is invalid.
+     *         UnsupportedCountryException if iban's country is not supported.
      */
     public static void validate(String iban) throws IbanFormatException {
 
-        // FIXME -> PERF: optimize performance of this method -> 100 ms
-        IbanStructure structure = getIbanStructure(iban);
+        BbanStructure structure = getBbanStructure(iban);
+
+        if(structure == null) {
+            throw new UnsupportedCountryException();
+        }
 
         try {
             validateIbanLength(iban, structure);
-            // FIXME -> PERF: optimize performance of this method -> 70 ms
             validateIbanEntries(iban, structure);
         } catch (Exception e) {
             throw new IbanFormatException(e);
         }
     }
 
-    private static IbanStructure getIbanStructure(String iban) {
+    private static BbanStructure getBbanStructure(String iban) {
         String countryCode = iban.substring(0, 2);
-        return IbanStructureResolver.getStructure(countryCode);
+        return BbanStructure.forCountry(CountryCode.valueOf(countryCode));
     }
 
-    private static void validateIbanLength(String iban, IbanStructure structure) {
-        int expectedLength = structure.getIbanLength();
-        int realLength = iban.length();
-        if (expectedLength != realLength) {
+    private static void validateIbanLength(String iban, BbanStructure structure) {
+        int bbanLength = structure.getBbanLength();
+        int ibanLength = iban.length();
+        if (bbanLength != ibanLength - 4) {
             throw new IbanFormatException("[" + iban + "] length is " +
-                    realLength + ", expected IBAN length is: " + expectedLength);
+                    ibanLength + ", expected IBAN length is: " + (bbanLength + 4));
         }
     }
 
-    private static void validateIbanEntries(String iban, IbanStructure structure) {
-        int ibanEntryOffset = 2;
-        List<IbanStructureEntry> entries = structure.getEntries();
-        for(IbanStructureEntry entry : entries) {
+    private static void validateIbanEntries(String iban, BbanStructure structure) {
+        int ibanEntryOffset = 4;
+        for(BbanStructureEntry entry : structure.getEntries()) {
             int entryLength = entry.getLength();
             String entryValue = iban.substring(ibanEntryOffset, ibanEntryOffset + entryLength);
 
