@@ -23,22 +23,13 @@ public class BbanStructureEntry {
     private EntryType entryType;
     private EntryCharacterType characterType;
     private int length;
-    private String defaultValue;
 
     private BbanStructureEntry(final EntryType entryType,
                        final EntryCharacterType characterType,
                        final int length) {
-        this(entryType, characterType, length, null);
-    }
-
-    private BbanStructureEntry(final EntryType entryType,
-                       final EntryCharacterType characterType,
-                       final int length,
-                       final String defaultValue) {
         this.entryType = entryType;
         this.characterType = characterType;
         this.length = length;
-        this.defaultValue = defaultValue;
     }
 
     public static BbanStructureEntry bankCode(final int length, final char characterType) {
@@ -59,12 +50,6 @@ public class BbanStructureEntry {
     public static BbanStructureEntry nationalCheckDigit(final int length, final char characterType) {
         return new BbanStructureEntry(EntryType.x,
                 EntryCharacterType.valueOf(String.valueOf(characterType)), length);
-    }
-
-    public static BbanStructureEntry nationalCheckDigit(final int length, final char characterType,
-                                                        final String defaultValue) {
-        return new BbanStructureEntry(EntryType.x,
-                EntryCharacterType.valueOf(String.valueOf(characterType)), length, defaultValue);
     }
 
     public static BbanStructureEntry accountType(final int length, final char characterType) {
@@ -92,14 +77,6 @@ public class BbanStructureEntry {
 
     public int getLength() {
         return length;
-    }
-
-    public String getDefaultValue() {
-        return defaultValue;
-    }
-
-    public boolean hasDefaultValue() {
-        return defaultValue != null;
     }
 
     public enum EntryType {

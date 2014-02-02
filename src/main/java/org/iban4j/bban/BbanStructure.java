@@ -390,7 +390,7 @@ public class BbanStructure {
         structures.put(CountryCode.TR,
                 new BbanStructure(CountryCode.TR,
                         BbanStructureEntry.bankCode(5, 'n'),
-                        BbanStructureEntry.nationalCheckDigit(1, 'c', "0"),
+                        BbanStructureEntry.nationalCheckDigit(1, 'c'),
                         BbanStructureEntry.accountNumber(16, 'c')));
 
         structures.put(CountryCode.GB,
