@@ -1,4 +1,4 @@
-iban4j [![Build Status](https://travis-ci.org/arturmkrtchyan/iban4j.png)](https://travis-ci.org/arturmkrtchyan/iban4j)
+iban4j [![Build Status](https://api.travis-ci.org/repositories/arturmkrtchyan/iban4j.png)](https://travis-ci.org/arturmkrtchyan/iban4j)
 ======
 
 A Java library for International Bank Account Number (<a href="http://en.wikipedia.org/wiki/ISO_13616" target="_blank">IBAN</a>) generation and validadtion
