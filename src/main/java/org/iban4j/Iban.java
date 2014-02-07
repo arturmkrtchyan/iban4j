@@ -106,11 +106,62 @@ public final class Iban implements Serializable {
 
 
     // TODO for future releases
-    private static Iban valueOf(final String iban) throws IbanFormatException {
+
+    /**
+     *
+     * @param iban
+     * @return
+     * @throws IbanFormatException
+     *         InvalidCheckDigitException if iban has invalid check digit.
+     *
+     */
+    public static Iban valueOf(final String iban) throws IbanFormatException {
+        //FIXME replace numbers with constants
         CountryCode countryCode = CountryCode.getByCode(iban.substring(0, 2));
-        String checkDigit = iban.substring(2, 4);
-//        return new Iban(countryCode, checkDigit, bban);
-        return null;
+
+        IbanUtil.validateCheckDigit(iban);
+
+        BbanStructure bbanStructure = BbanStructure.forCountry(countryCode);
+
+        Builder builder = new Builder()
+                .countryCode(countryCode)
+                .bbanStructure(bbanStructure);
+
+
+        // FIXME move to helper method to retrieve all entries
+        int bbanEntryOffset = 4;
+        for(BbanStructureEntry entry : bbanStructure.getEntries()) {
+            int entryLength = entry.getLength();
+            String entryValue = iban.substring(bbanEntryOffset, bbanEntryOffset + entryLength);
+
+            switch (entry.getEntryType()) {
+                case b:
+                    builder.bankCode(entryValue);
+                    break;
+                case s:
+                    builder.branchCode(entryValue);
+                    break;
+                case c:
+                    builder.accountNumber(entryValue);
+                    break;
+                case x:
+                    builder.nationalCheckDigit(entryValue);
+                    break;
+                case t:
+                    builder.accountType(entryValue);
+                    break;
+                case n:
+                    builder.ownerAccountType(entryValue);
+                    break;
+                case i:
+                    builder.identificationNumber(entryValue);
+                    break;
+            }
+
+            bbanEntryOffset = bbanEntryOffset + entryLength;
+        }
+
+        return builder.build();
     }
 
     // TODO for future releases
@@ -179,6 +230,7 @@ public final class Iban implements Serializable {
     public final static class Builder {
 
         private CountryCode countryCode;
+        private String checkDigit;
         private String bankCode;
         private String branchCode;
         private String nationalCheckDigit;
@@ -187,6 +239,7 @@ public final class Iban implements Serializable {
         private String ownerAccountType;
         private String identificationNumber;
         private BbanStructure bbanStructure;
+
 
         public Builder() {
         }
@@ -231,6 +284,11 @@ public final class Iban implements Serializable {
             return this;
         }
 
+        protected Builder bbanStructure(final BbanStructure bbanStructure) {
+            this.bbanStructure = bbanStructure;
+            return this;
+        }
+
         /**
          * Builds new iban instance.
          *
@@ -247,10 +305,9 @@ public final class Iban implements Serializable {
             Assert.notNull(bankCode, "bankCode is required; it cannot be null");
             Assert.notNull(accountNumber, "accountNumber is required; it cannot be null");
 
-            bbanStructure = BbanStructure.forCountry(countryCode);
-
+            //FIXME test UnsupportedCountryException
             if(bbanStructure == null) {
-                throw new UnsupportedCountryException();
+                bbanStructure = BbanStructure.forCountry(countryCode);
             }
 
             // iban instance with default check digit

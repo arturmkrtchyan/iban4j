@@ -65,14 +65,13 @@ public final class IbanUtil {
      * @param iban to be validated.
      * @throws IbanFormatException if iban is invalid.
      *         UnsupportedCountryException if iban's country is not supported.
+     *         InvalidCheckDigitException if iban has invalid check digit.
      */
     public static void validate(String iban) throws IbanFormatException {
 
-        BbanStructure structure = getBbanStructure(iban);
+        validateCheckDigit(iban);
 
-        if(structure == null) {
-            throw new UnsupportedCountryException();
-        }
+        BbanStructure structure = getBbanStructure(iban);
 
         try {
             validateIbanLength(iban, structure);
@@ -82,9 +81,22 @@ public final class IbanUtil {
         }
     }
 
-    private static BbanStructure getBbanStructure(String iban) {
+    protected static void validateCheckDigit(final String iban) {
+        String checkDigit = getCheckDigit(iban);
+        String expectedCheckDigit = calculateCheckDigit(iban);
+        if (!checkDigit.equals(expectedCheckDigit)) {
+            throw new InvalidCheckDigitException("[" + iban + "] has invalid check digit: " +
+                    checkDigit + ", expected check digit is: " + expectedCheckDigit);
+        }
+    }
+
+    private static BbanStructure getBbanStructure(final String iban) {
         String countryCode = iban.substring(0, 2);
         return BbanStructure.forCountry(CountryCode.valueOf(countryCode));
+    }
+
+    private static String getCheckDigit(final String iban) {
+        return iban.substring(2, 4);
     }
 
     private static void validateIbanLength(String iban, BbanStructure structure) {
@@ -97,15 +109,17 @@ public final class IbanUtil {
     }
 
     private static void validateIbanEntries(String iban, BbanStructure structure) {
-        int ibanEntryOffset = 4;
+        // FIXME check exception types (Assert class)
+        int bbanEntryOffset = 4;
         for(BbanStructureEntry entry : structure.getEntries()) {
             int entryLength = entry.getLength();
-            String entryValue = iban.substring(ibanEntryOffset, ibanEntryOffset + entryLength);
+            String entryValue = iban.substring(bbanEntryOffset, bbanEntryOffset + entryLength);
 
             // validate length
             Assert.hasLength(entryValue, entryLength, "Invalid bank code length.");
-            ibanEntryOffset = ibanEntryOffset + entryLength;
+            bbanEntryOffset = bbanEntryOffset + entryLength;
 
+            // FIXME move to separate method
             // validate character type
             switch (entry.getCharacterType()) {
                 case a:
