@@ -19,13 +19,12 @@ import org.iban4j.bban.BbanStructure;
 import org.iban4j.bban.BbanStructureEntry;
 import org.iban4j.support.Assert;
 
+import static org.iban4j.Iban.*;
+
 /**
  * Iban Utility Class
  */
 public final class IbanUtil {
-
-
-    // FIXME get rid of this class
 
     private static final long MOD = 97;
     private static final long MAX = 999999999;
@@ -63,7 +62,7 @@ public final class IbanUtil {
         BbanStructure structure = getBbanStructure(iban);
 
         try {
-            validateIbanLength(iban, structure);
+            validateBbanLength(iban, structure);
             validateBbanEntries(iban, structure);
         } catch (Exception e) {
             throw new IbanFormatException(e);
@@ -80,24 +79,32 @@ public final class IbanUtil {
     }
 
     private static BbanStructure getBbanStructure(final String iban) {
-        String countryCode = iban.substring(Iban.COUNTRY_CODE_INDEX, Iban.COUNTRY_CODE_LENGTH);
+        String countryCode = getCountryCode(iban);
         return BbanStructure.forCountry(CountryCode.valueOf(countryCode));
     }
 
     private static String getCheckDigit(final String iban) {
-        return iban.substring(Iban.CHECK_DIGIT_INDEX, Iban.CHECK_DIGIT_INDEX + Iban.CHECK_DIGIT_LENGTH);
+        return iban.substring(CHECK_DIGIT_INDEX, CHECK_DIGIT_INDEX + CHECK_DIGIT_LENGTH);
     }
 
-    private static void validateIbanLength(String iban, BbanStructure structure) {
-        int bbanLength = structure.getBbanLength();
-        int ibanLength = iban.length();
-        if (bbanLength != ibanLength - Iban.BBAN_INDEX) {
+    private static String getCountryCode(final String iban) {
+        return iban.substring(COUNTRY_CODE_INDEX, COUNTRY_CODE_INDEX + COUNTRY_CODE_LENGTH);
+    }
+
+    private static String getBban(final String iban) {
+        return iban.substring(BBAN_INDEX);
+    }
+
+    private static void validateBbanLength(final String iban, final BbanStructure structure) {
+        int expectedBbanLength = structure.getBbanLength();
+        int bbanLength = getBban(iban).length();
+        if (expectedBbanLength != bbanLength) {
             throw new IbanFormatException("[" + iban + "] length is " +
-                    ibanLength + ", expected IBAN length is: " + (bbanLength + Iban.BBAN_INDEX));
+                    bbanLength + ", expected BBAN length is: " + expectedBbanLength);
         }
     }
 
-    private static void validateBbanEntryCharacterType(BbanStructureEntry entry, String entryValue) {
+    private static void validateBbanEntryCharacterType(final BbanStructureEntry entry, final String entryValue) {
         switch (entry.getCharacterType()) {
             case a:
                 for(char ch: entryValue.toCharArray()) {
@@ -117,12 +124,13 @@ public final class IbanUtil {
         }
     }
 
-    private static void validateBbanEntries(String iban, BbanStructure structure) {
+    private static void validateBbanEntries(final String iban, final BbanStructure structure) {
         // FIXME check exception types (Assert class)
-        int bbanEntryOffset = Iban.BBAN_INDEX;
+        String bban = getBban(iban);
+        int bbanEntryOffset = 0;
         for(BbanStructureEntry entry : structure.getEntries()) {
             int entryLength = entry.getLength();
-            String entryValue = iban.substring(bbanEntryOffset, bbanEntryOffset + entryLength);
+            String entryValue = bban.substring(bbanEntryOffset, bbanEntryOffset + entryLength);
 
             // validate length
             Assert.hasLength(entryValue, entryLength, "Invalid bank code length.");
@@ -144,8 +152,7 @@ public final class IbanUtil {
      * @return The iban without the check digit
      */
     private static String removeCheckDigit(final String iban) {
-        return iban.substring(Iban.COUNTRY_CODE_INDEX, Iban.COUNTRY_CODE_LENGTH) +
-                Iban.DEFAULT_CHECK_DIGIT + iban.substring(Iban.BBAN_INDEX);
+        return getCountryCode(iban) + DEFAULT_CHECK_DIGIT + getBban(iban);
     }
 
 
@@ -157,8 +164,7 @@ public final class IbanUtil {
      * @return modulo 97
      */
     private static int calculateMod(final String iban) {
-        String reformattedIban = iban.substring(Iban.BBAN_INDEX) +
-                iban.substring(Iban.COUNTRY_CODE_INDEX, Iban.BBAN_INDEX);
+        String reformattedIban = getBban(iban) + getCountryCode(iban) + getCheckDigit(iban);
         long total = 0;
         for (int i = 0; i < reformattedIban.length(); i++) {
             int numericValue = Character.getNumericValue(reformattedIban.charAt(i));

@@ -30,12 +30,12 @@ public final class Iban implements Serializable {
 
     private static final long serialVersionUID = 3507561504372065317L;
 
-    public static final String DEFAULT_CHECK_DIGIT = "00";
-    public static final int COUNTRY_CODE_INDEX = 0;
-    public static final int COUNTRY_CODE_LENGTH = 2;
-    public static final int CHECK_DIGIT_INDEX = COUNTRY_CODE_LENGTH;
-    public static final int CHECK_DIGIT_LENGTH = 2;
-    public static final int BBAN_INDEX = CHECK_DIGIT_INDEX + CHECK_DIGIT_LENGTH;
+    protected static final String DEFAULT_CHECK_DIGIT = "00";
+    protected static final int COUNTRY_CODE_INDEX = 0;
+    protected static final int COUNTRY_CODE_LENGTH = 2;
+    protected static final int CHECK_DIGIT_INDEX = COUNTRY_CODE_LENGTH;
+    protected static final int CHECK_DIGIT_LENGTH = 2;
+    protected static final int BBAN_INDEX = CHECK_DIGIT_INDEX + CHECK_DIGIT_LENGTH;
 
     private final CountryCode countryCode;
     private String checkDigit;
@@ -118,8 +118,9 @@ public final class Iban implements Serializable {
      *
      * @param iban the String to be parsed.
      * @return an Iban object holding the value represented by the string argument.
-     * @throws IbanFormatException if the String doesn't contain parsable Iban.
-     *         InvalidCheckDigitException if Iban has invalid check digit.
+     * @throws IbanFormatException if the String doesn't contain parsable Iban
+     *         InvalidCheckDigitException if Iban has invalid check digit
+     *         UnsupportedCountryException if Iban's Country is not supported.
      *
      */
     public static Iban valueOf(final String iban) throws IbanFormatException {
@@ -329,8 +330,6 @@ public final class Iban implements Serializable {
 
             // validate iban
             IbanUtil.validate(iban.value);
-
-
 
             return iban;
         }

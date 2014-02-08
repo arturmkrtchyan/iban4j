@@ -80,6 +80,11 @@ public class IbanTest {
             Iban.valueOf(null);
         }
 
+        @Test(expected = InvalidCheckDigitException.class)
+        public void ibanConstructionWithInvalidCheckDigitShouldThrowException() {
+            Iban.valueOf("AT621904300234573201");
+        }
+
         @Test(expected = IllegalArgumentException.class)
         public void ibanConstructionWithoutCountryShouldThrowException() {
             new Iban.Builder()
