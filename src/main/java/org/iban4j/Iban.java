@@ -31,6 +31,11 @@ public final class Iban implements Serializable {
     private static final long serialVersionUID = 3507561504372065317L;
 
     public static final String DEFAULT_CHECK_DIGIT = "00";
+    public static final int COUNTRY_CODE_INDEX = 0;
+    public static final int COUNTRY_CODE_LENGTH = 2;
+    public static final int CHECK_DIGIT_INDEX = COUNTRY_CODE_LENGTH;
+    public static final int CHECK_DIGIT_LENGTH = 2;
+    public static final int BBAN_INDEX = CHECK_DIGIT_INDEX + CHECK_DIGIT_LENGTH;
 
     private final CountryCode countryCode;
     private String checkDigit;
@@ -104,32 +109,39 @@ public final class Iban implements Serializable {
         return identificationNumber;
     }
 
-
-    // TODO for future releases
+    public String getBban() {
+        return formatBban();
+    }
 
     /**
+     * Returns an Iban object holding the value of the specified String.
      *
-     * @param iban
-     * @return
-     * @throws IbanFormatException
-     *         InvalidCheckDigitException if iban has invalid check digit.
+     * @param iban the String to be parsed.
+     * @return an Iban object holding the value represented by the string argument.
+     * @throws IbanFormatException if the String doesn't contain parsable Iban.
+     *         InvalidCheckDigitException if Iban has invalid check digit.
      *
      */
     public static Iban valueOf(final String iban) throws IbanFormatException {
-        //FIXME replace numbers with constants
-        CountryCode countryCode = CountryCode.getByCode(iban.substring(0, 2));
+
+        if (iban == null) {
+            throw new IbanFormatException("null can't be parsed to Iban.");
+        }
+
+        CountryCode countryCode = CountryCode.getByCode(iban.substring(COUNTRY_CODE_INDEX, COUNTRY_CODE_LENGTH));
+
+        if (countryCode == null) {
+            throw new IbanFormatException("Iban has invalid country code: " + iban);
+        }
 
         IbanUtil.validateCheckDigit(iban);
 
         BbanStructure bbanStructure = BbanStructure.forCountry(countryCode);
 
-        Builder builder = new Builder()
-                .countryCode(countryCode)
-                .bbanStructure(bbanStructure);
-
+        Builder builder = new Builder().countryCode(countryCode).bbanStructure(bbanStructure);
 
         // FIXME move to helper method to retrieve all entries
-        int bbanEntryOffset = 4;
+        int bbanEntryOffset = BBAN_INDEX;
         for(BbanStructureEntry entry : bbanStructure.getEntries()) {
             int entryLength = entry.getLength();
             String entryValue = iban.substring(bbanEntryOffset, bbanEntryOffset + entryLength);
@@ -164,10 +176,7 @@ public final class Iban implements Serializable {
         return builder.build();
     }
 
-    // TODO for future releases
-    private String getBban() {
-        return formatBban();
-    }
+
 
     private String format() {
         StringBuilder sb = new StringBuilder(countryCode.getAlpha2());
@@ -305,7 +314,6 @@ public final class Iban implements Serializable {
             Assert.notNull(bankCode, "bankCode is required; it cannot be null");
             Assert.notNull(accountNumber, "accountNumber is required; it cannot be null");
 
-            //FIXME test UnsupportedCountryException
             if(bbanStructure == null) {
                 bbanStructure = BbanStructure.forCountry(countryCode);
             }

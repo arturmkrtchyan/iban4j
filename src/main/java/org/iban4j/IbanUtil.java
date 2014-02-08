@@ -25,6 +25,8 @@ import org.iban4j.support.Assert;
 public final class IbanUtil {
 
 
+    // FIXME get rid of this class
+
     private static final long MOD = 97;
     private static final long MAX = 999999999;
 
@@ -51,19 +53,6 @@ public final class IbanUtil {
      *
      * @param iban to be validated.
      * @throws IbanFormatException if iban is invalid.
-     *
-     * @deprecated use {@link #validate(String)} instead.
-     */
-    @Deprecated
-    public static void validate(final Iban iban) throws IbanFormatException {
-        validate(iban.toString());
-    }
-
-    /**
-     * Validates iban.
-     *
-     * @param iban to be validated.
-     * @throws IbanFormatException if iban is invalid.
      *         UnsupportedCountryException if iban's country is not supported.
      *         InvalidCheckDigitException if iban has invalid check digit.
      */
@@ -75,7 +64,7 @@ public final class IbanUtil {
 
         try {
             validateIbanLength(iban, structure);
-            validateIbanEntries(iban, structure);
+            validateBbanEntries(iban, structure);
         } catch (Exception e) {
             throw new IbanFormatException(e);
         }
@@ -91,26 +80,46 @@ public final class IbanUtil {
     }
 
     private static BbanStructure getBbanStructure(final String iban) {
-        String countryCode = iban.substring(0, 2);
+        String countryCode = iban.substring(Iban.COUNTRY_CODE_INDEX, Iban.COUNTRY_CODE_LENGTH);
         return BbanStructure.forCountry(CountryCode.valueOf(countryCode));
     }
 
     private static String getCheckDigit(final String iban) {
-        return iban.substring(2, 4);
+        return iban.substring(Iban.CHECK_DIGIT_INDEX, Iban.CHECK_DIGIT_INDEX + Iban.CHECK_DIGIT_LENGTH);
     }
 
     private static void validateIbanLength(String iban, BbanStructure structure) {
         int bbanLength = structure.getBbanLength();
         int ibanLength = iban.length();
-        if (bbanLength != ibanLength - 4) {
+        if (bbanLength != ibanLength - Iban.BBAN_INDEX) {
             throw new IbanFormatException("[" + iban + "] length is " +
-                    ibanLength + ", expected IBAN length is: " + (bbanLength + 4));
+                    ibanLength + ", expected IBAN length is: " + (bbanLength + Iban.BBAN_INDEX));
         }
     }
 
-    private static void validateIbanEntries(String iban, BbanStructure structure) {
+    private static void validateBbanEntryCharacterType(BbanStructureEntry entry, String entryValue) {
+        switch (entry.getCharacterType()) {
+            case a:
+                for(char ch: entryValue.toCharArray()) {
+                    Assert.isTrue(Character.isUpperCase(ch), "[" + entryValue + "] must contain only digits");
+                }
+                break;
+            case c:
+                for(char ch: entryValue.toCharArray()) {
+                    Assert.isTrue(Character.isLetterOrDigit(ch), "[" + entryValue + "] must contain only digits");
+                }
+                break;
+            case n:
+                for(char ch: entryValue.toCharArray()) {
+                    Assert.isTrue(Character.isDigit(ch), "[" + entryValue + "] must contain only digits");
+                }
+                break;
+        }
+    }
+
+    private static void validateBbanEntries(String iban, BbanStructure structure) {
         // FIXME check exception types (Assert class)
-        int bbanEntryOffset = 4;
+        int bbanEntryOffset = Iban.BBAN_INDEX;
         for(BbanStructureEntry entry : structure.getEntries()) {
             int entryLength = entry.getLength();
             String entryValue = iban.substring(bbanEntryOffset, bbanEntryOffset + entryLength);
@@ -119,26 +128,8 @@ public final class IbanUtil {
             Assert.hasLength(entryValue, entryLength, "Invalid bank code length.");
             bbanEntryOffset = bbanEntryOffset + entryLength;
 
-            // FIXME move to separate method
             // validate character type
-            switch (entry.getCharacterType()) {
-                case a:
-                    for(char ch: entryValue.toCharArray()) {
-                        Assert.isTrue(Character.isUpperCase(ch), "[" + entryValue + "] must contain only digits");
-                    }
-                    break;
-                case c:
-                    for(char ch: entryValue.toCharArray()) {
-                        Assert.isTrue(Character.isLetterOrDigit(ch), "[" + entryValue + "] must contain only digits");
-                    }
-                    break;
-                case n:
-                    for(char ch: entryValue.toCharArray()) {
-                        Assert.isTrue(Character.isDigit(ch), "[" + entryValue + "] must contain only digits");
-                    }
-                    break;
-
-            }
+            validateBbanEntryCharacterType(entry, entryValue);
         }
     }
 
@@ -153,7 +144,8 @@ public final class IbanUtil {
      * @return The iban without the check digit
      */
     private static String removeCheckDigit(final String iban) {
-        return iban.substring(0, 2) + Iban.DEFAULT_CHECK_DIGIT + iban.substring(4);
+        return iban.substring(Iban.COUNTRY_CODE_INDEX, Iban.COUNTRY_CODE_LENGTH) +
+                Iban.DEFAULT_CHECK_DIGIT + iban.substring(Iban.BBAN_INDEX);
     }
 
 
@@ -165,7 +157,8 @@ public final class IbanUtil {
      * @return modulo 97
      */
     private static int calculateMod(final String iban) {
-        String reformattedIban = iban.substring(4) + iban.substring(0, 4);
+        String reformattedIban = iban.substring(Iban.BBAN_INDEX) +
+                iban.substring(Iban.COUNTRY_CODE_INDEX, Iban.BBAN_INDEX);
         long total = 0;
         for (int i = 0; i < reformattedIban.length(); i++) {
             int numericValue = Character.getNumericValue(reformattedIban.charAt(i));

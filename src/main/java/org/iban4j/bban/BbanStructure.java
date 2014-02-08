@@ -422,7 +422,7 @@ public class BbanStructure {
         BbanStructure structure = structures.get(countryCode);
 
         if(structure == null) {
-            throw new UnsupportedCountryException();
+            throw new UnsupportedCountryException("Country code: " + countryCode + " is not supported.");
         }
         return structure;
     }
