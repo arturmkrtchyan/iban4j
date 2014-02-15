@@ -15,13 +15,19 @@ How to generate IBAN
                 .accountNumber("00234573201")
                 .build();
 ```
+How to create IBAN object from String
+
+```java
+ Iban iban = Iban.valueOf("DE89370400440532013000");
+```
+
 How to validate IBAN
 
 ```java
         try {
             IbanUtil.validate("AT611904300234573201");
             // valid
-        } catch (IbanFormatException e) {
+        } catch (Exception e) {
             // invalid
         }
 ```
@@ -31,7 +37,7 @@ How to validate IBAN
       <dependency>
           <groupId>org.iban4j</groupId>
           <artifactId>iban4j</artifactId>
-          <version>1.0.2</version>
+          <version>2.0.0</version>
       </dependency>
 ```
 
@@ -42,6 +48,6 @@ How to validate IBAN
 - http://en.wikipedia.org/wiki/IBAN
 
 ## License
-Copyright 2013 Artur Mkrtchyan.
+Copyright 2014 Artur Mkrtchyan.
 
 Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
