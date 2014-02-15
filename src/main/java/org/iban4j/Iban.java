@@ -221,6 +221,11 @@ public final class Iban implements Serializable {
         return format();
     }
 
+    private String toFormattedString() {
+        // TODO for next release
+        return null;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Iban) {

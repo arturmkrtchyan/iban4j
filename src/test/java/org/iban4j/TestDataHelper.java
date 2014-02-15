@@ -192,6 +192,12 @@ public final class TestDataHelper {
                         .accountNumber("000000123456")
                         .build(), "IT60X0542811101000000123456"},
                 {new Iban.Builder()
+                        .countryCode(CountryCode.JO)
+                        .bankCode("CBJO")
+                        .branchCode("0010")
+                        .accountNumber("000000000131000302")
+                        .build(), "JO94CBJO0010000000000131000302"},
+                {new Iban.Builder()
                         .countryCode(CountryCode.KZ)
                         .bankCode("125")
                         .accountNumber("KZT5004100100")

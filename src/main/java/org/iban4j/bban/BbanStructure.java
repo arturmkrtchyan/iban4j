@@ -206,12 +206,11 @@ public class BbanStructure {
                         BbanStructureEntry.branchCode(5, 'n'),
                         BbanStructureEntry.accountNumber(12, 'c')));
 
-        structures.put(CountryCode.IT,
-                new BbanStructure(CountryCode.IT,
-                        BbanStructureEntry.nationalCheckDigit(1, 'a'),
-                        BbanStructureEntry.bankCode(5, 'n'),
-                        BbanStructureEntry.branchCode(5, 'n'),
-                        BbanStructureEntry.accountNumber(12, 'c')));
+        structures.put(CountryCode.JO,
+                new BbanStructure(CountryCode.JO,
+                        BbanStructureEntry.bankCode(4, 'a'),
+                        BbanStructureEntry.branchCode(4, 'n'),
+                        BbanStructureEntry.accountNumber(18, 'c')));
 
         structures.put(CountryCode.KZ,
                 new BbanStructure(CountryCode.KZ,
