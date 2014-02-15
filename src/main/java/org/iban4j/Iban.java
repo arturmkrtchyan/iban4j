@@ -123,7 +123,8 @@ public final class Iban implements Serializable {
      *         UnsupportedCountryException if Iban's Country is not supported.
      *
      */
-    public static Iban valueOf(final String iban) throws IbanFormatException {
+    public static Iban valueOf(final String iban) throws IbanFormatException,
+            InvalidCheckDigitException, UnsupportedCountryException {
 
         if (iban == null) {
             throw new IbanFormatException("null can't be parsed to Iban.");

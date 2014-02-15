@@ -55,7 +55,8 @@ public final class IbanUtil {
      *         UnsupportedCountryException if iban's country is not supported.
      *         InvalidCheckDigitException if iban has invalid check digit.
      */
-    public static void validate(String iban) throws IbanFormatException {
+    public static void validate(String iban) throws IbanFormatException,
+            InvalidCheckDigitException, UnsupportedCountryException {
 
         validateCheckDigit(iban);
 
