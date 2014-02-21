@@ -335,6 +335,7 @@ public final class Iban implements Serializable {
             iban.value = iban.format();
 
             // validate iban
+            // FIXME create internal validation method
             IbanUtil.validate(iban.value);
 
             return iban;

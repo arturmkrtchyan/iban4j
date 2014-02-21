@@ -76,4 +76,17 @@ public class IbanUtilTest {
         }
     }
 
+    public static class InvalidIbanValidationTest {
+
+        @Test(expected = IbanFormatException.class)
+        public void ibanValidationWithNullShouldThrowException() {
+            IbanUtil.validate(null);
+        }
+
+        @Test(expected = IbanFormatException.class)
+        public void ibanValidationWithLowercaseCountryShouldThrowException() {
+            IbanUtil.validate("at611904300234573201");
+        }
+    }
+
 }

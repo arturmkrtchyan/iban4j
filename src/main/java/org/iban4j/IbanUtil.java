@@ -26,8 +26,10 @@ import static org.iban4j.Iban.*;
  */
 public final class IbanUtil {
 
-    private static final long MOD = 97;
+    private static final int MOD = 97;
     private static final long MAX = 999999999;
+
+    private static final int MIN_IBAN_SIZE = 15;
 
     private IbanUtil() {
     }
@@ -55,18 +57,26 @@ public final class IbanUtil {
      *         UnsupportedCountryException if iban's country is not supported.
      *         InvalidCheckDigitException if iban has invalid check digit.
      */
-    public static void validate(String iban) throws IbanFormatException,
+    public static void validate(final String iban) throws IbanFormatException,
             InvalidCheckDigitException, UnsupportedCountryException {
 
-        validateCheckDigit(iban);
-
-        BbanStructure structure = getBbanStructure(iban);
-
         try {
+            Assert.notNull(iban, "Null can't be a valid Iban.");
+            validateCountryCodeCase(iban);
+            validateMinLength(iban);
+
+            BbanStructure structure = getBbanStructure(iban);
+
             validateBbanLength(iban, structure);
             validateBbanEntries(iban, structure);
-        } catch (Exception e) {
-            throw new IbanFormatException(e);
+
+            validateCheckDigit(iban);
+        } catch (UnsupportedCountryException e) {
+            throw e;
+        } catch (InvalidCheckDigitException e) {
+            throw e;
+        } catch (RuntimeException e) {
+            throw new IbanFormatException(e.getMessage());
         }
     }
 
@@ -76,6 +86,19 @@ public final class IbanUtil {
         if (!checkDigit.equals(expectedCheckDigit)) {
             throw new InvalidCheckDigitException("[" + iban + "] has invalid check digit: " +
                     checkDigit + ", expected check digit is: " + expectedCheckDigit);
+        }
+    }
+
+    private static void validateCountryCodeCase(final String iban) {
+        String countryCode = getCountryCode(iban);
+        if(!countryCode.equals(countryCode.toUpperCase())) {
+            throw new IllegalArgumentException("Iban country code must contain upper case letters");
+        }
+    }
+
+    private static void validateMinLength(final String iban) {
+        if(iban.length() < MIN_IBAN_SIZE) {
+            throw new IllegalArgumentException("Iban length can't be less than " + MIN_IBAN_SIZE);
         }
     }
 
@@ -109,32 +132,29 @@ public final class IbanUtil {
         switch (entry.getCharacterType()) {
             case a:
                 for(char ch: entryValue.toCharArray()) {
-                    Assert.isTrue(Character.isUpperCase(ch), "[" + entryValue + "] must contain only digits");
+                    Assert.isTrue(Character.isUpperCase(ch), "[" + entryValue + "] must contain only upper case letters.");
                 }
                 break;
             case c:
                 for(char ch: entryValue.toCharArray()) {
-                    Assert.isTrue(Character.isLetterOrDigit(ch), "[" + entryValue + "] must contain only digits");
+                    Assert.isTrue(Character.isLetterOrDigit(ch), "[" + entryValue + "] must contain only digits or letters.");
                 }
                 break;
             case n:
                 for(char ch: entryValue.toCharArray()) {
-                    Assert.isTrue(Character.isDigit(ch), "[" + entryValue + "] must contain only digits");
+                    Assert.isTrue(Character.isDigit(ch), "[" + entryValue + "] must contain only digits.");
                 }
                 break;
         }
     }
 
     private static void validateBbanEntries(final String iban, final BbanStructure structure) {
-        // FIXME check exception types (Assert class)
-        String bban = getBban(iban);
+        final String bban = getBban(iban);
         int bbanEntryOffset = 0;
         for(BbanStructureEntry entry : structure.getEntries()) {
-            int entryLength = entry.getLength();
-            String entryValue = bban.substring(bbanEntryOffset, bbanEntryOffset + entryLength);
+            final int entryLength = entry.getLength();
+            final String entryValue = bban.substring(bbanEntryOffset, bbanEntryOffset + entryLength);
 
-            // validate length
-            Assert.hasLength(entryValue, entryLength, "Invalid bank code length.");
             bbanEntryOffset = bbanEntryOffset + entryLength;
 
             // validate character type

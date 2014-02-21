@@ -30,7 +30,7 @@ public final class Assert {
      * @param message the exception message to use if the assertion fails
      * @throws IllegalArgumentException if expression is {@code false}
      */
-    public static void isTrue(boolean expression, String message) {
+    public static void isTrue(final boolean expression, final String message) {
         if (!expression) {
             throw new IllegalArgumentException(message);
         }
@@ -58,7 +58,7 @@ public final class Assert {
      * @param message the exception message to use if the assertion fails
      * @throws IllegalArgumentException if the string doesn't have expected length.
      */
-    public static void hasLength(String text, int length, String message) {
+    public static void hasLength(final String text, final int length, final String message) {
         Assert.notNull(text, message);
         if (text.length() != length) {
             throw new IllegalArgumentException(message);
