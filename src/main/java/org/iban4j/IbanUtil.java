@@ -30,6 +30,7 @@ public final class IbanUtil {
     private static final long MAX = 999999999;
 
     private static final int MIN_IBAN_SIZE = 15;
+    private static final int COUNTRY_CODE_LENGTH = 2;
 
     private IbanUtil() {
     }
@@ -62,7 +63,7 @@ public final class IbanUtil {
 
         try {
             Assert.notNull(iban, "Null can't be a valid Iban.");
-            validateCountryCodeCase(iban);
+            validateCountryCode(iban);
             validateMinLength(iban);
 
             BbanStructure structure = getBbanStructure(iban);
@@ -89,9 +90,12 @@ public final class IbanUtil {
         }
     }
 
-    private static void validateCountryCodeCase(final String iban) {
+    private static void validateCountryCode(final String iban) {
         String countryCode = getCountryCode(iban);
-        if(!countryCode.equals(countryCode.toUpperCase())) {
+        if( countryCode.trim().length() < COUNTRY_CODE_LENGTH ||
+            !countryCode.equals(countryCode.toUpperCase()) ||
+            !Character.isLetter(countryCode.charAt(0)) ||
+            !Character.isLetter(countryCode.charAt(1))) {
             throw new IllegalArgumentException("Iban country code must contain upper case letters");
         }
     }
@@ -102,29 +106,27 @@ public final class IbanUtil {
         }
     }
 
-    private static BbanStructure getBbanStructure(final String iban) {
-        String countryCode = getCountryCode(iban);
-        return BbanStructure.forCountry(CountryCode.valueOf(countryCode));
-    }
-
-    private static String getCheckDigit(final String iban) {
-        return iban.substring(CHECK_DIGIT_INDEX, CHECK_DIGIT_INDEX + CHECK_DIGIT_LENGTH);
-    }
-
-    private static String getCountryCode(final String iban) {
-        return iban.substring(COUNTRY_CODE_INDEX, COUNTRY_CODE_INDEX + COUNTRY_CODE_LENGTH);
-    }
-
-    private static String getBban(final String iban) {
-        return iban.substring(BBAN_INDEX);
-    }
-
     private static void validateBbanLength(final String iban, final BbanStructure structure) {
         int expectedBbanLength = structure.getBbanLength();
-        int bbanLength = getBban(iban).length();
+        String bban = getBban(iban);
+        int bbanLength = bban.length();
         if (expectedBbanLength != bbanLength) {
-            throw new IbanFormatException("[" + iban + "] length is " +
+            throw new IbanFormatException("[" + bban + "] length is " +
                     bbanLength + ", expected BBAN length is: " + expectedBbanLength);
+        }
+    }
+
+    private static void validateBbanEntries(final String iban, final BbanStructure structure) {
+        final String bban = getBban(iban);
+        int bbanEntryOffset = 0;
+        for(BbanStructureEntry entry : structure.getEntries()) {
+            final int entryLength = entry.getLength();
+            final String entryValue = bban.substring(bbanEntryOffset, bbanEntryOffset + entryLength);
+
+            bbanEntryOffset = bbanEntryOffset + entryLength;
+
+            // validate character type
+            validateBbanEntryCharacterType(entry, entryValue);
         }
     }
 
@@ -145,20 +147,6 @@ public final class IbanUtil {
                     Assert.isTrue(Character.isDigit(ch), "[" + entryValue + "] must contain only digits.");
                 }
                 break;
-        }
-    }
-
-    private static void validateBbanEntries(final String iban, final BbanStructure structure) {
-        final String bban = getBban(iban);
-        int bbanEntryOffset = 0;
-        for(BbanStructureEntry entry : structure.getEntries()) {
-            final int entryLength = entry.getLength();
-            final String entryValue = bban.substring(bbanEntryOffset, bbanEntryOffset + entryLength);
-
-            bbanEntryOffset = bbanEntryOffset + entryLength;
-
-            // validate character type
-            validateBbanEntryCharacterType(entry, entryValue);
         }
     }
 
@@ -200,6 +188,23 @@ public final class IbanUtil {
 
         }
         return (int) (total % MOD);
+    }
+
+    private static BbanStructure getBbanStructure(final String iban) {
+        String countryCode = getCountryCode(iban);
+        return BbanStructure.forCountry(CountryCode.valueOf(countryCode));
+    }
+
+    private static String getCheckDigit(final String iban) {
+        return iban.substring(CHECK_DIGIT_INDEX, CHECK_DIGIT_INDEX + CHECK_DIGIT_LENGTH);
+    }
+
+    private static String getCountryCode(final String iban) {
+        return iban.substring(COUNTRY_CODE_INDEX, COUNTRY_CODE_INDEX + COUNTRY_CODE_LENGTH);
+    }
+
+    private static String getBban(final String iban) {
+        return iban.substring(BBAN_INDEX);
     }
 
 }
