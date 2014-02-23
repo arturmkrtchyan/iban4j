@@ -50,11 +50,11 @@ A Java library for generation and validation of the International Bank Account N
 
 #### Maven dependency: 
 ```
-      <dependency>
-          <groupId>org.iban4j</groupId>
-          <artifactId>iban4j</artifactId>
-          <version>2.1.0</version>
-      </dependency>
+<dependency>
+  <groupId>org.iban4j</groupId>
+  <artifactId>iban4j</artifactId>
+  <version>2.1.0</version>
+</dependency>
 ```
 
 #### References
