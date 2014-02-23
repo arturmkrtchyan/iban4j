@@ -96,13 +96,15 @@ public final class IbanUtil {
             !countryCode.equals(countryCode.toUpperCase()) ||
             !Character.isLetter(countryCode.charAt(0)) ||
             !Character.isLetter(countryCode.charAt(1))) {
-            throw new IllegalArgumentException("Iban country code must contain upper case letters");
+            throw new IbanFormatException("Iban country code must contain upper case letters");
         }
+
+        Assert.notNull(CountryCode.getByCode(countryCode), "Iban contains non existing country code.");
     }
 
     private static void validateMinLength(final String iban) {
         if(iban.length() < MIN_IBAN_SIZE) {
-            throw new IllegalArgumentException("Iban length can't be less than " + MIN_IBAN_SIZE);
+            throw new IbanFormatException("Iban length can't be less than " + MIN_IBAN_SIZE);
         }
     }
 
@@ -192,7 +194,7 @@ public final class IbanUtil {
 
     private static BbanStructure getBbanStructure(final String iban) {
         String countryCode = getCountryCode(iban);
-        return BbanStructure.forCountry(CountryCode.valueOf(countryCode));
+        return BbanStructure.forCountry(CountryCode.getByCode(countryCode));
     }
 
     private static String getCheckDigit(final String iban) {

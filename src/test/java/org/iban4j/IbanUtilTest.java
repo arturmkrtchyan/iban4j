@@ -111,6 +111,13 @@ public class IbanUtilTest {
             IbanUtil.validate("AM611904300234573201");
         }
 
+        @Test
+        public void ibanValidationWithNonExistingCountryShouldThrowException() {
+            expectedException.expect(IbanFormatException.class);
+            expectedException.expectMessage(containsString("Iban contains non existing country code"));
+            IbanUtil.validate("JJ611904300234573201");
+        }
+
         @Test(expected = InvalidCheckDigitException.class)
         public void ibanValidationWithInvalidCheckDigitShouldThrowException() {
             IbanUtil.validate("AT621904300234573201");
