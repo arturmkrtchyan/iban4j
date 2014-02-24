@@ -19,10 +19,22 @@ import org.iban4j.support.Assert;
 
 import static org.iban4j.Bic.*;
 
+/**
+ * Bic Utility Class
+ */
 public class BicUtil {
 
-    protected static final int BIC8_LENGTH = 8;
-    protected static final int BIC11_LENGTH = 11;
+    private static final int BIC8_LENGTH = 8;
+    private static final int BIC11_LENGTH = 11;
+
+    private static final int BANK_CODE_INDEX = 0;
+    private static final int BANK_CODE_LENGTH = 4;
+    private static final int COUNTRY_CODE_INDEX = BANK_CODE_INDEX + BANK_CODE_LENGTH;
+    private static final int COUNTRY_CODE_LENGTH = 2;
+    private static final int LOCATION_CODE_INDEX = COUNTRY_CODE_INDEX + COUNTRY_CODE_LENGTH;
+    private static final int LOCATION_CODE_LENGTH = 2;
+    private static final int BRANCH_CODE_INDEX = LOCATION_CODE_INDEX + LOCATION_CODE_LENGTH;
+    private static final int BRANCH_CODE_LENGTH = 3;
 
     /**
      * Validates bic.

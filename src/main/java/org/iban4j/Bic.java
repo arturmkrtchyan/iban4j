@@ -26,15 +26,6 @@ public final class Bic implements Serializable {
 
     private static final long serialVersionUID = -4551863466421109610L;
 
-    protected static final int BANK_CODE_INDEX = 0;
-    protected static final int BANK_CODE_LENGTH = 4;
-    protected static final int COUNTRY_CODE_INDEX = BANK_CODE_INDEX + BANK_CODE_LENGTH;
-    protected static final int COUNTRY_CODE_LENGTH = 2;
-    protected static final int LOCATION_CODE_INDEX = COUNTRY_CODE_INDEX + COUNTRY_CODE_LENGTH;
-    protected static final int LOCATION_CODE_LENGTH = 2;
-    protected static final int BRANCH_CODE_INDEX = LOCATION_CODE_INDEX + LOCATION_CODE_LENGTH;
-    protected static final int BRANCH_CODE_LENGTH = 3;
-
     private final String value;
 
     private Bic(final String value) {
