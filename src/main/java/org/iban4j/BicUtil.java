@@ -17,8 +17,6 @@ package org.iban4j;
 
 import org.iban4j.support.Assert;
 
-import static org.iban4j.Bic.*;
-
 /**
  * Bic Utility Class
  */

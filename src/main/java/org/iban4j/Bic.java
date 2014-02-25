@@ -33,10 +33,10 @@ public final class Bic implements Serializable {
     }
 
     /**
-     * Returns an Bic object holding the value of the specified String.
+     * Returns a Bic object holding the value of the specified String.
      *
      * @param bic the String to be parsed.
-     * @return an Bic object holding the value represented by the string argument.
+     * @return a Bic object holding the value represented by the string argument.
      * @throws BicFormatException if the String doesn't contain parsable Bic.
      */
     public static Bic valueOf(final String bic) throws BicFormatException {
