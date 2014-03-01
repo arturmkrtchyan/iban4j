@@ -19,8 +19,6 @@ import org.iban4j.bban.BbanStructure;
 import org.iban4j.bban.BbanStructureEntry;
 import org.iban4j.support.Assert;
 
-import static org.iban4j.Iban.*;
-
 /**
  * Iban Utility Class
  */
@@ -30,7 +28,12 @@ public final class IbanUtil {
     private static final long MAX = 999999999;
 
     private static final int MIN_IBAN_SIZE = 15;
+
+    private static final int COUNTRY_CODE_INDEX = 0;
     private static final int COUNTRY_CODE_LENGTH = 2;
+    private static final int CHECK_DIGIT_INDEX = COUNTRY_CODE_LENGTH;
+    private static final int CHECK_DIGIT_LENGTH = 2;
+    private static final int BBAN_INDEX = CHECK_DIGIT_INDEX + CHECK_DIGIT_LENGTH;
 
     private IbanUtil() {
     }
@@ -43,7 +46,7 @@ public final class IbanUtil {
      * @return check digit as String
      */
     public static String calculateCheckDigit(final String iban) {
-        String reformattedIban = removeCheckDigit(iban);
+        String reformattedIban = replaceCheckDigit(iban, Iban.DEFAULT_CHECK_DIGIT);
         int modResult = calculateMod(reformattedIban);
         int checkDigitIntValue = (98 - modResult);
         String checkDigit = Integer.toString(checkDigitIntValue);
@@ -157,13 +160,13 @@ public final class IbanUtil {
     }
 
     /**
-     * Returns an iban with default check digit.
+     * Returns an iban with replaced check digit.
      *
      * @param iban The iban
      * @return The iban without the check digit
      */
-    private static String removeCheckDigit(final String iban) {
-        return getCountryCode(iban) + DEFAULT_CHECK_DIGIT + getBban(iban);
+    protected static String replaceCheckDigit(final String iban, final String checkDigit) {
+        return getCountryCode(iban) + checkDigit + getBban(iban);
     }
 
 
@@ -192,21 +195,65 @@ public final class IbanUtil {
         return (int) (total % MOD);
     }
 
-    private static BbanStructure getBbanStructure(final String iban) {
+    protected static BbanStructure getBbanStructure(final String iban) {
         String countryCode = getCountryCode(iban);
         return BbanStructure.forCountry(CountryCode.getByCode(countryCode));
     }
 
-    private static String getCheckDigit(final String iban) {
+    protected static String getCheckDigit(final String iban) {
         return iban.substring(CHECK_DIGIT_INDEX, CHECK_DIGIT_INDEX + CHECK_DIGIT_LENGTH);
     }
 
-    private static String getCountryCode(final String iban) {
+    protected static String getCountryCode(final String iban) {
         return iban.substring(COUNTRY_CODE_INDEX, COUNTRY_CODE_INDEX + COUNTRY_CODE_LENGTH);
     }
 
-    private static String getBban(final String iban) {
+    protected static String getBban(final String iban) {
         return iban.substring(BBAN_INDEX);
+    }
+
+    protected static String getAccountNumber(final String iban) {
+        return extractBbanEntry(iban, BbanStructureEntry.EntryType.c);
+    }
+
+    protected static String getBankCode(final String iban) {
+        return extractBbanEntry(iban, BbanStructureEntry.EntryType.b);
+    }
+
+    protected static String getBranchCode(final String iban) {
+        return extractBbanEntry(iban, BbanStructureEntry.EntryType.s);
+    }
+
+    protected static String getNationalCheckDigit(final String iban) {
+        return extractBbanEntry(iban, BbanStructureEntry.EntryType.x);
+    }
+
+    protected static String getAccountType(final String iban) {
+        return extractBbanEntry(iban, BbanStructureEntry.EntryType.t);
+    }
+
+    protected static String getOwnerAccountType(final String iban) {
+        return extractBbanEntry(iban, BbanStructureEntry.EntryType.n);
+    }
+
+    protected static String getIdentificationNumber(final String iban) {
+        return extractBbanEntry(iban, BbanStructureEntry.EntryType.i);
+    }
+
+    private static String extractBbanEntry(final String iban, final BbanStructureEntry.EntryType entryType) {
+        final String bban = getBban(iban);
+        final BbanStructure structure = getBbanStructure(iban);
+        int bbanEntryOffset = 0;
+        for(BbanStructureEntry entry : structure.getEntries()) {
+            final int entryLength = entry.getLength();
+            final String entryValue = bban.substring(bbanEntryOffset, bbanEntryOffset + entryLength);
+
+            bbanEntryOffset = bbanEntryOffset + entryLength;
+            if(entry.getEntryType() == entryType) {
+                return entryValue;
+            }
+        }
+        return null;
     }
 
 }
