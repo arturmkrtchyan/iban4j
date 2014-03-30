@@ -22,9 +22,7 @@ import java.io.Serializable;
  *
  * <a href="http://en.wikipedia.org/wiki/ISO_9362">ISO_9362</a>.
  */
-public final class Bic implements Serializable {
-
-    private static final long serialVersionUID = -4551863466421109610L;
+public final class Bic {
 
     private final String value;
 

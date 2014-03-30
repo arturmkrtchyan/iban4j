@@ -26,9 +26,7 @@ import java.io.Serializable;
  *
  * <a href="http://en.wikipedia.org/wiki/ISO_13616">ISO_13616</a>.
  */
-public final class Iban implements Serializable {
-
-    private static final long serialVersionUID = 3507561504372065317L;
+public final class Iban {
 
     protected static final String DEFAULT_CHECK_DIGIT = "00";
 
