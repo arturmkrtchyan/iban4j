@@ -30,9 +30,13 @@ public final class Assert {
      * @param message the exception message to use if the assertion fails
      * @throws IllegalArgumentException if expression is {@code false}
      */
-    public static void isTrue(final boolean expression, final String message) {
+    public static void isTrue(final boolean expression, final String message, final Object... args) {
         if (!expression) {
-            throw new IllegalArgumentException(message);
+            String localMessage = message;
+            if(args != null && args.length > 0) {
+                localMessage = String.format(message, args);
+            }
+            throw new IllegalArgumentException(localMessage);
         }
     }
 

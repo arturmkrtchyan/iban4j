@@ -35,6 +35,10 @@ public final class IbanUtil {
     private static final int CHECK_DIGIT_LENGTH = 2;
     private static final int BBAN_INDEX = CHECK_DIGIT_INDEX + CHECK_DIGIT_LENGTH;
 
+    private static final String ASSERT_UPPER_LETTERS = "[%s] must contain only upper case letters.";
+    private static final String ASSERT_DIGITS_AND_LETTERS = "[%s] must contain only digits or letters.";
+    private static final String ASSERT_DIGITS = "[%s] must contain only digits.";
+
     private IbanUtil() {
     }
 
@@ -139,17 +143,17 @@ public final class IbanUtil {
         switch (entry.getCharacterType()) {
             case a:
                 for(char ch: entryValue.toCharArray()) {
-                    Assert.isTrue(Character.isUpperCase(ch), "[" + entryValue + "] must contain only upper case letters.");
+                    Assert.isTrue(Character.isUpperCase(ch), ASSERT_UPPER_LETTERS, entryValue);
                 }
                 break;
             case c:
                 for(char ch: entryValue.toCharArray()) {
-                    Assert.isTrue(Character.isLetterOrDigit(ch), "[" + entryValue + "] must contain only digits or letters.");
+                    Assert.isTrue(Character.isLetterOrDigit(ch), ASSERT_DIGITS_AND_LETTERS, entryValue);
                 }
                 break;
             case n:
                 for(char ch: entryValue.toCharArray()) {
-                    Assert.isTrue(Character.isDigit(ch), "[" + entryValue + "] must contain only digits.");
+                    Assert.isTrue(Character.isDigit(ch), ASSERT_DIGITS, entryValue);
                 }
                 break;
         }
@@ -178,7 +182,7 @@ public final class IbanUtil {
      * @return modulo 97
      */
     private static int calculateMod(final String iban) {
-        String reformattedIban = getBban(iban) + getCountryCode(iban) + getCheckDigit(iban);
+        String reformattedIban = getBban(iban) + getCountryCodeAndCheckDigit(iban);
         long total = 0;
         for (int i = 0; i < reformattedIban.length(); i++) {
             int numericValue = Character.getNumericValue(reformattedIban.charAt(i));
@@ -206,6 +210,10 @@ public final class IbanUtil {
 
     protected static String getCountryCode(final String iban) {
         return iban.substring(COUNTRY_CODE_INDEX, COUNTRY_CODE_INDEX + COUNTRY_CODE_LENGTH);
+    }
+
+    protected static String getCountryCodeAndCheckDigit(final String iban) {
+        return iban.substring(COUNTRY_CODE_INDEX, COUNTRY_CODE_INDEX + COUNTRY_CODE_LENGTH + CHECK_DIGIT_LENGTH);
     }
 
     protected static String getBban(final String iban) {
