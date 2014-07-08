@@ -103,9 +103,20 @@ public final class Iban {
         return value;
     }
 
-    private String toFormattedString() {
-        // TODO for next release
-        return null;
+    /**
+     * Returns formatted version of Iban.
+     *
+     * @return A string representing formatted Iban for printing.
+     */
+    public String toFormattedString() {
+        StringBuilder ibanBuffer = new StringBuilder(value);
+        int length = ibanBuffer.length();
+
+        for (int i = 0; i < length / 4; i++) {
+            ibanBuffer.insert((i + 1) * 4 + i, ' ');
+        }
+
+        return ibanBuffer.toString().trim();
     }
 
     @Override

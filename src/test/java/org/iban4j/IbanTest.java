@@ -260,5 +260,15 @@ public class IbanTest {
             assertThat(iban1.hashCode(), is(not(equalTo(iban2.hashCode()))));
         }
 
+        @Test
+        public void ibanToFormattedStringShouldHaveSpacesAfterEach4Character() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.AT)
+                    .bankCode("1904")
+                    .accountNumber("102345732012")
+                    .build();
+            assertThat(iban.toFormattedString(), is(equalTo("AT14 1904 1023 4573 2012")));
+        }
+
     }
 }
