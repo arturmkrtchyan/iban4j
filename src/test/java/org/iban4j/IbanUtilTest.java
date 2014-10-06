@@ -147,8 +147,8 @@ public class IbanUtilTest {
         @Test
         public void ibanValidationWithInvalidAccountNumberShouldThrowException() {
             expectedException.expect(IbanFormatException.class);
-            expectedException.expectMessage(containsString("must contain only digits or letters"));
-            IbanUtil.validate("DE8937040044053201300 ");
+            expectedException.expectMessage(containsString("must contain only digits"));
+            IbanUtil.validate("DE8937040044053201300A");
         }
 
         @Test
