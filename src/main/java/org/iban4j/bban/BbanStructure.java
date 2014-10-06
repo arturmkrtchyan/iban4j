@@ -103,7 +103,7 @@ public class BbanStructure {
         structures.put(CountryCode.DE,
                 new BbanStructure(
                         BbanStructureEntry.bankCode(8, 'n'),
-                        BbanStructureEntry.accountNumber(10, 'c')));
+                        BbanStructureEntry.accountNumber(10, 'n')));
 
         structures.put(CountryCode.HR,
                 new BbanStructure(
