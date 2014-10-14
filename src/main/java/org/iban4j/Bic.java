@@ -15,7 +15,6 @@
  */
 package org.iban4j;
 
-import java.io.Serializable;
 
 /**
  * Business Identifier Codes (also known as SWIFT-BIC, BIC code, SWIFT ID or SWIFT code).
