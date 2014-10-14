@@ -6,3 +6,9 @@ iban4j.iml
 
 
 target
+build
+.gradle
+local.properties
+*.class
+
+
