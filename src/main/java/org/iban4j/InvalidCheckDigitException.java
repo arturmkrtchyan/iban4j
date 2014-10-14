@@ -15,7 +15,6 @@
  */
 package org.iban4j;
 
-import java.io.Serializable;
 
 /**
  * Thrown to indicate that Iban's check digit is invalid
