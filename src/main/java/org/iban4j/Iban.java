@@ -19,7 +19,6 @@ import org.iban4j.bban.BbanStructure;
 import org.iban4j.bban.BbanStructureEntry;
 import org.iban4j.support.Assert;
 
-import java.io.Serializable;
 
 /**
  * International Bank Account Number
