@@ -20,9 +20,9 @@ package org.iban4j.bban;
  */
 public class BbanStructureEntry {
 
-    private EntryType entryType;
-    private EntryCharacterType characterType;
-    private int length;
+    private final EntryType entryType;
+    private final EntryCharacterType characterType;
+    private final int length;
 
     private BbanStructureEntry(final EntryType entryType,
                        final EntryCharacterType characterType,
@@ -86,13 +86,13 @@ public class BbanStructureEntry {
         x, // national check digit
         t, // account type (Cheque account, Savings account etc)
         n, // owner account number ("1", "2" etc)
-        i; // identification number
+        i // identification number
     }
 
     public enum EntryCharacterType {
         n,  // Digits (numeric characters 0 to 9 only)
         a,  // Upper case letters (alphabetic characters A-Z only)
-        c;  // upper and lower case alphanumeric characters (A-Z, a-z and 0-9)
+        c  // upper and lower case alphanumeric characters (A-Z, a-z and 0-9)
     }
 }
 

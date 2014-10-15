@@ -88,7 +88,7 @@ public final class IbanUtil {
         }
     }
 
-    protected static void validateCheckDigit(final String iban) {
+    private static void validateCheckDigit(final String iban) {
         String checkDigit = getCheckDigit(iban);
         String expectedCheckDigit = calculateCheckDigit(iban);
         if (!checkDigit.equals(expectedCheckDigit)) {
@@ -199,52 +199,52 @@ public final class IbanUtil {
         return (int) (total % MOD);
     }
 
-    protected static BbanStructure getBbanStructure(final String iban) {
+    private static BbanStructure getBbanStructure(final String iban) {
         String countryCode = getCountryCode(iban);
         return BbanStructure.forCountry(CountryCode.getByCode(countryCode));
     }
 
-    protected static String getCheckDigit(final String iban) {
+    static String getCheckDigit(final String iban) {
         return iban.substring(CHECK_DIGIT_INDEX, CHECK_DIGIT_INDEX + CHECK_DIGIT_LENGTH);
     }
 
-    protected static String getCountryCode(final String iban) {
+    static String getCountryCode(final String iban) {
         return iban.substring(COUNTRY_CODE_INDEX, COUNTRY_CODE_INDEX + COUNTRY_CODE_LENGTH);
     }
 
-    protected static String getCountryCodeAndCheckDigit(final String iban) {
+    static String getCountryCodeAndCheckDigit(final String iban) {
         return iban.substring(COUNTRY_CODE_INDEX, COUNTRY_CODE_INDEX + COUNTRY_CODE_LENGTH + CHECK_DIGIT_LENGTH);
     }
 
-    protected static String getBban(final String iban) {
+    static String getBban(final String iban) {
         return iban.substring(BBAN_INDEX);
     }
 
-    protected static String getAccountNumber(final String iban) {
+    static String getAccountNumber(final String iban) {
         return extractBbanEntry(iban, BbanStructureEntry.EntryType.c);
     }
 
-    protected static String getBankCode(final String iban) {
+    static String getBankCode(final String iban) {
         return extractBbanEntry(iban, BbanStructureEntry.EntryType.b);
     }
 
-    protected static String getBranchCode(final String iban) {
+    static String getBranchCode(final String iban) {
         return extractBbanEntry(iban, BbanStructureEntry.EntryType.s);
     }
 
-    protected static String getNationalCheckDigit(final String iban) {
+    static String getNationalCheckDigit(final String iban) {
         return extractBbanEntry(iban, BbanStructureEntry.EntryType.x);
     }
 
-    protected static String getAccountType(final String iban) {
+    static String getAccountType(final String iban) {
         return extractBbanEntry(iban, BbanStructureEntry.EntryType.t);
     }
 
-    protected static String getOwnerAccountType(final String iban) {
+    static String getOwnerAccountType(final String iban) {
         return extractBbanEntry(iban, BbanStructureEntry.EntryType.n);
     }
 
-    protected static String getIdentificationNumber(final String iban) {
+    static String getIdentificationNumber(final String iban) {
         return extractBbanEntry(iban, BbanStructureEntry.EntryType.i);
     }
 

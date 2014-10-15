@@ -27,7 +27,7 @@ import org.iban4j.support.Assert;
  */
 public final class Iban {
 
-    protected static final String DEFAULT_CHECK_DIGIT = "00";
+    static final String DEFAULT_CHECK_DIGIT = "00";
 
     // Cache string value of the iban
     private final String value;

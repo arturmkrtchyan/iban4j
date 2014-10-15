@@ -26,14 +26,14 @@ import java.util.EnumMap;
  */
 public class BbanStructure {
 
-    private BbanStructureEntry[] entries;
+    private final BbanStructureEntry[] entries;
 
     private BbanStructure(final BbanStructureEntry... entries) {
         this.entries = entries;
     }
 
 
-    private static EnumMap<CountryCode, BbanStructure> structures;
+    private static final EnumMap<CountryCode, BbanStructure> structures;
 
     static {
         structures = new EnumMap<CountryCode, BbanStructure>(CountryCode.class);
