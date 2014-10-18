@@ -22,6 +22,10 @@ package org.iban4j;
  */
 public class IbanFormatException extends RuntimeException {
 
+    private IbanFormatViolation formatViolation;
+    private Object expected;
+    private Object actual;
+
     private static final long serialVersionUID = 4385766780446382504L;
 
     /**
@@ -60,5 +64,37 @@ public class IbanFormatException extends RuntimeException {
      */
     public IbanFormatException(final Throwable t) {
         super(t);
+    }
+
+    /**
+     * Constructs a <code>IbanFormatException</code> with the
+     * specified violation, actual value, expected value and detail message.
+     *
+     * @param s the detail message.
+     */
+    public IbanFormatException(IbanFormatViolation violation, Object actual,
+                               Object expected, final String s) {
+        super(s);
+        this.expected = expected;
+        this.actual = actual;
+        this.formatViolation = violation;
+    }
+
+    public IbanFormatViolation getFormatViolation() {
+        return formatViolation;
+    }
+
+    public Object getExpected() {
+        return expected;
+    }
+
+    public Object getActual() {
+        return actual;
+    }
+
+    public static enum IbanFormatViolation {
+        LENGTH,
+        UPPER_CASE_LETTERS_ONLY;
+
     }
 }
