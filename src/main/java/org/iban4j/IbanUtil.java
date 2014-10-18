@@ -27,8 +27,6 @@ public final class IbanUtil {
     private static final int MOD = 97;
     private static final long MAX = 999999999;
 
-    private static final int MIN_IBAN_SIZE = 15;
-
     private static final int COUNTRY_CODE_INDEX = 0;
     private static final int COUNTRY_CODE_LENGTH = 2;
     private static final int CHECK_DIGIT_INDEX = COUNTRY_CODE_LENGTH;
@@ -70,8 +68,8 @@ public final class IbanUtil {
 
         try {
             Assert.notNull(iban, "Null can't be a valid Iban.");
+
             validateCountryCode(iban);
-            validateMinLength(iban);
 
             BbanStructure structure = getBbanStructure(iban);
 
@@ -107,12 +105,6 @@ public final class IbanUtil {
         }
 
         Assert.notNull(CountryCode.getByCode(countryCode), "Iban contains non existing country code.");
-    }
-
-    private static void validateMinLength(final String iban) {
-        if(iban.length() < MIN_IBAN_SIZE) {
-            throw new IbanFormatException("Iban length can't be less than " + MIN_IBAN_SIZE);
-        }
     }
 
     private static void validateBbanLength(final String iban, final BbanStructure structure) {

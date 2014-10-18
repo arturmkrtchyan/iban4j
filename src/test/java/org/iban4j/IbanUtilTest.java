@@ -126,7 +126,6 @@ public class IbanUtilTest {
         @Test
         public void ibanValidationWithInvalidLengthShouldThrowException() {
             expectedException.expect(IbanFormatException.class);
-            expectedException.expectMessage(containsString("Iban length can't be less than"));
             IbanUtil.validate("AT621904300");
         }
 
