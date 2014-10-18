@@ -415,7 +415,7 @@ public class BbanStructure {
      * @return BbanStructure for specified country.
      * @throws UnsupportedCountryException if country is not supported.
      */
-    public static BbanStructure forCountry(final CountryCode countryCode) {
+    public static BbanStructure forCountry(final CountryCode countryCode) throws UnsupportedCountryException {
         BbanStructure structure = structures.get(countryCode);
 
         if (structure == null) {

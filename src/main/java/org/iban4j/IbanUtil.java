@@ -65,16 +65,8 @@ public final class IbanUtil {
      */
     public static void validate(final String iban) throws IbanFormatException,
             InvalidCheckDigitException, UnsupportedCountryException {
-
-        if(iban == null) {
-            throw new IbanFormatException(NULL, "Null can't be a valid Iban.");
-        }
-
-        if(iban.trim().length() == 0) {
-            throw new IbanFormatException(EMPTY, "Empty string can't be a valid Iban.");
-        }
-
         try {
+            validateEmpty(iban);
             validateCountryCode(iban);
 
             BbanStructure structure = getBbanStructure(iban);
@@ -90,7 +82,7 @@ public final class IbanUtil {
         } catch (IbanFormatException e) {
             throw e;
         } catch (RuntimeException e) {
-            throw new IbanFormatException(e.getMessage());
+            throw new IbanFormatException(UNKNOWN, e.getMessage());
         }
     }
 
@@ -103,20 +95,40 @@ public final class IbanUtil {
         }
     }
 
+    private static void validateEmpty(final String iban) {
+        if(iban == null) {
+            throw new IbanFormatException(NULL, "Null can't be a valid Iban.");
+        }
+
+        if(iban.trim().length() == 0) {
+            throw new IbanFormatException(EMPTY, "Empty string can't be a valid Iban.");
+        }
+    }
+
     private static void validateCountryCode(final String iban) {
         // check if iban contains 2 char country code
         if(iban.trim().length() < COUNTRY_CODE_LENGTH) {
             throw new IbanFormatException(TWO_CHAR_COUNTRY_CODE,
                     "Iban must contain 2 char country code.");
         }
+
         String countryCode = getCountryCode(iban);
+
+        // check case sensitivity
         if(!countryCode.equals(countryCode.toUpperCase()) ||
             !Character.isLetter(countryCode.charAt(0)) ||
             !Character.isLetter(countryCode.charAt(1))) {
-            throw new IbanFormatException("Iban country code must contain upper case letters");
+            throw new IbanFormatException(UPPER_CASE_CHAR_COUNTRY_CODE,
+                    "Iban country code must contain upper case letters.");
         }
 
-        Assert.notNull(CountryCode.getByCode(countryCode), "Iban contains non existing country code.");
+        if(CountryCode.getByCode(countryCode) == null) {
+            throw new IbanFormatException(EXISTING_COUNTRY_CODE,
+                    "Iban contains non existing country code.");
+        }
+
+        // check if country is supported
+        BbanStructure.forCountry(CountryCode.getByCode(countryCode));
     }
 
     private static void validateBbanLength(final String iban, final BbanStructure structure) {
