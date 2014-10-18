@@ -80,6 +80,17 @@ public class IbanFormatException extends RuntimeException {
         this.formatViolation = violation;
     }
 
+    /**
+     * Constructs a <code>IbanFormatException</code> with the
+     * specified violation and detail message.
+     *
+     * @param s the detail message.
+     */
+    public IbanFormatException(IbanFormatViolation violation, final String s) {
+        super(s);
+        this.formatViolation = violation;
+    }
+
     public IbanFormatViolation getFormatViolation() {
         return formatViolation;
     }
@@ -93,6 +104,7 @@ public class IbanFormatException extends RuntimeException {
     }
 
     public static enum IbanFormatViolation {
+        NULL,
         LENGTH,
         UPPER_CASE_LETTERS_ONLY;
 

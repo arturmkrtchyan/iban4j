@@ -15,6 +15,9 @@
  */
 package org.iban4j;
 
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
@@ -29,6 +32,8 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import org.iban4j.IbanFormatException.IbanFormatViolation;
 
 @RunWith(Enclosed.class)
 public class IbanUtilTest {
@@ -89,6 +94,7 @@ public class IbanUtilTest {
         public void ibanValidationWithNullShouldThrowException() {
             expectedException.expect(IbanFormatException.class);
             expectedException.expectMessage(containsString("Null can't be a valid Iban"));
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.NULL));
             IbanUtil.validate(null);
         }
 
@@ -175,6 +181,30 @@ public class IbanUtilTest {
         @Parameterized.Parameters
         public static Collection<Object[]> ibanParameters() {
             return TestDataHelper.getIbanData();
+        }
+    }
+
+    @Ignore
+    public static class IbanFormatViolationMatcher extends TypeSafeMatcher<IbanFormatException> {
+
+        private final IbanFormatViolation expectedViolation;
+        private IbanFormatViolation actualViolation;
+
+        public IbanFormatViolationMatcher(IbanFormatViolation violation) {
+            expectedViolation = violation;
+        }
+
+        @Override
+        protected boolean matchesSafely(IbanFormatException e) {
+            actualViolation = e.getFormatViolation();
+            return expectedViolation.equals(actualViolation);
+        }
+
+        public void describeTo(Description description) {
+            description.appendText("expected ")
+                    .appendValue(expectedViolation)
+                    .appendText(" but found ")
+                    .appendValue(actualViolation);
         }
     }
 

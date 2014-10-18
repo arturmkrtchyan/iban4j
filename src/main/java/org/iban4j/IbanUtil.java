@@ -18,7 +18,7 @@ package org.iban4j;
 import org.iban4j.bban.BbanStructure;
 import org.iban4j.bban.BbanStructureEntry;
 import org.iban4j.support.Assert;
-
+import static org.iban4j.IbanFormatException.IbanFormatViolation.*;
 /**
  * Iban Utility Class
  */
@@ -66,9 +66,11 @@ public final class IbanUtil {
     public static void validate(final String iban) throws IbanFormatException,
             InvalidCheckDigitException, UnsupportedCountryException {
 
-        try {
-            Assert.notNull(iban, "Null can't be a valid Iban.");
+        if(iban == null) {
+            throw new IbanFormatException(NULL, "Null can't be a valid Iban.");
+        }
 
+        try {
             validateCountryCode(iban);
 
             BbanStructure structure = getBbanStructure(iban);
