@@ -99,6 +99,22 @@ public class IbanUtilTest {
         }
 
         @Test
+        public void ibanValidationWithEmptyShouldThrowException() {
+            expectedException.expect(IbanFormatException.class);
+            expectedException.expectMessage(containsString("Empty string can't be a valid Iban"));
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.EMPTY));
+            IbanUtil.validate("");
+        }
+
+        @Test
+        public void ibanValidationWithOneCharStringShouldThrowException() {
+            expectedException.expect(IbanFormatException.class);
+            expectedException.expectMessage(containsString("Iban must contain 2 char country code."));
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.TWO_CHAR_COUNTRY_CODE));
+            IbanUtil.validate("A");
+        }
+
+        @Test
         public void ibanValidationWithLowercaseCountryShouldThrowException() {
             expectedException.expect(IbanFormatException.class);
             expectedException.expectMessage(containsString("Iban country code must contain upper case letters"));

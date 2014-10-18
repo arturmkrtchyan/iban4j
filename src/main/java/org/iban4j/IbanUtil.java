@@ -70,6 +70,10 @@ public final class IbanUtil {
             throw new IbanFormatException(NULL, "Null can't be a valid Iban.");
         }
 
+        if(iban.trim().length() == 0) {
+            throw new IbanFormatException(EMPTY, "Empty string can't be a valid Iban.");
+        }
+
         try {
             validateCountryCode(iban);
 
@@ -82,6 +86,8 @@ public final class IbanUtil {
         } catch (UnsupportedCountryException e) {
             throw e;
         } catch (InvalidCheckDigitException e) {
+            throw e;
+        } catch (IbanFormatException e) {
             throw e;
         } catch (RuntimeException e) {
             throw new IbanFormatException(e.getMessage());
@@ -98,9 +104,13 @@ public final class IbanUtil {
     }
 
     private static void validateCountryCode(final String iban) {
+        // check if iban contains 2 char country code
+        if(iban.trim().length() < COUNTRY_CODE_LENGTH) {
+            throw new IbanFormatException(TWO_CHAR_COUNTRY_CODE,
+                    "Iban must contain 2 char country code.");
+        }
         String countryCode = getCountryCode(iban);
-        if( countryCode.trim().length() < COUNTRY_CODE_LENGTH ||
-            !countryCode.equals(countryCode.toUpperCase()) ||
+        if(!countryCode.equals(countryCode.toUpperCase()) ||
             !Character.isLetter(countryCode.charAt(0)) ||
             !Character.isLetter(countryCode.charAt(1))) {
             throw new IbanFormatException("Iban country code must contain upper case letters");

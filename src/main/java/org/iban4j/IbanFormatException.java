@@ -105,7 +105,9 @@ public class IbanFormatException extends RuntimeException {
 
     public static enum IbanFormatViolation {
         NULL,
+        EMPTY,
         LENGTH,
+        TWO_CHAR_COUNTRY_CODE,
         UPPER_CASE_LETTERS_ONLY;
 
     }
