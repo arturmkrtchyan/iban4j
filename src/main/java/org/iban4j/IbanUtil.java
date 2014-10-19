@@ -88,6 +88,71 @@ public final class IbanUtil {
         }
     }
 
+    public static int getIbanLength(CountryCode countryCode) {
+        BbanStructure structure = getBbanStructure(countryCode);
+        return COUNTRY_CODE_LENGTH + CHECK_DIGIT_LENGTH + structure.getBbanLength();
+    }
+
+    public static String getCheckDigit(final String iban) {
+        return iban.substring(CHECK_DIGIT_INDEX, CHECK_DIGIT_INDEX + CHECK_DIGIT_LENGTH);
+    }
+
+    public static String getCountryCode(final String iban) {
+        return iban.substring(COUNTRY_CODE_INDEX, COUNTRY_CODE_INDEX + COUNTRY_CODE_LENGTH);
+    }
+
+    public static String getCountryCodeAndCheckDigit(final String iban) {
+        return iban.substring(COUNTRY_CODE_INDEX, COUNTRY_CODE_INDEX + COUNTRY_CODE_LENGTH + CHECK_DIGIT_LENGTH);
+    }
+
+    public static String getBban(final String iban) {
+        return iban.substring(BBAN_INDEX);
+    }
+
+    public static String getAccountNumber(final String iban) {
+        return extractBbanEntry(iban, BbanEntryType.account_number);
+    }
+
+    public static String getBankCode(final String iban) {
+        return extractBbanEntry(iban, BbanEntryType.bank_code);
+    }
+
+    static String getBranchCode(final String iban) {
+        return extractBbanEntry(iban, BbanEntryType.branch_code);
+    }
+
+    static String getNationalCheckDigit(final String iban) {
+        return extractBbanEntry(iban, BbanEntryType.national_check_digit);
+    }
+
+    static String getAccountType(final String iban) {
+        return extractBbanEntry(iban, BbanEntryType.account_type);
+    }
+
+    static String getOwnerAccountType(final String iban) {
+        return extractBbanEntry(iban, BbanEntryType.owner_account_number);
+    }
+
+    static String getIdentificationNumber(final String iban) {
+        return extractBbanEntry(iban, BbanEntryType.identification_number);
+    }
+
+    static String calculateCheckDigit(final Iban iban) {
+        return calculateCheckDigit(iban.toString());
+    }
+
+    /**
+     * Returns an iban with replaced check digit.
+     *
+     * @param iban The iban
+     * @return The iban without the check digit
+     */
+    static String replaceCheckDigit(final String iban, final String checkDigit) {
+        return getCountryCode(iban) + checkDigit + getBban(iban);
+    }
+
+
+
     private static void validateCheckDigit(final String iban) {
         String checkDigit = getCheckDigit(iban);
         String expectedCheckDigit = calculateCheckDigit(iban);
@@ -215,21 +280,6 @@ public final class IbanUtil {
         }
     }
 
-    protected static String calculateCheckDigit(final Iban iban) {
-        return calculateCheckDigit(iban.toString());
-    }
-
-    /**
-     * Returns an iban with replaced check digit.
-     *
-     * @param iban The iban
-     * @return The iban without the check digit
-     */
-    protected static String replaceCheckDigit(final String iban, final String checkDigit) {
-        return getCountryCode(iban) + checkDigit + getBban(iban);
-    }
-
-
     /**
      * Calculates
      * <a href="http://en.wikipedia.org/wiki/ISO_13616#Modulo_operation_on_IBAN">Iban Modulo</a>.
@@ -257,51 +307,11 @@ public final class IbanUtil {
 
     private static BbanStructure getBbanStructure(final String iban) {
         String countryCode = getCountryCode(iban);
-        return BbanStructure.forCountry(CountryCode.getByCode(countryCode));
+        return getBbanStructure(CountryCode.getByCode(countryCode));
     }
 
-    public static String getCheckDigit(final String iban) {
-        return iban.substring(CHECK_DIGIT_INDEX, CHECK_DIGIT_INDEX + CHECK_DIGIT_LENGTH);
-    }
-
-    public static String getCountryCode(final String iban) {
-        return iban.substring(COUNTRY_CODE_INDEX, COUNTRY_CODE_INDEX + COUNTRY_CODE_LENGTH);
-    }
-
-    public static String getCountryCodeAndCheckDigit(final String iban) {
-        return iban.substring(COUNTRY_CODE_INDEX, COUNTRY_CODE_INDEX + COUNTRY_CODE_LENGTH + CHECK_DIGIT_LENGTH);
-    }
-
-    public static String getBban(final String iban) {
-        return iban.substring(BBAN_INDEX);
-    }
-
-    public static String getAccountNumber(final String iban) {
-        return extractBbanEntry(iban, BbanEntryType.account_number);
-    }
-
-    public static String getBankCode(final String iban) {
-        return extractBbanEntry(iban, BbanEntryType.bank_code);
-    }
-
-    static String getBranchCode(final String iban) {
-        return extractBbanEntry(iban, BbanEntryType.branch_code);
-    }
-
-    static String getNationalCheckDigit(final String iban) {
-        return extractBbanEntry(iban, BbanEntryType.national_check_digit);
-    }
-
-    static String getAccountType(final String iban) {
-        return extractBbanEntry(iban, BbanEntryType.account_type);
-    }
-
-    static String getOwnerAccountType(final String iban) {
-        return extractBbanEntry(iban, BbanEntryType.owner_account_number);
-    }
-
-    static String getIdentificationNumber(final String iban) {
-        return extractBbanEntry(iban, BbanEntryType.identification_number);
+    private static BbanStructure getBbanStructure(final CountryCode countryCode) {
+        return BbanStructure.forCountry(countryCode);
     }
 
     private static String extractBbanEntry(final String iban, final BbanEntryType entryType) {
