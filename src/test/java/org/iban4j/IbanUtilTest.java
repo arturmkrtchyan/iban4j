@@ -94,7 +94,7 @@ public class IbanUtilTest {
         public void ibanValidationWithNullShouldThrowException() {
             expectedException.expect(IbanFormatException.class);
             expectedException.expectMessage(containsString("Null can't be a valid Iban"));
-            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.NULL));
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.NOT_NULL));
             IbanUtil.validate(null);
         }
 
@@ -102,7 +102,7 @@ public class IbanUtilTest {
         public void ibanValidationWithEmptyShouldThrowException() {
             expectedException.expect(IbanFormatException.class);
             expectedException.expectMessage(containsString("Empty string can't be a valid Iban"));
-            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.EMPTY));
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.NOT_EMPTY));
             IbanUtil.validate("");
         }
 
@@ -112,6 +112,22 @@ public class IbanUtilTest {
             expectedException.expectMessage(containsString("Iban must contain 2 char country code."));
             expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.TWO_CHAR_COUNTRY_CODE));
             IbanUtil.validate("A");
+        }
+
+        @Test
+        public void ibanValidationWithCountryCodeOnlyShouldThrowException() {
+            expectedException.expect(IbanFormatException.class);
+            expectedException.expectMessage(containsString("Iban must contain 2 digit check digit."));
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.TWO_DIGIT_CHECK_DIGIT));
+            IbanUtil.validate("AT");
+        }
+
+        @Test
+        public void ibanValidationWithNonDigitCheckDigitShouldThrowException() {
+            expectedException.expect(IbanFormatException.class);
+            expectedException.expectMessage(containsString("Iban's check digit should contain only digits."));
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.ONLY_DIGIT));
+            IbanUtil.validate("AT4T");
         }
 
         @Test

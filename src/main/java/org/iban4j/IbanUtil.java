@@ -69,6 +69,7 @@ public final class IbanUtil {
         try {
             validateEmpty(iban);
             validateCountryCode(iban);
+            validateCheckDigitPresence(iban);
 
             BbanStructure structure = getBbanStructure(iban);
 
@@ -83,7 +84,7 @@ public final class IbanUtil {
         } catch (IbanFormatException e) {
             throw e;
         } catch (RuntimeException e) {
-            throw new IbanFormatException(UNKNOWN, e.getMessage());
+            throw new IbanFormatException(e.getMessage(), e);
         }
     }
 
@@ -98,11 +99,11 @@ public final class IbanUtil {
 
     private static void validateEmpty(final String iban) {
         if(iban == null) {
-            throw new IbanFormatException(NULL, "Null can't be a valid Iban.");
+            throw new IbanFormatException(NOT_NULL, "Null can't be a valid Iban.");
         }
 
         if(iban.trim().length() == 0) {
-            throw new IbanFormatException(EMPTY, "Empty string can't be a valid Iban.");
+            throw new IbanFormatException(NOT_EMPTY, "Empty string can't be a valid Iban.");
         }
     }
 
@@ -130,6 +131,23 @@ public final class IbanUtil {
 
         // check if country is supported
         BbanStructure.forCountry(CountryCode.getByCode(countryCode));
+    }
+
+    private static void validateCheckDigitPresence(final String iban) {
+        // check if iban contains 2 digit check digit
+        if(iban.trim().length() < COUNTRY_CODE_LENGTH + CHECK_DIGIT_LENGTH) {
+            throw new IbanFormatException(TWO_DIGIT_CHECK_DIGIT,
+                    "Iban must contain 2 digit check digit.");
+        }
+
+        String checkDigit = getCheckDigit(iban);
+
+        // check digits
+        if(!Character.isDigit(checkDigit.charAt(0)) ||
+           !Character.isDigit(checkDigit.charAt(1))) {
+            throw new IbanFormatException(ONLY_DIGIT,
+                    "Iban's check digit should contain only digits.");
+        }
     }
 
     private static void validateBbanLength(final String iban, final BbanStructure structure) {
