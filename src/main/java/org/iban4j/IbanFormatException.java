@@ -130,12 +130,12 @@ public class IbanFormatException extends RuntimeException {
         UNKNOWN,
         NOT_NULL_IBAN,
         NOT_EMPTY_IBAN,
-        LENGTH,
         ONLY_DIGIT_CHECK_DIGIT,
         TWO_DIGIT_CHECK_DIGIT,
         TWO_CHAR_COUNTRY_CODE,
         UPPER_CASE_CHAR_COUNTRY_CODE,
-        EXISTING_COUNTRY_CODE;
+        EXISTING_COUNTRY_CODE,
+        LENGTH_BBAN
 
     }
 }

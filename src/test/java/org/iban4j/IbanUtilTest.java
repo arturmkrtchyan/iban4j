@@ -131,6 +131,13 @@ public class IbanUtilTest {
         }
 
         @Test
+        public void ibanValidationWithCountryCodeAndCheckDigitOnlyShouldThrowException() {
+            expectedException.expect(IbanFormatException.class);
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.LENGTH_BBAN));
+            IbanUtil.validate("AT48");
+        }
+
+        @Test
         public void ibanValidationWithLowercaseCountryShouldThrowException() {
             expectedException.expect(IbanFormatException.class);
             expectedException.expectMessage(containsString("Iban country code must contain upper case letters"));

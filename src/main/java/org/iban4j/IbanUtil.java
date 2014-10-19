@@ -158,7 +158,7 @@ public final class IbanUtil {
         String bban = getBban(iban);
         int bbanLength = bban.length();
         if (expectedBbanLength != bbanLength) {
-            throw new IbanFormatException("[" + bban + "] length is " +
+            throw new IbanFormatException(LENGTH_BBAN, "[" + bban + "] length is " +
                     bbanLength + ", expected BBAN length is: " + expectedBbanLength);
         }
     }
