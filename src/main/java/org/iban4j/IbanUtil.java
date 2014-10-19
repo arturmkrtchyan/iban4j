@@ -92,7 +92,9 @@ public final class IbanUtil {
         String checkDigit = getCheckDigit(iban);
         String expectedCheckDigit = calculateCheckDigit(iban);
         if (!checkDigit.equals(expectedCheckDigit)) {
-            throw new InvalidCheckDigitException("[" + iban + "] has invalid check digit: " +
+            throw new InvalidCheckDigitException(
+                    checkDigit, expectedCheckDigit,
+                    "[" + iban + "] has invalid check digit: " +
                     checkDigit + ", expected check digit is: " + expectedCheckDigit);
         }
     }
@@ -102,15 +104,15 @@ public final class IbanUtil {
             throw new IbanFormatException(IBAN_NOT_NULL, "Null can't be a valid Iban.");
         }
 
-        if(iban.trim().length() == 0) {
+        if(iban.length() == 0) {
             throw new IbanFormatException(IBAN_NOT_EMPTY, "Empty string can't be a valid Iban.");
         }
     }
 
     private static void validateCountryCode(final String iban) {
         // check if iban contains 2 char country code
-        if(iban.trim().length() < COUNTRY_CODE_LENGTH) {
-            throw new IbanFormatException(COUNTRY_CODE_TWO_LETTERS,
+        if(iban.length() < COUNTRY_CODE_LENGTH) {
+            throw new IbanFormatException(COUNTRY_CODE_TWO_LETTERS, iban,
                     "Iban must contain 2 char country code.");
         }
 
@@ -120,26 +122,28 @@ public final class IbanUtil {
         if(!countryCode.equals(countryCode.toUpperCase()) ||
             !Character.isLetter(countryCode.charAt(0)) ||
             !Character.isLetter(countryCode.charAt(1))) {
-            throw new IbanFormatException(COUNTRY_CODE_UPPER_CASE_LETTERS,
+            throw new IbanFormatException(COUNTRY_CODE_UPPER_CASE_LETTERS, countryCode,
                     "Iban country code must contain upper case letters.");
         }
 
         if(CountryCode.getByCode(countryCode) == null) {
-            throw new IbanFormatException(COUNTRY_CODE_EXISTS,
+            throw new IbanFormatException(COUNTRY_CODE_EXISTS, countryCode,
                     "Iban contains non existing country code.");
         }
 
         // check if country is supported
         BbanStructure structure = BbanStructure.forCountry(CountryCode.getByCode(countryCode));
         if (structure == null) {
-            throw new UnsupportedCountryException("Country code: " + countryCode + " is not supported.");
+            throw new UnsupportedCountryException(countryCode,
+                    "Country code: " + countryCode + " is not supported.");
         }
     }
 
     private static void validateCheckDigitPresence(final String iban) {
         // check if iban contains 2 digit check digit
-        if(iban.trim().length() < COUNTRY_CODE_LENGTH + CHECK_DIGIT_LENGTH) {
+        if(iban.length() < COUNTRY_CODE_LENGTH + CHECK_DIGIT_LENGTH) {
             throw new IbanFormatException(CHECK_DIGIT_TWO_DIGITS,
+                    iban.substring(COUNTRY_CODE_LENGTH),
                     "Iban must contain 2 digit check digit.");
         }
 
@@ -148,7 +152,7 @@ public final class IbanUtil {
         // check digits
         if(!Character.isDigit(checkDigit.charAt(0)) ||
            !Character.isDigit(checkDigit.charAt(1))) {
-            throw new IbanFormatException(CHECK_DIGIT_ONLY_DIGITS,
+            throw new IbanFormatException(CHECK_DIGIT_ONLY_DIGITS, checkDigit,
                     "Iban's check digit should contain only digits.");
         }
     }
@@ -158,8 +162,10 @@ public final class IbanUtil {
         String bban = getBban(iban);
         int bbanLength = bban.length();
         if (expectedBbanLength != bbanLength) {
-            throw new IbanFormatException(BBAN_LENGTH, "[" + bban + "] length is " +
-                    bbanLength + ", expected BBAN length is: " + expectedBbanLength);
+            throw new IbanFormatException(BBAN_LENGTH,
+                    bbanLength, expectedBbanLength,
+                    "[" + bban + "] length is " + bbanLength +
+                    ", expected BBAN length is: " + expectedBbanLength);
         }
     }
 
@@ -183,6 +189,7 @@ public final class IbanUtil {
                 for(char ch: entryValue.toCharArray()) {
                     if(!Character.isUpperCase(ch)) {
                         throw new IbanFormatException(BBAN_ONLY_UPPER_CASE_LETTERS,
+                                entry.getEntryType(), entryValue,
                                 String.format(ASSERT_UPPER_LETTERS, entryValue));
                     }
                 }
@@ -191,6 +198,7 @@ public final class IbanUtil {
                 for(char ch: entryValue.toCharArray()) {
                     if(!Character.isLetterOrDigit(ch)) {
                         throw new IbanFormatException(BBAN_ONLY_DIGITS_OR_LETTERS,
+                                entry.getEntryType(), entryValue,
                                 String.format(ASSERT_DIGITS_AND_LETTERS, entryValue));
                     }
                 }
@@ -199,6 +207,7 @@ public final class IbanUtil {
                 for(char ch: entryValue.toCharArray()) {
                     if(!Character.isDigit(ch)) {
                         throw new IbanFormatException(BBAN_ONLY_DIGITS,
+                                entry.getEntryType(), entryValue,
                                 String.format(ASSERT_DIGITS, entryValue));
                     }
                 }
@@ -251,27 +260,27 @@ public final class IbanUtil {
         return BbanStructure.forCountry(CountryCode.getByCode(countryCode));
     }
 
-    static String getCheckDigit(final String iban) {
+    public static String getCheckDigit(final String iban) {
         return iban.substring(CHECK_DIGIT_INDEX, CHECK_DIGIT_INDEX + CHECK_DIGIT_LENGTH);
     }
 
-    static String getCountryCode(final String iban) {
+    public static String getCountryCode(final String iban) {
         return iban.substring(COUNTRY_CODE_INDEX, COUNTRY_CODE_INDEX + COUNTRY_CODE_LENGTH);
     }
 
-    static String getCountryCodeAndCheckDigit(final String iban) {
+    public static String getCountryCodeAndCheckDigit(final String iban) {
         return iban.substring(COUNTRY_CODE_INDEX, COUNTRY_CODE_INDEX + COUNTRY_CODE_LENGTH + CHECK_DIGIT_LENGTH);
     }
 
-    static String getBban(final String iban) {
+    public static String getBban(final String iban) {
         return iban.substring(BBAN_INDEX);
     }
 
-    static String getAccountNumber(final String iban) {
+    public static String getAccountNumber(final String iban) {
         return extractBbanEntry(iban, BbanEntryType.account_number);
     }
 
-    static String getBankCode(final String iban) {
+    public static String getBankCode(final String iban) {
         return extractBbanEntry(iban, BbanEntryType.bank_code);
     }
 

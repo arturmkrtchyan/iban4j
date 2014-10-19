@@ -22,6 +22,8 @@ public class UnsupportedCountryException extends RuntimeException {
 
     private static final long serialVersionUID = -5193286194898199366L;
 
+    private String countryCode;
+
     /**
      * Constructs a <code>UnsupportedCountryException</code> with no detail message and cause.
      */
@@ -37,6 +39,17 @@ public class UnsupportedCountryException extends RuntimeException {
      */
     public UnsupportedCountryException(final String s) {
         super(s);
+    }
+
+    /**
+     * Constructs a <code>UnsupportedCountryException</code> with the
+     * specified country code and detail message.
+     *
+     * @param s the detail message.
+     */
+    public UnsupportedCountryException(String countryCode, final String s) {
+        super(s);
+        this.countryCode = countryCode;
     }
 
     /**
@@ -58,5 +71,9 @@ public class UnsupportedCountryException extends RuntimeException {
      */
     public UnsupportedCountryException(final Throwable t) {
         super(t);
+    }
+
+    public String getCountryCode() {
+        return countryCode;
     }
 }

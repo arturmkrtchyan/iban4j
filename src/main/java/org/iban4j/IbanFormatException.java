@@ -85,6 +85,32 @@ public class IbanFormatException extends RuntimeException {
 
     /**
      * Constructs a <code>IbanFormatException</code> with the
+     * specified violation, actual value and detail message.
+     *
+     * @param s the detail message.
+     */
+    public IbanFormatException(IbanFormatViolation violation, Object actual, final String s) {
+        super(s);
+        this.actual = actual;
+        this.formatViolation = violation;
+    }
+
+    /**
+     * Constructs a <code>IbanFormatException</code> with the
+     * specified violation, actual value and detail message.
+     *
+     * @param s the detail message.
+     */
+    public IbanFormatException(IbanFormatViolation violation,
+                               BbanEntryType entryType, Object actual, final String s) {
+        super(s);
+        this.actual = actual;
+        this.formatViolation = violation;
+        this.bbanEntryType = entryType;
+    }
+
+    /**
+     * Constructs a <code>IbanFormatException</code> with the
      * specified violation and detail message.
      *
      * @param s the detail message.
@@ -92,22 +118,6 @@ public class IbanFormatException extends RuntimeException {
     public IbanFormatException(IbanFormatViolation violation, final String s) {
         super(s);
         this.formatViolation = violation;
-    }
-
-    /**
-     * Constructs a <code>IbanFormatException</code> with the
-     * specified violation, actual value, expected value and detail message.
-     *
-     * @param s the detail message.
-     */
-    public IbanFormatException(IbanFormatViolation violation, Object actual,
-                               Object expected, BbanEntryType bbanEntryType,
-                               final String s) {
-        super(s);
-        this.expected = expected;
-        this.actual = actual;
-        this.formatViolation = violation;
-        this.bbanEntryType = bbanEntryType;
     }
 
     public IbanFormatViolation getFormatViolation() {
