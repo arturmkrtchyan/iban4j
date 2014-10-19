@@ -18,7 +18,7 @@ package org.iban4j;
 import org.iban4j.bban.BbanEntryType;
 import org.iban4j.bban.BbanStructure;
 import org.iban4j.bban.BbanStructureEntry;
-import org.iban4j.support.Assert;
+
 import static org.iban4j.IbanFormatException.IbanFormatViolation.*;
 /**
  * Iban Utility Class
@@ -84,7 +84,7 @@ public final class IbanUtil {
         } catch (IbanFormatException e) {
             throw e;
         } catch (RuntimeException e) {
-            throw new IbanFormatException(e.getMessage(), e);
+            throw new IbanFormatException(UNKNOWN, e.getMessage());
         }
     }
 
@@ -99,18 +99,18 @@ public final class IbanUtil {
 
     private static void validateEmpty(final String iban) {
         if(iban == null) {
-            throw new IbanFormatException(NOT_NULL_IBAN, "Null can't be a valid Iban.");
+            throw new IbanFormatException(IBAN_NOT_NULL, "Null can't be a valid Iban.");
         }
 
         if(iban.trim().length() == 0) {
-            throw new IbanFormatException(NOT_EMPTY_IBAN, "Empty string can't be a valid Iban.");
+            throw new IbanFormatException(IBAN_NOT_EMPTY, "Empty string can't be a valid Iban.");
         }
     }
 
     private static void validateCountryCode(final String iban) {
         // check if iban contains 2 char country code
         if(iban.trim().length() < COUNTRY_CODE_LENGTH) {
-            throw new IbanFormatException(TWO_CHAR_COUNTRY_CODE,
+            throw new IbanFormatException(COUNTRY_CODE_TWO_LETTERS,
                     "Iban must contain 2 char country code.");
         }
 
@@ -120,12 +120,12 @@ public final class IbanUtil {
         if(!countryCode.equals(countryCode.toUpperCase()) ||
             !Character.isLetter(countryCode.charAt(0)) ||
             !Character.isLetter(countryCode.charAt(1))) {
-            throw new IbanFormatException(UPPER_CASE_CHAR_COUNTRY_CODE,
+            throw new IbanFormatException(COUNTRY_CODE_UPPER_CASE_LETTERS,
                     "Iban country code must contain upper case letters.");
         }
 
         if(CountryCode.getByCode(countryCode) == null) {
-            throw new IbanFormatException(EXISTING_COUNTRY_CODE,
+            throw new IbanFormatException(COUNTRY_CODE_EXISTS,
                     "Iban contains non existing country code.");
         }
 
@@ -139,7 +139,7 @@ public final class IbanUtil {
     private static void validateCheckDigitPresence(final String iban) {
         // check if iban contains 2 digit check digit
         if(iban.trim().length() < COUNTRY_CODE_LENGTH + CHECK_DIGIT_LENGTH) {
-            throw new IbanFormatException(TWO_DIGIT_CHECK_DIGIT,
+            throw new IbanFormatException(CHECK_DIGIT_TWO_DIGITS,
                     "Iban must contain 2 digit check digit.");
         }
 
@@ -148,7 +148,7 @@ public final class IbanUtil {
         // check digits
         if(!Character.isDigit(checkDigit.charAt(0)) ||
            !Character.isDigit(checkDigit.charAt(1))) {
-            throw new IbanFormatException(ONLY_DIGIT_CHECK_DIGIT,
+            throw new IbanFormatException(CHECK_DIGIT_ONLY_DIGITS,
                     "Iban's check digit should contain only digits.");
         }
     }
@@ -158,7 +158,7 @@ public final class IbanUtil {
         String bban = getBban(iban);
         int bbanLength = bban.length();
         if (expectedBbanLength != bbanLength) {
-            throw new IbanFormatException(LENGTH_BBAN, "[" + bban + "] length is " +
+            throw new IbanFormatException(BBAN_LENGTH, "[" + bban + "] length is " +
                     bbanLength + ", expected BBAN length is: " + expectedBbanLength);
         }
     }
@@ -181,17 +181,26 @@ public final class IbanUtil {
         switch (entry.getCharacterType()) {
             case a:
                 for(char ch: entryValue.toCharArray()) {
-                    Assert.isTrue(Character.isUpperCase(ch), ASSERT_UPPER_LETTERS, entryValue);
+                    if(!Character.isUpperCase(ch)) {
+                        throw new IbanFormatException(BBAN_ONLY_UPPER_CASE_LETTERS,
+                                String.format(ASSERT_UPPER_LETTERS, entryValue));
+                    }
                 }
                 break;
             case c:
                 for(char ch: entryValue.toCharArray()) {
-                    Assert.isTrue(Character.isLetterOrDigit(ch), ASSERT_DIGITS_AND_LETTERS, entryValue);
+                    if(!Character.isLetterOrDigit(ch)) {
+                        throw new IbanFormatException(BBAN_ONLY_DIGITS_OR_LETTERS,
+                                String.format(ASSERT_DIGITS_AND_LETTERS, entryValue));
+                    }
                 }
                 break;
             case n:
                 for(char ch: entryValue.toCharArray()) {
-                    Assert.isTrue(Character.isDigit(ch), ASSERT_DIGITS, entryValue);
+                    if(!Character.isDigit(ch)) {
+                        throw new IbanFormatException(BBAN_ONLY_DIGITS,
+                                String.format(ASSERT_DIGITS, entryValue));
+                    }
                 }
                 break;
         }

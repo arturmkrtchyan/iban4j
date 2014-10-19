@@ -94,7 +94,7 @@ public class IbanUtilTest {
         public void ibanValidationWithNullShouldThrowException() {
             expectedException.expect(IbanFormatException.class);
             expectedException.expectMessage(containsString("Null can't be a valid Iban"));
-            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.NOT_NULL_IBAN));
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.IBAN_NOT_NULL));
             IbanUtil.validate(null);
         }
 
@@ -102,7 +102,7 @@ public class IbanUtilTest {
         public void ibanValidationWithEmptyShouldThrowException() {
             expectedException.expect(IbanFormatException.class);
             expectedException.expectMessage(containsString("Empty string can't be a valid Iban"));
-            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.NOT_EMPTY_IBAN));
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.IBAN_NOT_EMPTY));
             IbanUtil.validate("");
         }
 
@@ -110,7 +110,7 @@ public class IbanUtilTest {
         public void ibanValidationWithOneCharStringShouldThrowException() {
             expectedException.expect(IbanFormatException.class);
             expectedException.expectMessage(containsString("Iban must contain 2 char country code."));
-            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.TWO_CHAR_COUNTRY_CODE));
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.COUNTRY_CODE_TWO_LETTERS));
             IbanUtil.validate("A");
         }
 
@@ -118,7 +118,7 @@ public class IbanUtilTest {
         public void ibanValidationWithCountryCodeOnlyShouldThrowException() {
             expectedException.expect(IbanFormatException.class);
             expectedException.expectMessage(containsString("Iban must contain 2 digit check digit."));
-            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.TWO_DIGIT_CHECK_DIGIT));
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.CHECK_DIGIT_TWO_DIGITS));
             IbanUtil.validate("AT");
         }
 
@@ -126,14 +126,14 @@ public class IbanUtilTest {
         public void ibanValidationWithNonDigitCheckDigitShouldThrowException() {
             expectedException.expect(IbanFormatException.class);
             expectedException.expectMessage(containsString("Iban's check digit should contain only digits."));
-            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.ONLY_DIGIT_CHECK_DIGIT));
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.CHECK_DIGIT_ONLY_DIGITS));
             IbanUtil.validate("AT4T");
         }
 
         @Test
         public void ibanValidationWithCountryCodeAndCheckDigitOnlyShouldThrowException() {
             expectedException.expect(IbanFormatException.class);
-            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.LENGTH_BBAN));
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.BBAN_LENGTH));
             IbanUtil.validate("AT48");
         }
 
@@ -141,7 +141,7 @@ public class IbanUtilTest {
         public void ibanValidationWithLowercaseCountryShouldThrowException() {
             expectedException.expect(IbanFormatException.class);
             expectedException.expectMessage(containsString("Iban country code must contain upper case letters"));
-            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.UPPER_CASE_CHAR_COUNTRY_CODE));
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.COUNTRY_CODE_UPPER_CASE_LETTERS));
             IbanUtil.validate("at611904300234573201");
         }
 
@@ -149,7 +149,7 @@ public class IbanUtilTest {
         public void ibanValidationWithEmptyCountryShouldThrowException() {
             expectedException.expect(IbanFormatException.class);
             expectedException.expectMessage(containsString("Iban country code must contain upper case letters"));
-            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.UPPER_CASE_CHAR_COUNTRY_CODE));
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.COUNTRY_CODE_UPPER_CASE_LETTERS));
             IbanUtil.validate(" _611904300234573201");
         }
 
@@ -162,7 +162,7 @@ public class IbanUtilTest {
         public void ibanValidationWithNonExistingCountryShouldThrowException() {
             expectedException.expect(IbanFormatException.class);
             expectedException.expectMessage(containsString("Iban contains non existing country code."));
-            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.EXISTING_COUNTRY_CODE));
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.COUNTRY_CODE_EXISTS));
             IbanUtil.validate("JJ611904300234573201");
         }
 
