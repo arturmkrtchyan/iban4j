@@ -128,10 +128,10 @@ public class IbanFormatException extends RuntimeException {
 
     public static enum IbanFormatViolation {
         UNKNOWN,
-        NOT_NULL,
-        NOT_EMPTY,
+        NOT_NULL_IBAN,
+        NOT_EMPTY_IBAN,
         LENGTH,
-        ONLY_DIGIT,
+        ONLY_DIGIT_CHECK_DIGIT,
         TWO_DIGIT_CHECK_DIGIT,
         TWO_CHAR_COUNTRY_CODE,
         UPPER_CASE_CHAR_COUNTRY_CODE,

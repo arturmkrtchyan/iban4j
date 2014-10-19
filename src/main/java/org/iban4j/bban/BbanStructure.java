@@ -16,7 +16,6 @@
 package org.iban4j.bban;
 
 import org.iban4j.CountryCode;
-import org.iban4j.UnsupportedCountryException;
 
 import java.util.EnumMap;
 
@@ -412,16 +411,10 @@ public class BbanStructure {
 
     /**
      * @param countryCode the country code.
-     * @return BbanStructure for specified country.
-     * @throws UnsupportedCountryException if country is not supported.
+     * @return BbanStructure for specified country or null if country is not supported.
      */
-    public static BbanStructure forCountry(final CountryCode countryCode) throws UnsupportedCountryException {
-        BbanStructure structure = structures.get(countryCode);
-
-        if (structure == null) {
-            throw new UnsupportedCountryException("Country code: " + countryCode + " is not supported.");
-        }
-        return structure;
+    public static BbanStructure forCountry(final CountryCode countryCode) {
+        return structures.get(countryCode);
     }
 
     public BbanStructureEntry[] getEntries() {

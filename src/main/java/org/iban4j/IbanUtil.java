@@ -99,11 +99,11 @@ public final class IbanUtil {
 
     private static void validateEmpty(final String iban) {
         if(iban == null) {
-            throw new IbanFormatException(NOT_NULL, "Null can't be a valid Iban.");
+            throw new IbanFormatException(NOT_NULL_IBAN, "Null can't be a valid Iban.");
         }
 
         if(iban.trim().length() == 0) {
-            throw new IbanFormatException(NOT_EMPTY, "Empty string can't be a valid Iban.");
+            throw new IbanFormatException(NOT_EMPTY_IBAN, "Empty string can't be a valid Iban.");
         }
     }
 
@@ -130,7 +130,10 @@ public final class IbanUtil {
         }
 
         // check if country is supported
-        BbanStructure.forCountry(CountryCode.getByCode(countryCode));
+        BbanStructure structure = BbanStructure.forCountry(CountryCode.getByCode(countryCode));
+        if (structure == null) {
+            throw new UnsupportedCountryException("Country code: " + countryCode + " is not supported.");
+        }
     }
 
     private static void validateCheckDigitPresence(final String iban) {
@@ -145,7 +148,7 @@ public final class IbanUtil {
         // check digits
         if(!Character.isDigit(checkDigit.charAt(0)) ||
            !Character.isDigit(checkDigit.charAt(1))) {
-            throw new IbanFormatException(ONLY_DIGIT,
+            throw new IbanFormatException(ONLY_DIGIT_CHECK_DIGIT,
                     "Iban's check digit should contain only digits.");
         }
     }

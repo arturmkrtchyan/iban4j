@@ -94,7 +94,7 @@ public class IbanUtilTest {
         public void ibanValidationWithNullShouldThrowException() {
             expectedException.expect(IbanFormatException.class);
             expectedException.expectMessage(containsString("Null can't be a valid Iban"));
-            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.NOT_NULL));
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.NOT_NULL_IBAN));
             IbanUtil.validate(null);
         }
 
@@ -102,7 +102,7 @@ public class IbanUtilTest {
         public void ibanValidationWithEmptyShouldThrowException() {
             expectedException.expect(IbanFormatException.class);
             expectedException.expectMessage(containsString("Empty string can't be a valid Iban"));
-            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.NOT_EMPTY));
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.NOT_EMPTY_IBAN));
             IbanUtil.validate("");
         }
 
@@ -126,7 +126,7 @@ public class IbanUtilTest {
         public void ibanValidationWithNonDigitCheckDigitShouldThrowException() {
             expectedException.expect(IbanFormatException.class);
             expectedException.expectMessage(containsString("Iban's check digit should contain only digits."));
-            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.ONLY_DIGIT));
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.ONLY_DIGIT_CHECK_DIGIT));
             IbanUtil.validate("AT4T");
         }
 

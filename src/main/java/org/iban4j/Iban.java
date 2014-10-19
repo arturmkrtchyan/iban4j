@@ -191,6 +191,11 @@ public final class Iban {
         private String formatBban() {
             StringBuilder sb = new StringBuilder();
             BbanStructure structure = BbanStructure.forCountry(countryCode);
+
+            if (structure == null) {
+                throw new UnsupportedCountryException("Country code: " + countryCode + " is not supported.");
+            }
+
             for(BbanStructureEntry entry : structure.getEntries()) {
                 switch (entry.getEntryType()) {
                     case bank_code:
