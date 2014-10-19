@@ -15,6 +15,7 @@
  */
 package org.iban4j;
 
+import org.iban4j.bban.BbanEntryType;
 import org.iban4j.bban.BbanStructure;
 import org.iban4j.bban.BbanStructureEntry;
 import org.iban4j.support.Assert;
@@ -237,34 +238,34 @@ public final class IbanUtil {
     }
 
     static String getAccountNumber(final String iban) {
-        return extractBbanEntry(iban, BbanStructureEntry.EntryType.c);
+        return extractBbanEntry(iban, BbanEntryType.account_number);
     }
 
     static String getBankCode(final String iban) {
-        return extractBbanEntry(iban, BbanStructureEntry.EntryType.b);
+        return extractBbanEntry(iban, BbanEntryType.bank_code);
     }
 
     static String getBranchCode(final String iban) {
-        return extractBbanEntry(iban, BbanStructureEntry.EntryType.s);
+        return extractBbanEntry(iban, BbanEntryType.branch_code);
     }
 
     static String getNationalCheckDigit(final String iban) {
-        return extractBbanEntry(iban, BbanStructureEntry.EntryType.x);
+        return extractBbanEntry(iban, BbanEntryType.national_check_digit);
     }
 
     static String getAccountType(final String iban) {
-        return extractBbanEntry(iban, BbanStructureEntry.EntryType.t);
+        return extractBbanEntry(iban, BbanEntryType.account_type);
     }
 
     static String getOwnerAccountType(final String iban) {
-        return extractBbanEntry(iban, BbanStructureEntry.EntryType.n);
+        return extractBbanEntry(iban, BbanEntryType.owner_account_number);
     }
 
     static String getIdentificationNumber(final String iban) {
-        return extractBbanEntry(iban, BbanStructureEntry.EntryType.i);
+        return extractBbanEntry(iban, BbanEntryType.identification_number);
     }
 
-    private static String extractBbanEntry(final String iban, final BbanStructureEntry.EntryType entryType) {
+    private static String extractBbanEntry(final String iban, final BbanEntryType entryType) {
         final String bban = getBban(iban);
         final BbanStructure structure = getBbanStructure(iban);
         int bbanEntryOffset = 0;

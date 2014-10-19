@@ -193,25 +193,25 @@ public final class Iban {
             BbanStructure structure = BbanStructure.forCountry(countryCode);
             for(BbanStructureEntry entry : structure.getEntries()) {
                 switch (entry.getEntryType()) {
-                    case b:
+                    case bank_code:
                         sb.append(bankCode);
                         break;
-                    case s:
+                    case branch_code:
                         sb.append(branchCode);
                         break;
-                    case c:
+                    case account_number:
                         sb.append(accountNumber);
                         break;
-                    case x:
+                    case national_check_digit:
                         sb.append(nationalCheckDigit);
                         break;
-                    case t:
+                    case account_type:
                         sb.append(accountType);
                         break;
-                    case n:
+                    case owner_account_number:
                         sb.append(ownerAccountType);
                         break;
-                    case i:
+                    case identification_number:
                         sb.append(identificationNumber);
                         break;
                 }

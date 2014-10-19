@@ -15,6 +15,8 @@
  */
 package org.iban4j;
 
+import org.iban4j.bban.BbanEntryType;
+
 /**
  * Thrown to indicate that the application has attempted to convert
  * a string to Iban, but that the string does not
@@ -25,6 +27,7 @@ public class IbanFormatException extends RuntimeException {
     private IbanFormatViolation formatViolation;
     private Object expected;
     private Object actual;
+    private BbanEntryType bbanEntryType;
 
     private static final long serialVersionUID = 4385766780446382504L;
 
@@ -91,6 +94,22 @@ public class IbanFormatException extends RuntimeException {
         this.formatViolation = violation;
     }
 
+    /**
+     * Constructs a <code>IbanFormatException</code> with the
+     * specified violation, actual value, expected value and detail message.
+     *
+     * @param s the detail message.
+     */
+    public IbanFormatException(IbanFormatViolation violation, Object actual,
+                               Object expected, BbanEntryType bbanEntryType,
+                               final String s) {
+        super(s);
+        this.expected = expected;
+        this.actual = actual;
+        this.formatViolation = violation;
+        this.bbanEntryType = bbanEntryType;
+    }
+
     public IbanFormatViolation getFormatViolation() {
         return formatViolation;
     }
@@ -101,6 +120,10 @@ public class IbanFormatException extends RuntimeException {
 
     public Object getActual() {
         return actual;
+    }
+
+    public BbanEntryType getBbanEntryType() {
+        return bbanEntryType;
     }
 
     public static enum IbanFormatViolation {
