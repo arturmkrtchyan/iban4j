@@ -1,10 +1,14 @@
 
 #IntelliJ IDEA
-
 iban4j.iml
 .idea/
 
+#Eclipse
+.classpath
+.settings
+.project
 
+#Maven
 target
 build
 .gradle

@@ -15,12 +15,19 @@
  */
 package org.iban4j;
 
+import org.iban4j.bban.BbanEntryType;
+
 /**
  * Thrown to indicate that the application has attempted to convert
  * a string to Iban, but that the string does not
  * have the appropriate format.
  */
 public class IbanFormatException extends RuntimeException {
+
+    private IbanFormatViolation formatViolation;
+    private Object expected;
+    private Object actual;
+    private BbanEntryType bbanEntryType;
 
     private static final long serialVersionUID = 4385766780446382504L;
 
@@ -60,5 +67,92 @@ public class IbanFormatException extends RuntimeException {
      */
     public IbanFormatException(final Throwable t) {
         super(t);
+    }
+
+    /**
+     * Constructs a <code>IbanFormatException</code> with the
+     * specified violation, actual value, expected value and detail message.
+     *
+     * @param s the detail message.
+     */
+    public IbanFormatException(IbanFormatViolation violation, Object actual,
+                               Object expected, final String s) {
+        super(s);
+        this.expected = expected;
+        this.actual = actual;
+        this.formatViolation = violation;
+    }
+
+    /**
+     * Constructs a <code>IbanFormatException</code> with the
+     * specified violation, actual value and detail message.
+     *
+     * @param s the detail message.
+     */
+    public IbanFormatException(IbanFormatViolation violation, Object actual, final String s) {
+        super(s);
+        this.actual = actual;
+        this.formatViolation = violation;
+    }
+
+    /**
+     * Constructs a <code>IbanFormatException</code> with the
+     * specified violation, actual value and detail message.
+     *
+     * @param s the detail message.
+     */
+    public IbanFormatException(IbanFormatViolation violation,
+                               BbanEntryType entryType, Object actual, final String s) {
+        super(s);
+        this.actual = actual;
+        this.formatViolation = violation;
+        this.bbanEntryType = entryType;
+    }
+
+    /**
+     * Constructs a <code>IbanFormatException</code> with the
+     * specified violation and detail message.
+     *
+     * @param s the detail message.
+     */
+    public IbanFormatException(IbanFormatViolation violation, final String s) {
+        super(s);
+        this.formatViolation = violation;
+    }
+
+    public IbanFormatViolation getFormatViolation() {
+        return formatViolation;
+    }
+
+    public Object getExpected() {
+        return expected;
+    }
+
+    public Object getActual() {
+        return actual;
+    }
+
+    public BbanEntryType getBbanEntryType() {
+        return bbanEntryType;
+    }
+
+    public static enum IbanFormatViolation {
+        UNKNOWN,
+
+        IBAN_NOT_NULL,
+        IBAN_NOT_EMPTY,
+
+        CHECK_DIGIT_ONLY_DIGITS,
+        CHECK_DIGIT_TWO_DIGITS,
+
+        COUNTRY_CODE_TWO_LETTERS,
+        COUNTRY_CODE_UPPER_CASE_LETTERS,
+        COUNTRY_CODE_EXISTS,
+
+        BBAN_LENGTH,
+        BBAN_ONLY_DIGITS,
+        BBAN_ONLY_UPPER_CASE_LETTERS,
+        BBAN_ONLY_DIGITS_OR_LETTERS
+
     }
 }

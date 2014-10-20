@@ -15,7 +15,6 @@
  */
 package org.iban4j;
 
-import java.io.Serializable;
 
 /**
  * Thrown to indicate that Iban's check digit is invalid
@@ -24,6 +23,9 @@ public class InvalidCheckDigitException extends RuntimeException {
 
 
     private static final long serialVersionUID = -9193946653023753090L;
+
+    private String actual;
+    private String expected;
 
     /**
      * Constructs a <code>InvalidCheckDigitException</code> with no detail message.
@@ -40,6 +42,18 @@ public class InvalidCheckDigitException extends RuntimeException {
      */
     public InvalidCheckDigitException(final String s) {
         super(s);
+    }
+
+    /**
+     * Constructs a <code>InvalidCheckDigitException</code> with the
+     * specified actual, expected and detail message.
+     *
+     * @param s the detail message.
+     */
+    public InvalidCheckDigitException(final String actual, final String expected, final String s) {
+        super(s);
+        this.actual = actual;
+        this.expected = expected;
     }
 
     /**
@@ -61,5 +75,13 @@ public class InvalidCheckDigitException extends RuntimeException {
      */
     public InvalidCheckDigitException(final Throwable t) {
         super(t);
+    }
+
+    public String getActual() {
+        return actual;
+    }
+
+    public String getExpected() {
+        return expected;
     }
 }

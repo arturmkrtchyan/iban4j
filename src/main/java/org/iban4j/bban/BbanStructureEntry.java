@@ -20,11 +20,11 @@ package org.iban4j.bban;
  */
 public class BbanStructureEntry {
 
-    private EntryType entryType;
-    private EntryCharacterType characterType;
-    private int length;
+    private final BbanEntryType entryType;
+    private final EntryCharacterType characterType;
+    private final int length;
 
-    private BbanStructureEntry(final EntryType entryType,
+    private BbanStructureEntry(final BbanEntryType entryType,
                        final EntryCharacterType characterType,
                        final int length) {
         this.entryType = entryType;
@@ -33,41 +33,41 @@ public class BbanStructureEntry {
     }
 
     public static BbanStructureEntry bankCode(final int length, final char characterType) {
-        return new BbanStructureEntry(EntryType.b,
+        return new BbanStructureEntry(BbanEntryType.bank_code,
                 EntryCharacterType.valueOf(String.valueOf(characterType)), length);
     }
 
     public static BbanStructureEntry branchCode(final int length, final char characterType) {
-        return new BbanStructureEntry(EntryType.s,
+        return new BbanStructureEntry(BbanEntryType.branch_code,
                 EntryCharacterType.valueOf(String.valueOf(characterType)), length);
     }
 
     public static BbanStructureEntry accountNumber(final int length, final char characterType) {
-        return new BbanStructureEntry(EntryType.c,
+        return new BbanStructureEntry(BbanEntryType.account_number,
                 EntryCharacterType.valueOf(String.valueOf(characterType)), length);
     }
 
     public static BbanStructureEntry nationalCheckDigit(final int length, final char characterType) {
-        return new BbanStructureEntry(EntryType.x,
+        return new BbanStructureEntry(BbanEntryType.national_check_digit,
                 EntryCharacterType.valueOf(String.valueOf(characterType)), length);
     }
 
     public static BbanStructureEntry accountType(final int length, final char characterType) {
-        return new BbanStructureEntry(EntryType.t,
+        return new BbanStructureEntry(BbanEntryType.account_type,
                 EntryCharacterType.valueOf(String.valueOf(characterType)), length);
     }
 
     public static BbanStructureEntry ownerAccountNumber(final int length, final char characterType) {
-        return new BbanStructureEntry(EntryType.n,
+        return new BbanStructureEntry(BbanEntryType.owner_account_number,
                 EntryCharacterType.valueOf(String.valueOf(characterType)), length);
     }
 
     public static BbanStructureEntry identificationNumber(final int length, final char characterType) {
-        return new BbanStructureEntry(EntryType.i,
+        return new BbanStructureEntry(BbanEntryType.identification_number,
                 EntryCharacterType.valueOf(String.valueOf(characterType)), length);
     }
 
-    public EntryType getEntryType() {
+    public BbanEntryType getEntryType() {
         return entryType;
     }
 
@@ -79,20 +79,10 @@ public class BbanStructureEntry {
         return length;
     }
 
-    public enum EntryType {
-        b, // bank code, national bank code
-        s, // branch code
-        c, // account number
-        x, // national check digit
-        t, // account type (Cheque account, Savings account etc)
-        n, // owner account number ("1", "2" etc)
-        i; // identification number
-    }
-
     public enum EntryCharacterType {
         n,  // Digits (numeric characters 0 to 9 only)
         a,  // Upper case letters (alphabetic characters A-Z only)
-        c;  // upper and lower case alphanumeric characters (A-Z, a-z and 0-9)
+        c  // upper and lower case alphanumeric characters (A-Z, a-z and 0-9)
     }
 }
 

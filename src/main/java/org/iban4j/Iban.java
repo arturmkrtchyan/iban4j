@@ -19,7 +19,6 @@ import org.iban4j.bban.BbanStructure;
 import org.iban4j.bban.BbanStructureEntry;
 import org.iban4j.support.Assert;
 
-import java.io.Serializable;
 
 /**
  * International Bank Account Number
@@ -28,7 +27,7 @@ import java.io.Serializable;
  */
 public final class Iban {
 
-    protected static final String DEFAULT_CHECK_DIGIT = "00";
+    static final String DEFAULT_CHECK_DIGIT = "00";
 
     // Cache string value of the iban
     private final String value;
@@ -192,27 +191,32 @@ public final class Iban {
         private String formatBban() {
             StringBuilder sb = new StringBuilder();
             BbanStructure structure = BbanStructure.forCountry(countryCode);
+
+            if (structure == null) {
+                throw new UnsupportedCountryException("Country code: " + countryCode + " is not supported.");
+            }
+
             for(BbanStructureEntry entry : structure.getEntries()) {
                 switch (entry.getEntryType()) {
-                    case b:
+                    case bank_code:
                         sb.append(bankCode);
                         break;
-                    case s:
+                    case branch_code:
                         sb.append(branchCode);
                         break;
-                    case c:
+                    case account_number:
                         sb.append(accountNumber);
                         break;
-                    case x:
+                    case national_check_digit:
                         sb.append(nationalCheckDigit);
                         break;
-                    case t:
+                    case account_type:
                         sb.append(accountType);
                         break;
-                    case n:
+                    case owner_account_number:
                         sb.append(ownerAccountType);
                         break;
-                    case i:
+                    case identification_number:
                         sb.append(identificationNumber);
                         break;
                 }

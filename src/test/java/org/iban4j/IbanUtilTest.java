@@ -15,6 +15,9 @@
  */
 package org.iban4j;
 
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
@@ -25,10 +28,11 @@ import org.junit.runners.Parameterized;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+
+import org.iban4j.IbanFormatException.IbanFormatViolation;
 
 @RunWith(Enclosed.class)
 public class IbanUtilTest {
@@ -89,13 +93,60 @@ public class IbanUtilTest {
         public void ibanValidationWithNullShouldThrowException() {
             expectedException.expect(IbanFormatException.class);
             expectedException.expectMessage(containsString("Null can't be a valid Iban"));
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.IBAN_NOT_NULL));
             IbanUtil.validate(null);
+        }
+
+        @Test
+        public void ibanValidationWithEmptyShouldThrowException() {
+            expectedException.expect(IbanFormatException.class);
+            expectedException.expectMessage(containsString("Empty string can't be a valid Iban"));
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.IBAN_NOT_EMPTY));
+            IbanUtil.validate("");
+        }
+
+        @Test
+        public void ibanValidationWithOneCharStringShouldThrowException() {
+            expectedException.expect(IbanFormatException.class);
+            expectedException.expectMessage(containsString("Iban must contain 2 char country code."));
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.COUNTRY_CODE_TWO_LETTERS));
+            expectedException.expect(new IbanFormatExceptionActualValueMatcher("A"));
+            IbanUtil.validate("A");
+        }
+
+        @Test
+        public void ibanValidationWithCountryCodeOnlyShouldThrowException() {
+            expectedException.expect(IbanFormatException.class);
+            expectedException.expectMessage(containsString("Iban must contain 2 digit check digit."));
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.CHECK_DIGIT_TWO_DIGITS));
+            expectedException.expect(new IbanFormatExceptionActualValueMatcher(""));
+            IbanUtil.validate("AT");
+        }
+
+        @Test
+        public void ibanValidationWithNonDigitCheckDigitShouldThrowException() {
+            expectedException.expect(IbanFormatException.class);
+            expectedException.expectMessage(containsString("Iban's check digit should contain only digits."));
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.CHECK_DIGIT_ONLY_DIGITS));
+            expectedException.expect(new IbanFormatExceptionActualValueMatcher("4T"));
+            IbanUtil.validate("AT4T");
+        }
+
+        @Test
+        public void ibanValidationWithCountryCodeAndCheckDigitOnlyShouldThrowException() {
+            expectedException.expect(IbanFormatException.class);
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.BBAN_LENGTH));
+            expectedException.expect(new IbanFormatExceptionActualValueMatcher(0));
+            expectedException.expect(new IbanFormatExceptionExpectedValueMatcher(16));
+            IbanUtil.validate("AT48");
         }
 
         @Test
         public void ibanValidationWithLowercaseCountryShouldThrowException() {
             expectedException.expect(IbanFormatException.class);
             expectedException.expectMessage(containsString("Iban country code must contain upper case letters"));
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.COUNTRY_CODE_UPPER_CASE_LETTERS));
+            expectedException.expect(new IbanFormatExceptionActualValueMatcher("at"));
             IbanUtil.validate("at611904300234573201");
         }
 
@@ -103,6 +154,8 @@ public class IbanUtilTest {
         public void ibanValidationWithEmptyCountryShouldThrowException() {
             expectedException.expect(IbanFormatException.class);
             expectedException.expectMessage(containsString("Iban country code must contain upper case letters"));
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.COUNTRY_CODE_UPPER_CASE_LETTERS));
+            expectedException.expect(new IbanFormatExceptionActualValueMatcher(" _"));
             IbanUtil.validate(" _611904300234573201");
         }
 
@@ -114,19 +167,23 @@ public class IbanUtilTest {
         @Test
         public void ibanValidationWithNonExistingCountryShouldThrowException() {
             expectedException.expect(IbanFormatException.class);
-            expectedException.expectMessage(containsString("Iban contains non existing country code"));
+            expectedException.expectMessage(containsString("Iban contains non existing country code."));
+            expectedException.expect(new IbanFormatViolationMatcher(IbanFormatViolation.COUNTRY_CODE_EXISTS));
             IbanUtil.validate("JJ611904300234573201");
         }
 
-        @Test(expected = InvalidCheckDigitException.class)
+        @Test
         public void ibanValidationWithInvalidCheckDigitShouldThrowException() {
+            expectedException.expect(InvalidCheckDigitException.class);
+            expectedException.expectMessage("invalid check digit: 62");
+            expectedException.expectMessage("expected check digit is: 61");
+            expectedException.expectMessage("AT621904300234573201");
             IbanUtil.validate("AT621904300234573201");
         }
 
         @Test
         public void ibanValidationWithInvalidLengthShouldThrowException() {
             expectedException.expect(IbanFormatException.class);
-            expectedException.expectMessage(containsString("Iban length can't be less than"));
             IbanUtil.validate("AT621904300");
         }
 
@@ -176,6 +233,78 @@ public class IbanUtilTest {
         @Parameterized.Parameters
         public static Collection<Object[]> ibanParameters() {
             return TestDataHelper.getIbanData();
+        }
+    }
+
+    @Ignore
+    public static class IbanFormatViolationMatcher extends TypeSafeMatcher<IbanFormatException> {
+
+        private final IbanFormatViolation expectedViolation;
+        private IbanFormatViolation actualViolation;
+
+        public IbanFormatViolationMatcher(IbanFormatViolation violation) {
+            expectedViolation = violation;
+        }
+
+        @Override
+        protected boolean matchesSafely(IbanFormatException e) {
+            actualViolation = e.getFormatViolation();
+            return expectedViolation.equals(actualViolation);
+        }
+
+        public void describeTo(Description description) {
+            description.appendText("expected ")
+                    .appendValue(expectedViolation)
+                    .appendText(" but found ")
+                    .appendValue(actualViolation);
+        }
+    }
+
+    @Ignore
+    public static class IbanFormatExceptionActualValueMatcher extends TypeSafeMatcher<IbanFormatException> {
+
+        private final Object expectedValue;
+        private Object actualValue;
+
+        public IbanFormatExceptionActualValueMatcher(Object expectedValue) {
+            this.expectedValue = expectedValue;
+        }
+
+        @Override
+        protected boolean matchesSafely(IbanFormatException e) {
+            actualValue = e.getActual();
+            return expectedValue.equals(actualValue);
+        }
+
+        public void describeTo(Description description) {
+            description.appendText("expected ")
+                    .appendValue(expectedValue)
+                    .appendText(" but found ")
+                    .appendValue(actualValue);
+        }
+    }
+
+    @Ignore
+    public static class IbanFormatExceptionExpectedValueMatcher extends TypeSafeMatcher<IbanFormatException> {
+
+        private final Object expectedValue;
+        private Object actualValue;
+
+        public IbanFormatExceptionExpectedValueMatcher(Object expectedValue) {
+            this.expectedValue = expectedValue;
+        }
+
+        @Override
+        protected boolean matchesSafely(IbanFormatException e) {
+            actualValue = e.getExpected();
+            return expectedValue.equals(actualValue);
+        }
+
+        public void describeTo(Description description) {
+            description.appendText("expected ")
+                    .appendValue(expectedValue)
+                    .appendText(" but found ")
+                    .appendValue(actualValue);
         }
     }
 
