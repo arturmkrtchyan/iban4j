@@ -270,7 +270,7 @@ public final class IbanUtil {
                 for(char ch: entryValue.toCharArray()) {
                     if(!Character.isUpperCase(ch)) {
                         throw new IbanFormatException(BBAN_ONLY_UPPER_CASE_LETTERS,
-                                entry.getEntryType(), entryValue,
+                                entry.getEntryType(), entryValue, ch,
                                 String.format(ASSERT_UPPER_LETTERS, entryValue));
                     }
                 }
@@ -279,7 +279,7 @@ public final class IbanUtil {
                 for(char ch: entryValue.toCharArray()) {
                     if(!Character.isLetterOrDigit(ch)) {
                         throw new IbanFormatException(BBAN_ONLY_DIGITS_OR_LETTERS,
-                                entry.getEntryType(), entryValue,
+                                entry.getEntryType(), entryValue, ch,
                                 String.format(ASSERT_DIGITS_AND_LETTERS, entryValue));
                     }
                 }
@@ -288,7 +288,7 @@ public final class IbanUtil {
                 for(char ch: entryValue.toCharArray()) {
                     if(!Character.isDigit(ch)) {
                         throw new IbanFormatException(BBAN_ONLY_DIGITS,
-                                entry.getEntryType(), entryValue,
+                                entry.getEntryType(), entryValue, ch,
                                 String.format(ASSERT_DIGITS, entryValue));
                     }
                 }
