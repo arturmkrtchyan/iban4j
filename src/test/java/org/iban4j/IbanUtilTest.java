@@ -83,6 +83,24 @@ public class IbanUtilTest {
         }
     }
 
+    public static class DefaultIbanUtilTest {
+
+        @Test
+        public void ibanCountrySupportCheckWithNullShouldReturnFalse() {
+            assertThat(IbanUtil.isSupportedCountry(null), is(equalTo(false)));
+        }
+
+        @Test
+        public void ibanCountrySupportCheckWithSupportedCountryShouldReturnTrue() {
+            assertThat(IbanUtil.isSupportedCountry(CountryCode.BE), is(equalTo(true)));
+        }
+
+        @Test
+        public void ibanCountrySupportCheckWithUnsupportedCountryShouldReturnFalse() {
+            assertThat(IbanUtil.isSupportedCountry(CountryCode.AM), is(equalTo(false)));
+        }
+    }
+
     public static class InvalidIbanValidationTest {
 
         @Rule

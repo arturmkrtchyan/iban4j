@@ -88,6 +88,22 @@ public final class IbanUtil {
         }
     }
 
+    /**
+     * Checks whether country is supporting iban.
+     * @param countryCode {@link org.iban4j.CountryCode}
+     *
+     * @return boolean true if country supports iban, false otherwise.
+     */
+    public static boolean isSupportedCountry(CountryCode countryCode) {
+        return BbanStructure.forCountry(countryCode) != null;
+    }
+
+    /**
+     * Returns iban length for the specified country.
+     *
+     * @param countryCode {@link org.iban4j.CountryCode}
+     * @return the length of the iban for the specified country.
+     */
     public static int getIbanLength(CountryCode countryCode) {
         BbanStructure structure = getBbanStructure(countryCode);
         return COUNTRY_CODE_LENGTH + CHECK_DIGIT_LENGTH + structure.getBbanLength();
