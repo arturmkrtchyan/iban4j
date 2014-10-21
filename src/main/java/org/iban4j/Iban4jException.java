@@ -41,8 +41,4 @@ public class Iban4jException extends RuntimeException {
     public Iban4jException(Throwable cause) {
         super(cause);
     }
-
-    public Iban4jException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
 }
