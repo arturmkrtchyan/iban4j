@@ -19,10 +19,9 @@ package org.iban4j;
 /**
  * Thrown to indicate that Iban's check digit is invalid
  */
-public class InvalidCheckDigitException extends RuntimeException {
+public class InvalidCheckDigitException extends Iban4jException {
 
-
-    private static final long serialVersionUID = -9193946653023753090L;
+    private static final long serialVersionUID = -9222165415290480187L;
 
     private String actual;
     private String expected;

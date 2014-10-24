@@ -22,14 +22,15 @@ import org.iban4j.bban.BbanEntryType;
  * a string to Iban, but that the string does not
  * have the appropriate format.
  */
-public class IbanFormatException extends RuntimeException {
+public class IbanFormatException extends Iban4jException {
+
+    private static final long serialVersionUID = -2715142907876721085L;
 
     private IbanFormatViolation formatViolation;
     private Object expected;
     private Object actual;
     private BbanEntryType bbanEntryType;
-
-    private static final long serialVersionUID = 4385766780446382504L;
+    private char invalidCharacter;
 
     /**
      * Constructs a <code>IbanFormatException</code> with no detail message.
@@ -101,12 +102,16 @@ public class IbanFormatException extends RuntimeException {
      *
      * @param s the detail message.
      */
-    public IbanFormatException(IbanFormatViolation violation,
-                               BbanEntryType entryType, Object actual, final String s) {
+    public IbanFormatException(final IbanFormatViolation violation,
+                               final BbanEntryType entryType,
+                               final Object actual,
+                               final char invalidCharacter,
+                               final String s) {
         super(s);
         this.actual = actual;
         this.formatViolation = violation;
         this.bbanEntryType = entryType;
+        this.invalidCharacter = invalidCharacter;
     }
 
     /**
@@ -130,6 +135,10 @@ public class IbanFormatException extends RuntimeException {
 
     public Object getActual() {
         return actual;
+    }
+
+    public char getInvalidCharacter() {
+        return invalidCharacter;
     }
 
     public BbanEntryType getBbanEntryType() {

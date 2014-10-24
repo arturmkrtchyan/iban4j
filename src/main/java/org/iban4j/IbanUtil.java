@@ -88,6 +88,22 @@ public final class IbanUtil {
         }
     }
 
+    /**
+     * Checks whether country is supporting iban.
+     * @param countryCode {@link org.iban4j.CountryCode}
+     *
+     * @return boolean true if country supports iban, false otherwise.
+     */
+    public static boolean isSupportedCountry(CountryCode countryCode) {
+        return BbanStructure.forCountry(countryCode) != null;
+    }
+
+    /**
+     * Returns iban length for the specified country.
+     *
+     * @param countryCode {@link org.iban4j.CountryCode}
+     * @return the length of the iban for the specified country.
+     */
     public static int getIbanLength(CountryCode countryCode) {
         BbanStructure structure = getBbanStructure(countryCode);
         return COUNTRY_CODE_LENGTH + CHECK_DIGIT_LENGTH + structure.getBbanLength();
@@ -254,7 +270,7 @@ public final class IbanUtil {
                 for(char ch: entryValue.toCharArray()) {
                     if(!Character.isUpperCase(ch)) {
                         throw new IbanFormatException(BBAN_ONLY_UPPER_CASE_LETTERS,
-                                entry.getEntryType(), entryValue,
+                                entry.getEntryType(), entryValue, ch,
                                 String.format(ASSERT_UPPER_LETTERS, entryValue));
                     }
                 }
@@ -263,7 +279,7 @@ public final class IbanUtil {
                 for(char ch: entryValue.toCharArray()) {
                     if(!Character.isLetterOrDigit(ch)) {
                         throw new IbanFormatException(BBAN_ONLY_DIGITS_OR_LETTERS,
-                                entry.getEntryType(), entryValue,
+                                entry.getEntryType(), entryValue, ch,
                                 String.format(ASSERT_DIGITS_AND_LETTERS, entryValue));
                     }
                 }
@@ -272,7 +288,7 @@ public final class IbanUtil {
                 for(char ch: entryValue.toCharArray()) {
                     if(!Character.isDigit(ch)) {
                         throw new IbanFormatException(BBAN_ONLY_DIGITS,
-                                entry.getEntryType(), entryValue,
+                                entry.getEntryType(), entryValue, ch,
                                 String.format(ASSERT_DIGITS, entryValue));
                     }
                 }
