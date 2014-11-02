@@ -42,7 +42,7 @@ public final class Bic {
     }
 
     /**
-     * Extract the bank code from the Bic.
+     * Returns the bank code from the Bic.
      *
      * @return string representation of Bic's institution code.
      */
@@ -51,7 +51,7 @@ public final class Bic {
     }
 
     /**
-     * Extract the country code from the Bic.
+     * Returns the country code from the Bic.
      *
      * @return CountryCode representation of Bic's country code.
      */
@@ -60,7 +60,7 @@ public final class Bic {
     }
 
     /**
-     * Extract the location code from the Bic.
+     * Returns the location code from the Bic.
      *
      * @return string representation of Bic's location code.
      */
@@ -69,7 +69,7 @@ public final class Bic {
     }
 
     /**
-     * Extract the branch code from the Bic.
+     * Returns the branch code from the Bic.
      *
      * @return string representation of Bic's branch code, null if Bic has no branch code.
      */
@@ -81,7 +81,7 @@ public final class Bic {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (obj instanceof Bic) {
             return value.equals(((Bic)obj).value);
         }

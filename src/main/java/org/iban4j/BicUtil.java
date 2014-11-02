@@ -76,7 +76,7 @@ public class BicUtil {
 
     private static void validateBankCode(final String bic) {
         String bankCode = getBankCode(bic);
-        for(char ch : bankCode.toCharArray()) {
+        for(final char ch : bankCode.toCharArray()) {
             if(!Character.isLetter(ch)) {
                 throw new BicFormatException("Bank code must contain only letters.");
             }
@@ -84,8 +84,8 @@ public class BicUtil {
     }
 
     private static void validateCountryCode(final String bic) {
-        String countryCode = getCountryCode(bic);
-        if( countryCode.trim().length() < COUNTRY_CODE_LENGTH ||
+        final String countryCode = getCountryCode(bic);
+        if(countryCode.trim().length() < COUNTRY_CODE_LENGTH ||
                 !countryCode.equals(countryCode.toUpperCase()) ||
                 !Character.isLetter(countryCode.charAt(0)) ||
                 !Character.isLetter(countryCode.charAt(1))) {
@@ -96,7 +96,7 @@ public class BicUtil {
     }
 
     private static void validateLocationCode(final String bic) {
-        String locationCode = getLocationCode(bic);
+        final String locationCode = getLocationCode(bic);
         for(char ch : locationCode.toCharArray()) {
             if(!Character.isLetterOrDigit(ch)) {
                 throw new BicFormatException("Location code must contain only letters or digits.");
@@ -105,8 +105,8 @@ public class BicUtil {
     }
 
     private static void validateBranchCode(final String bic) {
-        String branchCode = getBranchCode(bic);
-        for(char ch : branchCode.toCharArray()) {
+        final String branchCode = getBranchCode(bic);
+        for(final char ch : branchCode.toCharArray()) {
             if(!Character.isLetterOrDigit(ch)) {
                 throw new BicFormatException("Branch code must contain only letters or digits.");
             }

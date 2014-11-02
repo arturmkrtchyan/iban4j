@@ -76,8 +76,10 @@ public class IbanFormatException extends Iban4jException {
      *
      * @param s the detail message.
      */
-    public IbanFormatException(IbanFormatViolation violation, Object actual,
-                               Object expected, final String s) {
+    public IbanFormatException(final IbanFormatViolation violation,
+                               final Object actual,
+                               final Object expected,
+                               final String s) {
         super(s);
         this.expected = expected;
         this.actual = actual;
@@ -90,7 +92,9 @@ public class IbanFormatException extends Iban4jException {
      *
      * @param s the detail message.
      */
-    public IbanFormatException(IbanFormatViolation violation, Object actual, final String s) {
+    public IbanFormatException(final IbanFormatViolation violation,
+                               final Object actual,
+                               final String s) {
         super(s);
         this.actual = actual;
         this.formatViolation = violation;
@@ -120,7 +124,8 @@ public class IbanFormatException extends Iban4jException {
      *
      * @param s the detail message.
      */
-    public IbanFormatException(IbanFormatViolation violation, final String s) {
+    public IbanFormatException(final IbanFormatViolation violation,
+                               final String s) {
         super(s);
         this.formatViolation = violation;
     }
