@@ -22,23 +22,21 @@ package org.iban4j;
  * @see org.iban4j.UnsupportedCountryException
  * @see org.iban4j.BicFormatException
  */
-public class Iban4jException extends RuntimeException {
-
-    private static final long serialVersionUID = 7582046094394810747L;
+public abstract class Iban4jException extends RuntimeException {
 
     public Iban4jException() {
         super();
     }
 
-    public Iban4jException(String message) {
+    public Iban4jException(final String message) {
         super(message);
     }
 
-    public Iban4jException(String message, Throwable cause) {
+    public Iban4jException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public Iban4jException(Throwable cause) {
+    public Iban4jException(final Throwable cause) {
         super(cause);
     }
 }

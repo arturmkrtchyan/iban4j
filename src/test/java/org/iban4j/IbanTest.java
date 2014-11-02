@@ -85,7 +85,7 @@ public class IbanTest {
             Iban.valueOf("AT621904300234573201");
         }
 
-        @Test(expected = IllegalArgumentException.class)
+        @Test(expected = IbanFormatException.class)
         public void ibanConstructionWithoutCountryShouldThrowException() {
             new Iban.Builder()
                     .bankCode("0001")
@@ -94,7 +94,7 @@ public class IbanTest {
                     .build();
         }
 
-        @Test(expected = IllegalArgumentException.class)
+        @Test(expected = IbanFormatException.class)
         public void ibanConstructionWithoutBankCodeShouldThrowException() {
             new Iban.Builder()
                     .countryCode(CountryCode.AM)
@@ -103,7 +103,7 @@ public class IbanTest {
                     .build();
         }
 
-        @Test(expected = IllegalArgumentException.class)
+        @Test(expected = IbanFormatException.class)
         public void ibanConstructionWithoutAccountNumberShouldThrowException() {
             new Iban.Builder()
                     .countryCode(CountryCode.AM)

@@ -17,7 +17,8 @@ package org.iban4j;
 
 import org.iban4j.bban.BbanStructure;
 import org.iban4j.bban.BbanStructureEntry;
-import org.iban4j.support.Assert;
+
+import static org.iban4j.IbanFormatException.IbanFormatViolation.*;
 
 
 /**
@@ -33,7 +34,7 @@ public final class Iban {
     private final String value;
 
     /**
-     * Creates iban with default check digit.
+     * Creates iban instance.
      *
      * @param value String
      */
@@ -41,42 +42,92 @@ public final class Iban {
         this.value = value;
     }
 
+    /**
+     * Returns iban's country code.
+     *
+     * @return countryCode CountryCode
+     */
     public CountryCode getCountryCode() {
         return CountryCode.getByCode(IbanUtil.getCountryCode(value));
     }
 
+    /**
+     * Returns iban's check digit.
+     *
+     * @return checkDigit String
+     */
     public String getCheckDigit() {
         return IbanUtil.getCheckDigit(value);
     }
 
+    /**
+     * Returns iban's account number.
+     *
+     * @return accountNumber String
+     */
     public String getAccountNumber() {
         return IbanUtil.getAccountNumber(value);
     }
 
+    /**
+     * Returns iban's bank code.
+     *
+     * @return bankCode String
+     */
     public String getBankCode() {
         return IbanUtil.getBankCode(value);
     }
 
+    /**
+     * Returns iban's branch code.
+     *
+     * @return branchCode String
+     */
     public String getBranchCode() {
         return IbanUtil.getBranchCode(value);
     }
 
+    /**
+     * Returns iban's national check digit.
+     *
+     * @return nationalCheckDigit String
+     */
     public String getNationalCheckDigit() {
         return IbanUtil.getNationalCheckDigit(value);
     }
 
+    /**
+     * Returns iban's account type.
+     *
+     * @return accountType String
+     */
     public String getAccountType() {
         return IbanUtil.getAccountType(value);
     }
 
+    /**
+     * Returns iban's owner account type.
+     *
+     * @return ownerAccountType String
+     */
     public String getOwnerAccountType() {
         return IbanUtil.getOwnerAccountType(value);
     }
 
+    /**
+     * Returns iban's identification number.
+     *
+     * @return identificationNumber String
+     */
     public String getIdentificationNumber() {
         return IbanUtil.getIdentificationNumber(value);
     }
 
+    /**
+     * Returns iban's bban (Basic Bank Account Number).
+     *
+     * @return bban String
+     */
     public String getBban() {
         return IbanUtil.getBban(value);
     }
@@ -108,8 +159,8 @@ public final class Iban {
      * @return A string representing formatted Iban for printing.
      */
     public String toFormattedString() {
-        StringBuilder ibanBuffer = new StringBuilder(value);
-        int length = ibanBuffer.length();
+        final StringBuilder ibanBuffer = new StringBuilder(value);
+        final int length = ibanBuffer.length();
 
         for (int i = 0; i < length / 4; i++) {
             ibanBuffer.insert((i + 1) * 4 + i, ' ');
@@ -119,7 +170,7 @@ public final class Iban {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (obj instanceof Iban) {
             return value.equals(((Iban)obj).value);
         }
@@ -145,58 +196,140 @@ public final class Iban {
         private String ownerAccountType;
         private String identificationNumber;
 
+        /**
+         * Creates an Iban Builder instance.
+         */
         public Builder() {
         }
 
+        /**
+         * Sets iban's country code.
+         *
+         * @param countryCode CountryCode
+         * @return builder Builder
+         */
         public Builder countryCode(final CountryCode countryCode) {
             this.countryCode = countryCode;
             return this;
         }
 
+        /**
+         * Sets iban's bank code.
+         *
+         * @param bankCode String
+         * @return builder Builder
+         */
         public Builder bankCode(final String bankCode) {
             this.bankCode = bankCode;
             return this;
         }
 
+        /**
+         * Sets iban's branch code.
+         *
+         * @param branchCode String
+         * @return builder Builder
+         */
         public Builder branchCode(final String branchCode) {
             this.branchCode = branchCode;
             return this;
         }
 
+        /**
+         * Sets iban's account number.
+         *
+         * @param accountNumber String
+         * @return builder Builder
+         */
         public Builder accountNumber(final String accountNumber) {
             this.accountNumber = accountNumber;
             return this;
         }
 
+        /**
+         * Sets iban's national check digit.
+         *
+         * @param nationalCheckDigit String
+         * @return builder Builder
+         */
         public Builder nationalCheckDigit(final String nationalCheckDigit) {
             this.nationalCheckDigit = nationalCheckDigit;
             return this;
         }
 
+        /**
+         * Sets iban's account type.
+         *
+         * @param accountType String
+         * @return builder Builder
+         */
         public Builder accountType(final String accountType) {
             this.accountType = accountType;
             return this;
         }
 
+        /**
+         * Sets iban's owner account type.
+         *
+         * @param ownerAccountType String
+         * @return builder Builder
+         */
         public Builder ownerAccountType(final String ownerAccountType) {
             this.ownerAccountType = ownerAccountType;
             return this;
         }
 
+        /**
+         * Sets iban's identification number.
+         *
+         * @param identificationNumber String
+         * @return builder Builder
+         */
         public Builder identificationNumber(final String identificationNumber) {
             this.identificationNumber = identificationNumber;
             return this;
         }
 
+        /**
+         * Builds new iban instance.
+         *
+         * @return new iban instance.
+         * @throws IbanFormatException, UnsupportedCountryException
+         *  if values are not parsable by Iban Specification
+         *  <a href="http://en.wikipedia.org/wiki/ISO_13616">ISO_13616</a>
+         */
+        public Iban build() throws IbanFormatException,
+                IllegalArgumentException, UnsupportedCountryException {
+
+            // null checks
+            require(countryCode, bankCode, accountNumber);
+
+            // iban is formatted with default check digit.
+            final String formattedIban = formatIban();
+
+            final String checkDigit = IbanUtil.calculateCheckDigit(formattedIban);
+
+            // replace default check digit with calculated check digit
+            final String ibanValue = IbanUtil.replaceCheckDigit(formattedIban, checkDigit);
+
+
+            IbanUtil.validate(ibanValue);
+            return new Iban(ibanValue);
+        }
+
+        /**
+         * Returns formatted bban string.
+         */
         private String formatBban() {
-            StringBuilder sb = new StringBuilder();
-            BbanStructure structure = BbanStructure.forCountry(countryCode);
+            final StringBuilder sb = new StringBuilder();
+            final BbanStructure structure = BbanStructure.forCountry(countryCode);
 
             if (structure == null) {
-                throw new UnsupportedCountryException("Country code: " + countryCode + " is not supported.");
+                throw new UnsupportedCountryException(countryCode.toString(),
+                        "Country code is not supported.");
             }
 
-            for(BbanStructureEntry entry : structure.getEntries()) {
+            for(final BbanStructureEntry entry : structure.getEntries()) {
                 switch (entry.getEntryType()) {
                     case bank_code:
                         sb.append(bankCode);
@@ -224,41 +357,38 @@ public final class Iban {
             return sb.toString();
         }
 
+        /**
+         * Returns formatted iban string with default check digit.
+         */
         private String formatIban() {
-            StringBuilder sb = new StringBuilder(countryCode.getAlpha2());
+            final StringBuilder sb = new StringBuilder();
+            sb.append(countryCode.getAlpha2());
             sb.append(DEFAULT_CHECK_DIGIT);
             sb.append(formatBban());
             return sb.toString();
         }
 
-        /**
-         * Builds new iban instance.
-         *
-         * @return new iban instance.
-         * @throws IbanFormatException, IllegalArgumentException, UnsupportedCountryException
-         *  if values are not parsable by Iban Specification
-         *  <a href="http://en.wikipedia.org/wiki/ISO_13616">ISO_13616</a>
-         */
-        public Iban build() throws IbanFormatException,
-                IllegalArgumentException, UnsupportedCountryException {
+        private void require(final CountryCode countryCode,
+                             final String bankCode,
+                             final String accountNumber)
+                throws IbanFormatException {
+            if(countryCode == null) {
+                throw new IbanFormatException(IBAN_COUNTRY_CODE_NOT_NULL,
+                        "countryCode is required; it cannot be null");
+            }
 
-            // null checks
-            Assert.notNull(countryCode, "countryCode is required; it cannot be null");
-            Assert.notNull(bankCode, "bankCode is required; it cannot be null");
-            Assert.notNull(accountNumber, "accountNumber is required; it cannot be null");
+            if(bankCode == null) {
+                throw new IbanFormatException(IBAN_BANK_CODE_NOT_NULL,
+                        "bankCode is required; it cannot be null");
+            }
 
-            // iban is formatted with default check digit.
-            String ibanValue = formatIban();
-
-            final String checkDigit = IbanUtil.calculateCheckDigit(ibanValue);
-
-            // replace default check digit with calculated check digit
-            ibanValue = IbanUtil.replaceCheckDigit(ibanValue, checkDigit);
-
-
-            IbanUtil.validate(ibanValue);
-            return new Iban(ibanValue);
+            if(accountNumber == null) {
+                throw new IbanFormatException(IBAN_ACCOUNT_NUMBER_NOT_NULL,
+                        "accountNumber is required; it cannot be null");
+            }
         }
+
+
     }
 
 }
