@@ -726,15 +726,13 @@ public enum CountryCode {
 
     VU("Vanuatu", "VUT"),
 
-
     WF("Wallis and Futuna", "WLF"),
-
 
     WS("Samoa", "WSM"),
 
+    XK("Kosovo", "UNK"),
 
     YE("Yemen", "YEM"),
-
 
     YT("Mayotte", "MYT"),
 
@@ -742,7 +740,7 @@ public enum CountryCode {
 
     ZM("Zambia", "ZMB"),
 
-    ZW("Zimbabwe", "ZWE"),;
+    ZW("Zimbabwe", "ZWE");
 
 
     /**
