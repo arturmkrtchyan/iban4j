@@ -26,11 +26,9 @@ A Java library for generation and validation of the International Bank Account N
  try {
      IbanUtil.validate("AT611904300234573201");
      // valid
- } catch (IbanFormatException e) {
-     // invalid
- } catch (InvalidCheckDigitException e) {
-     // invalid
- } catch (UnsupportedCountryException e) {
+ } catch (IbanFormatException |
+          InvalidCheckDigitException |
+          UnsupportedCountryException e) {
      // invalid
  }
 ```
