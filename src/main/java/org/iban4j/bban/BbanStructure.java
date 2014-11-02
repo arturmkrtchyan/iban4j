@@ -407,6 +407,14 @@ public class BbanStructure {
                 new BbanStructure(
                         BbanStructureEntry.bankCode(4, 'c'),
                         BbanStructureEntry.accountNumber(16, 'n')));
+
+        structures.put(CountryCode.TL,
+                new BbanStructure(
+                        BbanStructureEntry.bankCode(3, 'n'),
+                        BbanStructureEntry.accountNumber(14, 'n'),
+                        BbanStructureEntry.nationalCheckDigit(2, 'n')));
+
+
     }
 
     /**
