@@ -58,6 +58,9 @@ A Java library for generation and validation of the International Bank Account N
 </dependency>
 ```
 
+iban4j is Java 8 Compatible
+![Compatibility Badge](https://java.net/downloads/adoptopenjdk/compat.svg)
+
 #### References
 
 - http://en.wikipedia.org/wiki/ISO_13616
