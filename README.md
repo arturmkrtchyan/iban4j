@@ -70,3 +70,4 @@ A Java library for generation and validation of the International Bank Account N
 Copyright 2014 Artur Mkrtchyan.
 
 Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
+
