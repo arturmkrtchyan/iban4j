@@ -46,9 +46,11 @@ public final class IbanUtil {
      * <a href="http://en.wikipedia.org/wiki/ISO_13616#Generating_IBAN_check_digits">Check Digit</a>.
      *
      * @param iban string value
+     * @throws IbanFormatException if iban contains invalid character.
+     *
      * @return check digit as String
      */
-    public static String calculateCheckDigit(final String iban) {
+    public static String calculateCheckDigit(final String iban) throws IbanFormatException {
         final String reformattedIban = replaceCheckDigit(iban,
                 Iban.DEFAULT_CHECK_DIGIT);
         final int modResult = calculateMod(reformattedIban);
@@ -383,8 +385,9 @@ public final class IbanUtil {
         for (int i = 0; i < reformattedIban.length(); i++) {
             final int numericValue = Character.getNumericValue(reformattedIban.charAt(i));
             if (numericValue < 0 || numericValue > 35) {
-                // FIXME IAE
-                throw new IllegalArgumentException("Invalid Character[" + i + "] = '" + numericValue + "'");
+                throw new IbanFormatException(IBAN_VALID_CHARACTERS, null, null,
+                        reformattedIban.charAt(i),
+                        "Invalid Character[" + i + "] = '" + numericValue + "'");
             }
             total = (numericValue > 9 ? total * 100 : total * 10) + numericValue;
 

@@ -70,7 +70,7 @@ public class IbanUtilTest {
             this.invalidCharacter = invalidCharacter;
         }
 
-        @Test(expected = IllegalArgumentException.class)
+        @Test(expected = IbanFormatException.class)
         public void checkDigitCalculationWithNonNumericBbanShouldThrowException() {
 
             IbanUtil.calculateCheckDigit("AT000159260" + invalidCharacter + "076545510730339");

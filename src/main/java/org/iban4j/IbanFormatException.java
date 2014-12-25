@@ -155,6 +155,7 @@ public class IbanFormatException extends Iban4jException {
 
         IBAN_NOT_NULL,
         IBAN_NOT_EMPTY,
+        IBAN_VALID_CHARACTERS,
 
         CHECK_DIGIT_ONLY_DIGITS,
         CHECK_DIGIT_TWO_DIGITS,

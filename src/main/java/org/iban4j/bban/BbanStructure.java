@@ -450,11 +450,4 @@ public class BbanStructure {
 
         return length;
     }
-
-    @Override
-    public String toString() {
-        return "BbanStructure{" +
-                "rawStructure='" + "TODO" +
-                '}';
-    }
 }
