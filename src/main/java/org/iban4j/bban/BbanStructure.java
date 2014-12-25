@@ -17,7 +17,10 @@ package org.iban4j.bban;
 
 import org.iban4j.CountryCode;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.EnumMap;
+import java.util.List;
 
 
 /**
@@ -432,8 +435,8 @@ public class BbanStructure {
         return structures.get(countryCode);
     }
 
-    public BbanStructureEntry[] getEntries() {
-        return entries;
+    public List<BbanStructureEntry> getEntries() {
+        return Collections.unmodifiableList(Arrays.asList(entries));
     }
 
     /**
