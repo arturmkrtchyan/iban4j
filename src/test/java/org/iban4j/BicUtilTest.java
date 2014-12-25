@@ -69,8 +69,8 @@ public class BicUtilTest {
 
         @Test
         public void bicValidationWithNonExistingCountryCodeShouldThrowException() {
-            expectedException.expect(BicFormatException.class);
-            expectedException.expectMessage(containsString("Bic contains non existing country code"));
+            expectedException.expect(UnsupportedCountryException.class);
+            expectedException.expectMessage(containsString("Country code is not supported"));
             BicUtil.validate("DEUTDDFF");
         }
 

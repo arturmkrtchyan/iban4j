@@ -34,8 +34,8 @@ public class IbanTest {
     @RunWith(Parameterized.class)
     public static class IbanGenerationTest1 {
 
-        private Iban iban;
-        private String expectedIbanString;
+        private final Iban iban;
+        private final String expectedIbanString;
 
         public IbanGenerationTest1(Iban iban, String expectedIbanString) {
             this.iban = iban;

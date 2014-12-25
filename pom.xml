@@ -153,6 +153,13 @@
                             <goal>report</goal>
                         </goals>
                         <configuration>
+                            <excludes>
+                                <exclude>**/org/iban4j/BicFormatException.*</exclude>
+                                <exclude>**/org/iban4j/Iban4jException.*</exclude>
+                                <exclude>**/org/iban4j/IbanFormatException.*</exclude>
+                                <exclude>**/org/iban4j/UnsupportedCountryException.*</exclude>
+                                <exclude>**/org/iban4j/InvalidCheckDigitException.*</exclude>
+                            </excludes>
                             <!-- Sets the path to the file which contains the execution data. -->
                             <dataFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</dataFile>
                             <!-- Sets the output directory for the code coverage report. -->

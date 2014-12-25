@@ -18,7 +18,7 @@ package org.iban4j;
 import java.util.Arrays;
 import java.util.Collection;
 
-public final class TestDataHelper {
+final class TestDataHelper {
 
     private TestDataHelper() {
     }

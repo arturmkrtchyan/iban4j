@@ -13,7 +13,7 @@ import org.junit.rules.TestRule;
 
 public class IbanBenchmark {
 
-    public static final long LOOPS_COUNT = 1000000;
+    private static final long LOOPS_COUNT = 1000000;
 
     @Rule
     public TestRule benchmarkRun = new BenchmarkRule();

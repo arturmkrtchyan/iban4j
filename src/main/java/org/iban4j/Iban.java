@@ -373,17 +373,17 @@ public final class Iban {
                              final String accountNumber)
                 throws IbanFormatException {
             if(countryCode == null) {
-                throw new IbanFormatException(IBAN_COUNTRY_CODE_NOT_NULL,
+                throw new IbanFormatException(COUNTRY_CODE_NOT_NULL,
                         "countryCode is required; it cannot be null");
             }
 
             if(bankCode == null) {
-                throw new IbanFormatException(IBAN_BANK_CODE_NOT_NULL,
+                throw new IbanFormatException(BANK_CODE_NOT_NULL,
                         "bankCode is required; it cannot be null");
             }
 
             if(accountNumber == null) {
-                throw new IbanFormatException(IBAN_ACCOUNT_NUMBER_NOT_NULL,
+                throw new IbanFormatException(ACCOUNT_NUMBER_NOT_NULL,
                         "accountNumber is required; it cannot be null");
             }
         }

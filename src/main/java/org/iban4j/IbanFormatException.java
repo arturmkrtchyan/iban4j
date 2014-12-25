@@ -74,6 +74,9 @@ public class IbanFormatException extends Iban4jException {
      * Constructs a <code>IbanFormatException</code> with the
      * specified violation, actual value, expected value and detail message.
      *
+     * @param violation the violation.
+     * @param actual the actual value.
+     * @param expected the expected value.
      * @param s the detail message.
      */
     public IbanFormatException(final IbanFormatViolation violation,
@@ -90,6 +93,8 @@ public class IbanFormatException extends Iban4jException {
      * Constructs a <code>IbanFormatException</code> with the
      * specified violation, actual value and detail message.
      *
+     * @param violation the violation.
+     * @param actual the actual value.
      * @param s the detail message.
      */
     public IbanFormatException(final IbanFormatViolation violation,
@@ -102,8 +107,13 @@ public class IbanFormatException extends Iban4jException {
 
     /**
      * Constructs a <code>IbanFormatException</code> with the
-     * specified violation, actual value and detail message.
+     * specified violation, entryType, actual value,
+     * invalidCharacter and detail message.
      *
+     * @param violation the violation.
+     * @param entryType the bban entry type.
+     * @param actual the actual value.
+     * @param invalidCharacter the invalid character.
      * @param s the detail message.
      */
     public IbanFormatException(final IbanFormatViolation violation,
@@ -122,6 +132,7 @@ public class IbanFormatException extends Iban4jException {
      * Constructs a <code>IbanFormatException</code> with the
      * specified violation and detail message.
      *
+     * @param violation the violation.
      * @param s the detail message.
      */
     public IbanFormatException(final IbanFormatViolation violation,
@@ -163,15 +174,15 @@ public class IbanFormatException extends Iban4jException {
         COUNTRY_CODE_TWO_LETTERS,
         COUNTRY_CODE_UPPER_CASE_LETTERS,
         COUNTRY_CODE_EXISTS,
+        COUNTRY_CODE_NOT_NULL,
 
         BBAN_LENGTH,
         BBAN_ONLY_DIGITS,
         BBAN_ONLY_UPPER_CASE_LETTERS,
         BBAN_ONLY_DIGITS_OR_LETTERS,
 
-        IBAN_COUNTRY_CODE_NOT_NULL,
-        IBAN_BANK_CODE_NOT_NULL,
-        IBAN_ACCOUNT_NUMBER_NOT_NULL
+        BANK_CODE_NOT_NULL,
+        ACCOUNT_NUMBER_NOT_NULL
 
     }
 }

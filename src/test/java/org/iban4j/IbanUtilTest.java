@@ -30,7 +30,6 @@ import java.util.Collection;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 import org.iban4j.IbanFormatException.IbanFormatViolation;
 
@@ -40,8 +39,8 @@ public class IbanUtilTest {
     @RunWith(Parameterized.class)
     public static class ValidCheckDigitCalculationTest {
 
-        private Iban iban;
-        private String expectedIbanString;
+        private final Iban iban;
+        private final String expectedIbanString;
 
         public ValidCheckDigitCalculationTest(Iban iban, String expectedIbanString) {
             this.iban = iban;
@@ -64,7 +63,7 @@ public class IbanUtilTest {
     public static class InvalidCheckDigitCalculationTest {
 
 
-        private Character invalidCharacter;
+        private final Character invalidCharacter;
 
         public InvalidCheckDigitCalculationTest(Character invalidCharacter) {
             this.invalidCharacter = invalidCharacter;
@@ -237,7 +236,7 @@ public class IbanUtilTest {
     @RunWith(Parameterized.class)
     public static class ValidIbanValidationTest {
 
-        private String ibanString;
+        private final String ibanString;
 
         public ValidIbanValidationTest(Iban iban, String ibanString) {
             this.ibanString = ibanString;

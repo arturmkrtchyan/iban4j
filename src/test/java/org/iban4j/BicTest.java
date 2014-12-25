@@ -31,7 +31,7 @@ public class BicTest {
 
     public static class BicCreationTest1 {
 
-        @Test(expected = BicFormatException.class)
+        @Test(expected = UnsupportedCountryException.class)
         public void bicConstructionWithInvalidCountryCodeShouldThrowException() {
             Bic.valueOf("DEUTAAFF500");
         }
@@ -80,7 +80,7 @@ public class BicTest {
     @RunWith(Parameterized.class)
     public static class BicCreationTest2 {
 
-        private String bicString;
+        private final String bicString;
 
         public BicCreationTest2(String bicString) {
             this.bicString = bicString;
