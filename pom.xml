@@ -159,6 +159,9 @@
                                 <exclude>**/org/iban4j/IbanFormatException.*</exclude>
                                 <exclude>**/org/iban4j/UnsupportedCountryException.*</exclude>
                                 <exclude>**/org/iban4j/InvalidCheckDigitException.*</exclude>
+                                <exclude>**/org/iban4j/**BicFormatViolation**</exclude>
+                                <exclude>**/org/iban4j/**IbanFormatViolation**</exclude>
+
                             </excludes>
                             <!-- Sets the path to the file which contains the execution data. -->
                             <dataFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</dataFile>

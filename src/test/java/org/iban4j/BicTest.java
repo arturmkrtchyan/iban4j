@@ -68,13 +68,54 @@ public class BicTest {
         }
 
         @Test
-        public void ibansWithDifferentDataShouldNotHaveSameHashCode() {
+        public void bicsWithDifferentDataShouldNotHaveSameHashCode() {
             Bic bic1 = Bic.valueOf("DEUTDEFF500");
             Bic bic2 = Bic.valueOf("DEUTDEFF501");
 
             assertThat(bic1.hashCode(), is(not(equalTo(bic2.hashCode()))));
         }
 
+        @Test
+        public void bicShouldReturnBankCode() {
+            Bic bic = Bic.valueOf("DEUTDEFF500");
+
+            assertThat(bic.getBankCode(), is(equalTo("DEUT")));
+        }
+
+        @Test
+        public void bicShouldReturnCountryCode() {
+            Bic bic = Bic.valueOf("DEUTDEFF500");
+
+            assertThat(bic.getCountryCode(), is(equalTo(CountryCode.DE)));
+        }
+
+        @Test
+        public void bicShouldReturnBranchCode() {
+            Bic bic = Bic.valueOf("DEUTDEFF500");
+
+            assertThat(bic.getBranchCode(), is(equalTo("500")));
+        }
+
+        @Test
+        public void bicWithoutBrnachCodeShouldReturnNull() {
+            Bic bic = Bic.valueOf("DEUTDEFF");
+
+            assertThat(bic.getBranchCode(), is(equalTo(null)));
+        }
+
+        @Test
+        public void bicShouldReturnLocationCode() {
+            Bic bic = Bic.valueOf("DEUTDEFF500");
+
+            assertThat(bic.getLocationCode(), is(equalTo("FF")));
+        }
+
+        @Test
+        public void bicToStringShouldReturnString() {
+            Bic bic = Bic.valueOf("DEUTDEFF500");
+
+            assertThat(bic.toString(), is(equalTo("DEUTDEFF500")));
+        }
     }
 
     @RunWith(Parameterized.class)
@@ -92,7 +133,7 @@ public class BicTest {
         }
 
         @Parameterized.Parameters
-        public static Collection<Object[]> ibanParameters() {
+        public static Collection<Object[]> bicParameters() {
             return TestDataHelper.getBicData();
         }
 

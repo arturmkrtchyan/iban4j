@@ -291,6 +291,13 @@ public class IbanTest {
         }
 
         @Test(expected = IbanFormatException.class)
+        public void ibanConstructionWithInvalidBbanCharacterShouldThrowException() {
+            Iban.valueOf("AZ21NABZ000000001370100_1944");
+        }
+
+
+
+        @Test(expected = IbanFormatException.class)
         public void ibanConstructionWithoutCountryShouldThrowException() {
             new Iban.Builder()
                     .bankCode("0001")

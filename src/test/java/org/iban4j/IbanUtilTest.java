@@ -253,6 +253,29 @@ public class IbanUtilTest {
         }
     }
 
+    @RunWith(Parameterized.class)
+    public static class IbanLengthTest {
+
+        private final Iban iban;
+        private final String expectedIbanString;
+
+        public IbanLengthTest(Iban iban, String expectedIbanString) {
+            this.iban = iban;
+            this.expectedIbanString = expectedIbanString;
+        }
+
+        @Test
+        public void getIbanLengthShouldReturnValidLength() {
+            assertThat(IbanUtil.getIbanLength(iban.getCountryCode()),
+                    is(equalTo(expectedIbanString.length())));
+        }
+
+        @Parameterized.Parameters
+        public static Collection<Object[]> ibanParameters() {
+            return TestDataHelper.getIbanData();
+        }
+    }
+
     @Ignore
     public static class IbanFormatViolationMatcher extends TypeSafeMatcher<IbanFormatException> {
 

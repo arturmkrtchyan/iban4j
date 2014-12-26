@@ -40,6 +40,13 @@ public class BicUtilTest {
         }
 
         @Test
+        public void bicValidationWithEmptyStringShouldThrowException() {
+            expectedException.expect(BicFormatException.class);
+            expectedException.expectMessage(containsString("Empty string can't be a valid Bic"));
+            BicUtil.validate("");
+        }
+
+        @Test
         public void bicValidationWithLessCharactersShouldThrowException() {
             expectedException.expect(BicFormatException.class);
             expectedException.expectMessage(containsString("Bic length must be 8 or 11"));

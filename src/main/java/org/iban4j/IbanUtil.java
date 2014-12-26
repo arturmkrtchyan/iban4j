@@ -325,7 +325,6 @@ public final class IbanUtil {
     private static void validateBbanEntries(final String iban,
                                             final BbanStructure structure) {
         final String bban = getBban(iban);
-        // FIXME duplicate code
         int bbanEntryOffset = 0;
         for(final BbanStructureEntry entry : structure.getEntries()) {
             final int entryLength = entry.getLength();
@@ -409,7 +408,6 @@ public final class IbanUtil {
     }
 
     private static String extractBbanEntry(final String iban, final BbanEntryType entryType) {
-        // FIXME duplicate code
         final String bban = getBban(iban);
         final BbanStructure structure = getBbanStructure(iban);
         int bbanEntryOffset = 0;
