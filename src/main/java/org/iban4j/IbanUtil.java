@@ -19,6 +19,8 @@ import org.iban4j.bban.BbanEntryType;
 import org.iban4j.bban.BbanStructure;
 import org.iban4j.bban.BbanStructureEntry;
 
+import java.util.Random;
+
 import static org.iban4j.IbanFormatException.IbanFormatViolation.*;
 /**
  * Iban Utility Class
@@ -37,6 +39,8 @@ public final class IbanUtil {
     private static final String ASSERT_UPPER_LETTERS = "[%s] must contain only upper case letters.";
     private static final String ASSERT_DIGITS_AND_LETTERS = "[%s] must contain only digits or letters.";
     private static final String ASSERT_DIGITS = "[%s] must contain only digits.";
+
+    private static final Random RANDOM = new Random();
 
     private IbanUtil() {
     }
@@ -171,6 +175,23 @@ public final class IbanUtil {
         return extractBbanEntry(iban, BbanEntryType.bank_code);
     }
 
+    protected static Iban randomIban() {
+        return randomIban(randomCountryCode());
+    }
+
+    protected static Iban randomIban(CountryCode countryCode) {
+        final BbanStructure bbanStructure = getBbanStructure(countryCode);
+
+        // TODO implement
+        return null;
+    }
+
+    static CountryCode randomCountryCode() {
+        final CountryCode[] countryCodes = CountryCode.values();
+        final int randomIndex = RANDOM.nextInt(countryCodes.length);
+        return countryCodes[randomIndex];
+    }
+
     /**
      * Returns iban's branch code.
      *
@@ -238,13 +259,14 @@ public final class IbanUtil {
 
 
     private static void validateCheckDigit(final String iban) {
-        String checkDigit = getCheckDigit(iban);
-        String expectedCheckDigit = calculateCheckDigit(iban);
-        if (!checkDigit.equals(expectedCheckDigit)) {
+        if (calculateMod(iban) != 1) {
+            final String checkDigit = getCheckDigit(iban);
+            final String expectedCheckDigit = calculateCheckDigit(iban);
             throw new InvalidCheckDigitException(
                     checkDigit, expectedCheckDigit,
-                    "[" + iban + "] has invalid check digit: " +
-                    checkDigit + ", expected check digit is: " + expectedCheckDigit);
+                    String.format("[%s] has invalid check digit: %s, " +
+                                    "expected check digit is: %s",
+                            iban, checkDigit, expectedCheckDigit));
         }
     }
 
@@ -317,8 +339,8 @@ public final class IbanUtil {
         if (expectedBbanLength != bbanLength) {
             throw new IbanFormatException(BBAN_LENGTH,
                     bbanLength, expectedBbanLength,
-                    "[" + bban + "] length is " + bbanLength +
-                    ", expected BBAN length is: " + expectedBbanLength);
+                    String.format("[%s] length is %d, expected BBAN length is: %d",
+                            bban, bbanLength, expectedBbanLength));
         }
     }
 
@@ -386,7 +408,7 @@ public final class IbanUtil {
             if (numericValue < 0 || numericValue > 35) {
                 throw new IbanFormatException(IBAN_VALID_CHARACTERS, null, null,
                         reformattedIban.charAt(i),
-                        "Invalid Character[" + i + "] = '" + numericValue + "'");
+                        String.format("Invalid Character[%d] = '%d'", i, numericValue));
             }
             total = (numericValue > 9 ? total * 100 : total * 10) + numericValue;
 

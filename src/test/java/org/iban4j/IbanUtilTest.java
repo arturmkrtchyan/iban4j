@@ -25,6 +25,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -249,7 +250,30 @@ public class IbanUtilTest {
 
         @Parameterized.Parameters
         public static Collection<Object[]> ibanParameters() {
-            return TestDataHelper.getIbanData();
+            final Collection<Object[]> data = new ArrayList<Object[]>(TestDataHelper.getIbanData());
+            data.addAll(nonStandardButValidIbans());
+            return data;
+        }
+
+        private static Collection<Object[]> nonStandardButValidIbans() {
+            final Collection<Object[]> data = new ArrayList<Object[]>();
+            // adding custom validation cases.
+            // iban with 01 check digit
+            data.add(new Object[]{new Iban.Builder()
+                    .countryCode(CountryCode.TR)
+                    .bankCode("00123")
+                    .accountNumber("0882101517977799")
+                    .nationalCheckDigit("0")
+                    .build(), "TR010012300882101517977799"});
+            // iban with 98 check digit
+            data.add(new Object[]{new Iban.Builder()
+                    .countryCode(CountryCode.TR)
+                    .bankCode("00123")
+                    .accountNumber("0882101517977799")
+                    .nationalCheckDigit("0")
+                    .build(), "TR980012300882101517977799"});
+
+            return data;
         }
     }
 
