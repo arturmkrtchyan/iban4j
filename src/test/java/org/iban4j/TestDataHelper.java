@@ -408,7 +408,12 @@ final class TestDataHelper {
                         .branchCode("00")
                         .accountNumber("0000000000")
                         .nationalCheckDigit("53")
-                        .build(), "XK051000000000000053"}
+                        .build(), "XK051000000000000053"},
+                {new Iban.Builder()
+                        .countryCode(CountryCode.IR)
+                        .bankCode("017")
+                        .accountNumber("0000000000123456789")
+                        .build(), "IR200170000000000123456789"}
         });
     }
 

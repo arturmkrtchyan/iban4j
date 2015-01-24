@@ -200,6 +200,11 @@ public class BbanStructure {
                         BbanStructureEntry.branchCode(3, 'n'),
                         BbanStructureEntry.accountNumber(13, 'n')));
 
+        structures.put(CountryCode.IR,
+                new BbanStructure(
+                        BbanStructureEntry.bankCode(3, 'n'),
+                        BbanStructureEntry.accountNumber(19, 'n')));
+
         structures.put(CountryCode.IT,
                 new BbanStructure(
                         BbanStructureEntry.nationalCheckDigit(1, 'a'),
