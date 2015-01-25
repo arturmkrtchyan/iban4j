@@ -54,7 +54,7 @@ A Java library for generation and validation of the International Bank Account N
 <dependency>
   <groupId>org.iban4j</groupId>
   <artifactId>iban4j</artifactId>
-  <version>3.0.2</version>
+  <version>3.0.3</version>
 </dependency>
 ```
 
