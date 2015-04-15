@@ -415,6 +415,12 @@ final class TestDataHelper {
                         .accountNumber("0000000000123456789")
                         .build(), "IR200170000000000123456789"},
                 {new Iban.Builder()
+                        .countryCode(CountryCode.FO)
+                        .bankCode("5432")
+                        .accountNumber("038889994")
+                        .nationalCheckDigit("4")
+                        .build(), "FO9754320388899944"},
+                {new Iban.Builder()
                         .countryCode(CountryCode.GL)
                         .bankCode("6471")
                         .accountNumber("0001000206")

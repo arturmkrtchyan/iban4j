@@ -140,6 +140,12 @@ public class BbanStructure {
                         BbanStructureEntry.accountNumber(11, 'n'),
                         BbanStructureEntry.nationalCheckDigit(1, 'n')));
 
+        structures.put(CountryCode.FO,
+                new BbanStructure(
+                        BbanStructureEntry.bankCode(4, 'n'),
+                        BbanStructureEntry.accountNumber(9, 'n'),
+                        BbanStructureEntry.nationalCheckDigit(1, 'n')));
+
         structures.put(CountryCode.FI,
                 new BbanStructure(
                         BbanStructureEntry.bankCode(6, 'n'),
