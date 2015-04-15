@@ -163,6 +163,11 @@ public class BbanStructure {
                         BbanStructureEntry.bankCode(4, 'a'),
                         BbanStructureEntry.accountNumber(15, 'c')));
 
+        structures.put(CountryCode.GL,
+                new BbanStructure(
+                        BbanStructureEntry.bankCode(4, 'n'),
+                        BbanStructureEntry.accountNumber(10, 'n')));
+
         structures.put(CountryCode.GR,
                 new BbanStructure(
                         BbanStructureEntry.bankCode(3, 'n'),
