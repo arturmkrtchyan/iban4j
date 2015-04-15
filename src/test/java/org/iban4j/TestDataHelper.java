@@ -424,7 +424,12 @@ final class TestDataHelper {
                         .countryCode(CountryCode.GL)
                         .bankCode("6471")
                         .accountNumber("0001000206")
-                        .build(), "GL8964710001000206"}
+                        .build(), "GL8964710001000206"},
+                {new Iban.Builder()
+                        .countryCode(CountryCode.UA)
+                        .bankCode("354347")
+                        .accountNumber("0006762462054925026")
+                        .build(), "UA573543470006762462054925026"}
         });
     }
 

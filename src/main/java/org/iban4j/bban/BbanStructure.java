@@ -411,6 +411,11 @@ public class BbanStructure {
                         BbanStructureEntry.nationalCheckDigit(1, 'c'),
                         BbanStructureEntry.accountNumber(16, 'c')));
 
+        structures.put(CountryCode.UA,
+                new BbanStructure(
+                        BbanStructureEntry.bankCode(6, 'n'),
+                        BbanStructureEntry.accountNumber(19, 'n')));
+
         structures.put(CountryCode.GB,
                 new BbanStructure(
                         BbanStructureEntry.bankCode(4, 'a'),
