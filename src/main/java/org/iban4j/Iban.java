@@ -291,7 +291,7 @@ public final class Iban {
         }
 
         /**
-         * Builds new iban instance.
+         * Builds new iban instance. This methods validates the generated IBAN.
          *
          * @return new iban instance.
          * @throws IbanFormatException, UnsupportedCountryException
@@ -299,6 +299,21 @@ public final class Iban {
          *  <a href="http://en.wikipedia.org/wiki/ISO_13616">ISO_13616</a>
          */
         public Iban build() throws IbanFormatException,
+                IllegalArgumentException, UnsupportedCountryException {
+            return build(true);
+        }
+
+        /**
+         * Builds new iban instance.
+         *
+         * @param validate boolean indicates if the generated IBAN needs to be
+         *  validated after generation
+         * @return new iban instance.
+         * @throws IbanFormatException, UnsupportedCountryException
+         *  if values are not parsable by Iban Specification
+         *  <a href="http://en.wikipedia.org/wiki/ISO_13616">ISO_13616</a>
+         */
+        public Iban build(boolean validate) throws IbanFormatException,
                 IllegalArgumentException, UnsupportedCountryException {
 
             // null checks
@@ -312,8 +327,9 @@ public final class Iban {
             // replace default check digit with calculated check digit
             final String ibanValue = IbanUtil.replaceCheckDigit(formattedIban, checkDigit);
 
-
-            IbanUtil.validate(ibanValue);
+            if (validate) {
+                IbanUtil.validate(ibanValue);
+            }
             return new Iban(ibanValue);
         }
 

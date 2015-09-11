@@ -261,6 +261,16 @@ public class IbanTest {
                     .build();
             assertThat(iban.toFormattedString(), is(equalTo("AT14 1904 1023 4573 2012")));
         }
+
+        @Test
+        public void ibanConstructionWithShortBankCodeShouldNotThrowExceptionIfValidationIsDisabled() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.AT)
+                    .bankCode("1904")
+                    .accountNumber("A0234573201")
+                    .build(false);
+            assertThat(iban.toFormattedString(), is(equalTo("AT40 1904 A023 4573 201")));
+        }
     }
 
     public static class IbanGenerationExceptionalTest {
@@ -340,6 +350,15 @@ public class IbanTest {
                     .bankCode("1904")
                     .accountNumber("A0234573201")
                     .build();
+        }
+
+        @Test(expected = IbanFormatException.class)
+        public void ibanConstructionWithShortBankCodeShouldThrowExceptionIfValidationRequested() {
+            new Iban.Builder()
+                    .countryCode(CountryCode.AT)
+                    .bankCode("1904")
+                    .accountNumber("A0234573201")
+                    .build(true);
         }
     }
 }
