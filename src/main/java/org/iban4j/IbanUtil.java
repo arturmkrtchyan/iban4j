@@ -19,8 +19,6 @@ import org.iban4j.bban.BbanEntryType;
 import org.iban4j.bban.BbanStructure;
 import org.iban4j.bban.BbanStructureEntry;
 
-import java.util.Random;
-
 import static org.iban4j.IbanFormatException.IbanFormatViolation.*;
 /**
  * Iban Utility Class
@@ -39,8 +37,6 @@ public final class IbanUtil {
     private static final String ASSERT_UPPER_LETTERS = "[%s] must contain only upper case letters.";
     private static final String ASSERT_DIGITS_AND_LETTERS = "[%s] must contain only digits or letters.";
     private static final String ASSERT_DIGITS = "[%s] must contain only digits.";
-
-    private static final Random RANDOM = new Random();
 
     private IbanUtil() {
     }
@@ -173,23 +169,6 @@ public final class IbanUtil {
      */
     public static String getBankCode(final String iban) {
         return extractBbanEntry(iban, BbanEntryType.bank_code);
-    }
-
-    protected static Iban randomIban() {
-        return randomIban(randomCountryCode());
-    }
-
-    protected static Iban randomIban(CountryCode countryCode) {
-        final BbanStructure bbanStructure = getBbanStructure(countryCode);
-
-        // TODO implement
-        return null;
-    }
-
-    static CountryCode randomCountryCode() {
-        final CountryCode[] countryCodes = CountryCode.values();
-        final int randomIndex = RANDOM.nextInt(countryCodes.length);
-        return countryCodes[randomIndex];
     }
 
     /**

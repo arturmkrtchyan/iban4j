@@ -15,6 +15,9 @@
  */
 package org.iban4j;
 
+import java.util.List;
+import java.util.Random;
+
 import org.iban4j.bban.BbanStructure;
 import org.iban4j.bban.BbanStructureEntry;
 
@@ -169,6 +172,14 @@ public final class Iban {
         return ibanBuffer.toString().trim();
     }
 
+    public static Iban random() {
+        return new Iban.Builder().buildRandom();
+    }
+
+    public static Iban random(CountryCode cc) {
+        return new Iban.Builder().countryCode(cc).buildRandom();
+    }
+
     @Override
     public boolean equals(final Object obj) {
         if (obj instanceof Iban) {
@@ -195,6 +206,8 @@ public final class Iban {
         private String accountNumber;
         private String ownerAccountType;
         private String identificationNumber;
+
+        private final Random random = new Random();
 
         /**
          * Creates an Iban Builder instance.
@@ -333,6 +346,16 @@ public final class Iban {
             return new Iban(ibanValue);
         }
 
+        public Iban buildRandom() throws IbanFormatException,
+                IllegalArgumentException, UnsupportedCountryException {
+            if (countryCode == null) {
+                 List<CountryCode> codes = BbanStructure.getCountries();
+                this.countryCode(codes.get(random.nextInt(codes.size())));
+            }
+            fillMissingFieldsRandomly();
+            return build();
+        }
+
         /**
          * Returns formatted bban string.
          */
@@ -404,6 +427,54 @@ public final class Iban {
             }
         }
 
+        public void fillMissingFieldsRandomly() {
+            final BbanStructure structure = BbanStructure.forCountry(countryCode);
+
+            if (structure == null) {
+                throw new UnsupportedCountryException(countryCode.toString(),
+                        "Country code is not supported.");
+            }
+
+            for(final BbanStructureEntry entry : structure.getEntries()) {
+                switch (entry.getEntryType()) {
+                    case bank_code:
+                        if (bankCode == null) {
+                            bankCode = entry.getRandom();
+                        }
+                        break;
+                    case branch_code:
+                        if (branchCode == null) {
+                            branchCode = entry.getRandom();
+                        }
+                        break;
+                    case account_number:
+                        if (accountNumber == null) {
+                            accountNumber = entry.getRandom();
+                        }
+                        break;
+                    case national_check_digit:
+                        if (nationalCheckDigit == null) {
+                            nationalCheckDigit = entry.getRandom();
+                        }
+                        break;
+                    case account_type:
+                        if (accountType == null) {
+                            accountType = entry.getRandom();
+                        }
+                        break;
+                    case owner_account_number:
+                        if (ownerAccountType == null) {
+                            ownerAccountType = entry.getRandom();
+                        }
+                        break;
+                    case identification_number:
+                        if (identificationNumber == null) {
+                            identificationNumber = entry.getRandom();
+                        }
+                        break;
+                }
+            }
+        }
 
     }
 
