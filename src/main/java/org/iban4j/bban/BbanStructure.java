@@ -17,10 +17,7 @@ package org.iban4j.bban;
 
 import org.iban4j.CountryCode;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -36,6 +33,7 @@ public class BbanStructure {
 
 
     private static final EnumMap<CountryCode, BbanStructure> structures;
+    private static final List<CountryCode> countries;
 
     static {
         structures = new EnumMap<CountryCode, BbanStructure>(CountryCode.class);
@@ -445,6 +443,10 @@ public class BbanStructure {
                         BbanStructureEntry.accountNumber(10, 'n'),
                         BbanStructureEntry.nationalCheckDigit(2, 'n')));
 
+        countries = new ArrayList<CountryCode>();
+        for (CountryCode code : structures.keySet()) {
+            countries.add(code);
+        }
 
     }
 
@@ -458,6 +460,10 @@ public class BbanStructure {
 
     public List<BbanStructureEntry> getEntries() {
         return Collections.unmodifiableList(Arrays.asList(entries));
+    }
+
+    public static List<CountryCode> getCountries() {
+        return countries;
     }
 
     /**

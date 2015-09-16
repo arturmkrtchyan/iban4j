@@ -360,5 +360,81 @@ public class IbanTest {
                     .accountNumber("A0234573201")
                     .build(true);
         }
+
+        @Test
+        public void ibanContructionRandom() {
+            for (int i = 0; i < 100; i++) {
+                new Iban.Builder().buildRandom();
+            }
+        }
+
+        @Test
+        public void ibanContructionRandomAcctRetainsSpecifiedCountry() {
+            Iban iban = new Iban.Builder().countryCode(CountryCode.AT).buildRandom();
+            assertThat(iban.getCountryCode(), is(equalTo(CountryCode.AT)));
+        }
+
+        @Test
+        public void ibanContructionRandomRetainsSpecifiedBankCode() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.AT)
+                    .bankCode("12345")
+                    .buildRandom();
+            assertThat(iban.getBankCode(), is(equalTo("12345")));
+        }
+
+        @Test
+        public void ibanContructionRandomDoesNotOverwriteBankAccount() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.AT)
+                    .accountNumber("12345678901")
+                    .buildRandom();
+            assertThat(iban.getAccountNumber(), is(equalTo("12345678901")));
+        }
+
+        @Test
+        public void ibanContructionRandomDoesNotOverwriteBranchCode() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.AL)
+                    .branchCode("1234")
+                    .buildRandom();
+            assertThat(iban.getBranchCode(), is(equalTo("1234")));
+        }
+
+        @Test
+        public void ibanContructionRandomDoesNotOverwriteNationalCheckDigit() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.AL)
+                    .nationalCheckDigit("1")
+                    .buildRandom();
+            assertThat(iban.getNationalCheckDigit(), is(equalTo("1")));
+        }
+
+        @Test
+        public void ibanContructionRandomDoesNotOverwriteAccountType() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.BR)
+                    .accountType("A")
+                    .buildRandom();
+            assertThat(iban.getAccountType(), is(equalTo("A")));
+        }
+
+        @Test
+        public void ibanContructionRandomDoesNotOverwriteOwnerAccountType() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.BR)
+                    .ownerAccountType("C")
+                    .buildRandom();
+            assertThat(iban.getOwnerAccountType(), is(equalTo("C")));
+        }
+
+        @Test
+        public void ibanContructionRandomDoesNotOverwriteIdentificationNumber() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.IS)
+                    .identificationNumber("1234567890")
+                    .buildRandom();
+            assertThat(iban.getIdentificationNumber(), is(equalTo("1234567890")));
+        }
     }
 }
