@@ -346,11 +346,19 @@ public final class Iban {
             return new Iban(ibanValue);
         }
 
+        /**
+         * Builds random iban instance.
+         *
+         * @return random iban instance.
+         * @throws IbanFormatException, UnsupportedCountryException
+         *  if values are not parsable by Iban Specification
+         *  <a href="http://en.wikipedia.org/wiki/ISO_13616">ISO_13616</a>
+         */
         public Iban buildRandom() throws IbanFormatException,
                 IllegalArgumentException, UnsupportedCountryException {
             if (countryCode == null) {
-                 List<CountryCode> codes = BbanStructure.getCountries();
-                this.countryCode(codes.get(random.nextInt(codes.size())));
+                List<CountryCode> countryCodes = BbanStructure.supportedCountries();
+                this.countryCode(countryCodes.get(random.nextInt(countryCodes.size())));
             }
             fillMissingFieldsRandomly();
             return build();
@@ -427,7 +435,7 @@ public final class Iban {
             }
         }
 
-        public void fillMissingFieldsRandomly() {
+        private void fillMissingFieldsRandomly() {
             final BbanStructure structure = BbanStructure.forCountry(countryCode);
 
             if (structure == null) {

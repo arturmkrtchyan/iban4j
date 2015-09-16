@@ -33,7 +33,6 @@ public class BbanStructure {
 
 
     private static final EnumMap<CountryCode, BbanStructure> structures;
-    private static final List<CountryCode> countries;
 
     static {
         structures = new EnumMap<CountryCode, BbanStructure>(CountryCode.class);
@@ -443,11 +442,6 @@ public class BbanStructure {
                         BbanStructureEntry.accountNumber(10, 'n'),
                         BbanStructureEntry.nationalCheckDigit(2, 'n')));
 
-        countries = new ArrayList<CountryCode>();
-        for (CountryCode code : structures.keySet()) {
-            countries.add(code);
-        }
-
     }
 
     /**
@@ -462,8 +456,10 @@ public class BbanStructure {
         return Collections.unmodifiableList(Arrays.asList(entries));
     }
 
-    public static List<CountryCode> getCountries() {
-        return countries;
+    public static List<CountryCode> supportedCountries() {
+        final List<CountryCode> countryCodes = new ArrayList<CountryCode>(structures.size());
+        countryCodes.addAll(structures.keySet());
+        return Collections.unmodifiableList(countryCodes);
     }
 
     /**
