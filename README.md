@@ -21,6 +21,13 @@ A Java library for generation and validation of the International Bank Account N
  // How to create Iban object from String
  Iban iban = Iban.valueOf("DE89370400440532013000");
 
+ // How to generate random Iban
+ Iban iban = Iban.random(CountryCode.AT);
+ Iban iban = Iban.random();
+ Iban iban = new Iban.Builder()
+                 .countryCode(CountryCode.AT)
+                 .bankCode("19043")
+                 .buildRandom();
 
  // How to validate Iban 
  try {
