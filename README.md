@@ -61,7 +61,7 @@ A Java library for generation and validation of the International Bank Account N
 <dependency>
   <groupId>org.iban4j</groupId>
   <artifactId>iban4j</artifactId>
-  <version>3.0.4</version>
+  <version>3.1.0</version>
 </dependency>
 ```
 
@@ -74,7 +74,7 @@ A Java library for generation and validation of the International Bank Account N
 - http://www.swift.com/dsp/resources/documents/IBAN_Registry.pdf
 
 ## License
-Copyright 2014 Artur Mkrtchyan.
+Copyright 2015 Artur Mkrtchyan.
 
 Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
 
