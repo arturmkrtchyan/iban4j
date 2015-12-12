@@ -164,6 +164,7 @@ public class IbanFormatException extends Iban4jException {
     public static enum IbanFormatViolation {
         UNKNOWN,
 
+        IBAN_FORMATTING,
         IBAN_NOT_NULL,
         IBAN_NOT_EMPTY,
         IBAN_VALID_CHARACTERS,

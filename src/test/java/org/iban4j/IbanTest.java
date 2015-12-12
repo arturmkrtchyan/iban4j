@@ -271,6 +271,18 @@ public class IbanTest {
                     .build(false);
             assertThat(iban.toFormattedString(), is(equalTo("AT40 1904 A023 4573 201")));
         }
+
+        @Test
+        public void ibanConstructionWithNoneFormattingShouldReturnIban() {
+            Iban iban = Iban.valueOf("AT611904300234573201", IbanFormat.None);
+            assertThat(iban.toFormattedString(), is(equalTo("AT61 1904 3002 3457 3201")));
+        }
+
+        @Test
+        public void ibanConstructionWithDefaultFormattingShouldReturnIban() {
+            Iban iban = Iban.valueOf("AT61 1904 3002 3457 3201", IbanFormat.Default);
+            assertThat(iban.toFormattedString(), is(equalTo("AT61 1904 3002 3457 3201")));
+        }
     }
 
     public static class IbanGenerationExceptionalTest {
@@ -305,7 +317,20 @@ public class IbanTest {
             Iban.valueOf("AZ21NABZ000000001370100_1944");
         }
 
+        @Test(expected = IbanFormatException.class)
+        public void ibanConstructionWithDefaultButInvalidFormatShouldThrowException() {
+            Iban.valueOf("AT61 1904 3002 34573201", IbanFormat.Default);
+        }
 
+        @Test(expected = IbanFormatException.class)
+        public void formattedIbanConstructionWithNoneFormatShouldThrowException() {
+            Iban.valueOf("AT61 1904 3002 3457 3201", IbanFormat.None);
+        }
+
+        @Test(expected = IbanFormatException.class)
+        public void unformattedIbanConstructionWithDefaultFormatShouldThrowException() {
+            Iban.valueOf("AT611904300234573201", IbanFormat.Default);
+        }
 
         @Test(expected = IbanFormatException.class)
         public void ibanConstructionWithoutCountryShouldThrowException() {
@@ -365,12 +390,16 @@ public class IbanTest {
         public void ibanContructionRandom() {
             for (int i = 0; i < 100; i++) {
                 new Iban.Builder().buildRandom();
+                Iban.random();
             }
         }
 
         @Test
         public void ibanContructionRandomAcctRetainsSpecifiedCountry() {
             Iban iban = new Iban.Builder().countryCode(CountryCode.AT).buildRandom();
+            assertThat(iban.getCountryCode(), is(equalTo(CountryCode.AT)));
+
+            iban = Iban.random(CountryCode.AT);
             assertThat(iban.getCountryCode(), is(equalTo(CountryCode.AT)));
         }
 

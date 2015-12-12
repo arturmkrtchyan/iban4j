@@ -151,6 +151,34 @@ public final class Iban {
         return new Iban(iban);
     }
 
+    /**
+     * Returns an Iban object holding the value of the specified String.
+     *
+     * @param iban the String to be parsed.
+     * @param format the format of the Iban.
+     * @return an Iban object holding the value represented by the string argument.
+     * @throws IbanFormatException if the String doesn't contain parsable Iban
+     *         InvalidCheckDigitException if Iban has invalid check digit
+     *         UnsupportedCountryException if Iban's Country is not supported.
+     *
+     */
+    public static Iban valueOf(final String iban, final IbanFormat format) throws IbanFormatException,
+            InvalidCheckDigitException, UnsupportedCountryException {
+        switch (format) {
+            case Default:
+                final String ibanWithoutSpaces = iban.replace(" ", "");
+                final Iban ibanObj = valueOf(ibanWithoutSpaces);
+                if(ibanObj.toFormattedString().equals(iban)) {
+                    return ibanObj;
+                }
+                throw new IbanFormatException(IBAN_FORMATTING,
+                        String.format("Iban must be formatted using 4 characters and space combination. " +
+                                "Instead of [%s]", iban));
+            default:
+                return valueOf(iban);
+        }
+    }
+
     @Override
     public String toString() {
         return value;
@@ -162,14 +190,7 @@ public final class Iban {
      * @return A string representing formatted Iban for printing.
      */
     public String toFormattedString() {
-        final StringBuilder ibanBuffer = new StringBuilder(value);
-        final int length = ibanBuffer.length();
-
-        for (int i = 0; i < length / 4; i++) {
-            ibanBuffer.insert((i + 1) * 4 + i, ' ');
-        }
-
-        return ibanBuffer.toString().trim();
+        return IbanUtil.toFormattedString(value);
     }
 
     public static Iban random() {

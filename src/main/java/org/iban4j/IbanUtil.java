@@ -88,6 +88,33 @@ public final class IbanUtil {
     }
 
     /**
+     * Validates iban.
+     *
+     * @param iban to be validated.
+     * @param format to be used in validation.
+     * @throws IbanFormatException if iban is invalid.
+     *         UnsupportedCountryException if iban's country is not supported.
+     *         InvalidCheckDigitException if iban has invalid check digit.
+     */
+    public static void validate(final String iban, final IbanFormat format) throws IbanFormatException,
+            InvalidCheckDigitException, UnsupportedCountryException {
+        switch (format) {
+            case Default:
+                final String ibanWithoutSpaces = iban.replace(" ", "");
+                validate(ibanWithoutSpaces);
+                if(!toFormattedString(ibanWithoutSpaces).equals(iban)) {
+                    throw new IbanFormatException(IBAN_FORMATTING,
+                            String.format("Iban must be formatted using 4 characters and space combination. " +
+                                    "Instead of [%s]", iban));
+                }
+                break;
+            default:
+                validate(iban);
+                break;
+        }
+    }
+
+    /**
      * Checks whether country is supporting iban.
      * @param countryCode {@link org.iban4j.CountryCode}
      *
@@ -235,7 +262,21 @@ public final class IbanUtil {
         return getCountryCode(iban) + checkDigit + getBban(iban);
     }
 
+    /**
+     * Returns formatted version of Iban.
+     *
+     * @return A string representing formatted Iban for printing.
+     */
+    static String toFormattedString(final String iban) {
+        final StringBuilder ibanBuffer = new StringBuilder(iban);
+        final int length = ibanBuffer.length();
 
+        for (int i = 0; i < length / 4; i++) {
+            ibanBuffer.insert((i + 1) * 4 + i, ' ');
+        }
+
+        return ibanBuffer.toString().trim();
+    }
 
     private static void validateCheckDigit(final String iban) {
         if (calculateMod(iban) != 1) {
