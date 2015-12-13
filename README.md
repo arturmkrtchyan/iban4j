@@ -21,6 +21,9 @@ A Java library for generation and validation of the International Bank Account N
  // How to create Iban object from String
  Iban iban = Iban.valueOf("DE89370400440532013000");
 
+ // How to create Iban object from String
+ Iban iban = Iban.valueOf("DE89 3704 0044 0532 0130 00", IbanFormat.Default);
+
  // How to generate random Iban
  Iban iban = Iban.random(CountryCode.AT);
  Iban iban = Iban.random();
@@ -32,6 +35,7 @@ A Java library for generation and validation of the International Bank Account N
  // How to validate Iban 
  try {
      IbanUtil.validate("AT611904300234573201");
+     IbanUtil.validate("DE89 3704 0044 0532 0130 00", IbanFormat.Default);
      // valid
  } catch (IbanFormatException |
           InvalidCheckDigitException |
@@ -61,7 +65,7 @@ A Java library for generation and validation of the International Bank Account N
 <dependency>
   <groupId>org.iban4j</groupId>
   <artifactId>iban4j</artifactId>
-  <version>3.1.0</version>
+  <version>3.2.0</version>
 </dependency>
 ```
 
