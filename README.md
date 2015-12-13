@@ -21,7 +21,7 @@ A Java library for generation and validation of the International Bank Account N
  // How to create Iban object from String
  Iban iban = Iban.valueOf("DE89370400440532013000");
 
- // How to create Iban object from String
+ // How to create Iban object from formatted String
  Iban iban = Iban.valueOf("DE89 3704 0044 0532 0130 00", IbanFormat.Default);
 
  // How to generate random Iban
