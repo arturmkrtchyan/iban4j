@@ -328,9 +328,9 @@ public final class Iban {
          * Builds new iban instance. This methods validates the generated IBAN.
          *
          * @return new iban instance.
-         * @throws IbanFormatException, UnsupportedCountryException
-         *  if values are not parsable by Iban Specification
+         * @exception IbanFormatException if values are not parsable by Iban Specification
          *  <a href="http://en.wikipedia.org/wiki/ISO_13616">ISO_13616</a>
+         * @exception UnsupportedCountryException if country is not supported
          */
         public Iban build() throws IbanFormatException,
                 IllegalArgumentException, UnsupportedCountryException {
@@ -343,9 +343,9 @@ public final class Iban {
          * @param validate boolean indicates if the generated IBAN needs to be
          *  validated after generation
          * @return new iban instance.
-         * @throws IbanFormatException, UnsupportedCountryException
-         *  if values are not parsable by Iban Specification
+         * @exception IbanFormatException if values are not parsable by Iban Specification
          *  <a href="http://en.wikipedia.org/wiki/ISO_13616">ISO_13616</a>
+         * @exception UnsupportedCountryException if country is not supported
          */
         public Iban build(boolean validate) throws IbanFormatException,
                 IllegalArgumentException, UnsupportedCountryException {
@@ -371,9 +371,10 @@ public final class Iban {
          * Builds random iban instance.
          *
          * @return random iban instance.
-         * @throws IbanFormatException, UnsupportedCountryException
-         *  if values are not parsable by Iban Specification
+         * @exception IbanFormatException if values are not parsable by Iban Specification
          *  <a href="http://en.wikipedia.org/wiki/ISO_13616">ISO_13616</a>
+         * @exception UnsupportedCountryException if country is not supported
+         *
          */
         public Iban buildRandom() throws IbanFormatException,
                 IllegalArgumentException, UnsupportedCountryException {

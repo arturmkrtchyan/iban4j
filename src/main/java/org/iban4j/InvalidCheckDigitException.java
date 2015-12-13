@@ -47,6 +47,8 @@ public class InvalidCheckDigitException extends Iban4jException {
      * Constructs a <code>InvalidCheckDigitException</code> with the
      * specified actual, expected and detail message.
      *
+     * @param actual the actual check digit.
+     * @param expected the expected check digit.
      * @param s the detail message.
      */
     public InvalidCheckDigitException(final String actual, final String expected, final String s) {

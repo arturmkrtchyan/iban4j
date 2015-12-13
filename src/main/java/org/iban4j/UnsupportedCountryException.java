@@ -45,6 +45,7 @@ public class UnsupportedCountryException extends Iban4jException {
      * Constructs a <code>UnsupportedCountryException</code> with the
      * specified country code and detail message.
      *
+     * @param countryCode the country code.
      * @param s the detail message.
      */
     public UnsupportedCountryException(String countryCode, final String s) {
