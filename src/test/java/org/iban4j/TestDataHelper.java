@@ -50,9 +50,9 @@ final class TestDataHelper {
                         .build(), "AZ21NABZ00000000137010001944"},
                 {new Iban.Builder()
                         .countryCode(CountryCode.BH)
-                        .bankCode("BMAG")
-                        .accountNumber("00001299123456")
-                        .build(), "BH67BMAG00001299123456"},
+                        .bankCode("SCBL")
+                        .accountNumber("BHD18903608801")
+                        .build(), "BH72SCBLBHD18903608801"},
                 {new Iban.Builder()
                         .countryCode(CountryCode.BE)
                         .bankCode("539")

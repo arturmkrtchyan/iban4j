@@ -64,7 +64,7 @@ public class BbanStructure {
         structures.put(CountryCode.BH,
                 new BbanStructure(
                         BbanStructureEntry.bankCode(4, 'a'),
-                        BbanStructureEntry.accountNumber(14, 'n')));
+                        BbanStructureEntry.accountNumber(14, 'c')));
 
         structures.put(CountryCode.BE,
                 new BbanStructure(
