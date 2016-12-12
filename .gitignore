@@ -10,3 +10,9 @@ iban4j.iml
 
 #Maven
 target
+build
+.gradle
+local.properties
+*.class
+
+
