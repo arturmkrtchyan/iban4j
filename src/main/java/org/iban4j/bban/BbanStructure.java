@@ -462,47 +462,15 @@ public class BbanStructure {
 
         // IBAN structures according to Nordea
 
-        structures.put(CountryCode.DZ,
-                new BbanStructure(
-                        BbanStructureEntry.accountNumber(20, 'n')));
-
-        structures.put(CountryCode.AO,
-                new BbanStructure(
-                        BbanStructureEntry.accountNumber(21, 'n')));
-
-        structures.put(CountryCode.BJ,
-                new BbanStructure(
-                        BbanStructureEntry.accountNumber(24, 'n')));
-
-        structures.put(CountryCode.BI,
-                new BbanStructure(
-                        BbanStructureEntry.accountNumber(14, 'n')));
-
-        structures.put(CountryCode.CM,
-                new BbanStructure(
-                        BbanStructureEntry.accountNumber(23, 'n')));
-
-        structures.put(CountryCode.CV,
-                new BbanStructure(
-                        BbanStructureEntry.accountNumber(21, 'n')));
-
         structures.put(CountryCode.CI,
                 new BbanStructure(
                         BbanStructureEntry.bankCode(1, 'a'),
-                        BbanStructureEntry.accountNumber(23, 'n')));
-
-        structures.put(CountryCode.MG,
-                new BbanStructure(
                         BbanStructureEntry.accountNumber(23, 'n')));
 
         structures.put(CountryCode.ML,
                 new BbanStructure(
                         BbanStructureEntry.bankCode(1, 'a'),
                         BbanStructureEntry.accountNumber(23, 'n')));
-
-        structures.put(CountryCode.MZ,
-                new BbanStructure(
-                        BbanStructureEntry.accountNumber(21, 'n')));
 
         structures.put(CountryCode.SN,
                 new BbanStructure(
