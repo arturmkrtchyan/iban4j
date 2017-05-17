@@ -15,13 +15,16 @@
  */
 package org.iban4j;
 
+import static org.iban4j.IbanFormatException.IbanFormatViolation.ACCOUNT_NUMBER_NOT_NULL;
+import static org.iban4j.IbanFormatException.IbanFormatViolation.BANK_CODE_NOT_NULL;
+import static org.iban4j.IbanFormatException.IbanFormatViolation.COUNTRY_CODE_NOT_NULL;
+import static org.iban4j.IbanFormatException.IbanFormatViolation.IBAN_FORMATTING;
+
 import java.util.List;
 import java.util.Random;
 
 import org.iban4j.bban.BbanStructure;
 import org.iban4j.bban.BbanStructureEntry;
-
-import static org.iban4j.IbanFormatException.IbanFormatViolation.*;
 
 
 /**
@@ -61,6 +64,15 @@ public final class Iban {
      */
     public String getCheckDigit() {
         return IbanUtil.getCheckDigit(value);
+    }
+
+    /**
+     * Returns iban's account number prefix.
+     *
+     * @return accountNumberPrefix String
+     */
+    public String getAccountNumberPrefix() {
+        return IbanUtil.getAccountNumberPrefix(value);
     }
 
     /**
@@ -224,6 +236,7 @@ public final class Iban {
         private String branchCode;
         private String nationalCheckDigit;
         private String accountType;
+        private String accountNumberPrefix;
         private String accountNumber;
         private String ownerAccountType;
         private String identificationNumber;
@@ -266,6 +279,17 @@ public final class Iban {
          */
         public Builder branchCode(final String branchCode) {
             this.branchCode = branchCode;
+            return this;
+        }
+
+        /**
+         * Sets iban's account number prefix
+         *
+         * @param accountNumberPrefix String
+         * @return builder Builder
+         */
+        public Builder accountNumberPrefix(final String accountNumberPrefix) {
+            this.accountNumberPrefix = accountNumberPrefix;
             return this;
         }
 
@@ -406,6 +430,9 @@ public final class Iban {
                     case branch_code:
                         sb.append(branchCode);
                         break;
+                    case account_number_prefix:
+                        sb.append(accountNumberPrefix);
+                        break;
                     case account_number:
                         sb.append(accountNumber);
                         break;
@@ -475,6 +502,11 @@ public final class Iban {
                     case branch_code:
                         if (branchCode == null) {
                             branchCode = entry.getRandom();
+                        }
+                        break;
+                    case account_number_prefix:
+                        if (accountNumberPrefix == null) {
+                        	accountNumberPrefix = entry.getRandom();
                         }
                         break;
                     case account_number:

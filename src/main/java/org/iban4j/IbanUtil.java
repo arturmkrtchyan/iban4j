@@ -15,11 +15,24 @@
  */
 package org.iban4j;
 
+import static org.iban4j.IbanFormatException.IbanFormatViolation.BBAN_LENGTH;
+import static org.iban4j.IbanFormatException.IbanFormatViolation.BBAN_ONLY_DIGITS;
+import static org.iban4j.IbanFormatException.IbanFormatViolation.BBAN_ONLY_DIGITS_OR_LETTERS;
+import static org.iban4j.IbanFormatException.IbanFormatViolation.BBAN_ONLY_UPPER_CASE_LETTERS;
+import static org.iban4j.IbanFormatException.IbanFormatViolation.CHECK_DIGIT_ONLY_DIGITS;
+import static org.iban4j.IbanFormatException.IbanFormatViolation.CHECK_DIGIT_TWO_DIGITS;
+import static org.iban4j.IbanFormatException.IbanFormatViolation.COUNTRY_CODE_EXISTS;
+import static org.iban4j.IbanFormatException.IbanFormatViolation.COUNTRY_CODE_TWO_LETTERS;
+import static org.iban4j.IbanFormatException.IbanFormatViolation.COUNTRY_CODE_UPPER_CASE_LETTERS;
+import static org.iban4j.IbanFormatException.IbanFormatViolation.IBAN_FORMATTING;
+import static org.iban4j.IbanFormatException.IbanFormatViolation.IBAN_NOT_EMPTY;
+import static org.iban4j.IbanFormatException.IbanFormatViolation.IBAN_NOT_NULL;
+import static org.iban4j.IbanFormatException.IbanFormatViolation.IBAN_VALID_CHARACTERS;
+import static org.iban4j.IbanFormatException.IbanFormatViolation.UNKNOWN;
+
 import org.iban4j.bban.BbanEntryType;
 import org.iban4j.bban.BbanStructure;
 import org.iban4j.bban.BbanStructureEntry;
-
-import static org.iban4j.IbanFormatException.IbanFormatViolation.*;
 /**
  * Iban Utility Class
  */
@@ -176,6 +189,16 @@ public final class IbanUtil {
      */
     public static String getBban(final String iban) {
         return iban.substring(BBAN_INDEX);
+    }
+
+    /**
+     * Returns iban's account number.
+     *
+     * @param iban String
+     * @return accountNumberPrefix String
+     */
+    public static String getAccountNumberPrefix(final String iban) {
+        return extractBbanEntry(iban, BbanEntryType.account_number_prefix);
     }
 
     /**
