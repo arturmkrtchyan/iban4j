@@ -15,16 +15,13 @@
  */
 package org.iban4j;
 
-import static org.iban4j.IbanFormatException.IbanFormatViolation.ACCOUNT_NUMBER_NOT_NULL;
-import static org.iban4j.IbanFormatException.IbanFormatViolation.BANK_CODE_NOT_NULL;
-import static org.iban4j.IbanFormatException.IbanFormatViolation.COUNTRY_CODE_NOT_NULL;
-import static org.iban4j.IbanFormatException.IbanFormatViolation.IBAN_FORMATTING;
-
 import java.util.List;
 import java.util.Random;
 
 import org.iban4j.bban.BbanStructure;
 import org.iban4j.bban.BbanStructureEntry;
+
+import static org.iban4j.IbanFormatException.IbanFormatViolation.*;
 
 
 /**
