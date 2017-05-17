@@ -100,7 +100,8 @@ final class TestDataHelper {
                 {new Iban.Builder()
                         .countryCode(CountryCode.CZ)
                         .bankCode("0800")
-                        .accountNumber("0000192000145399")
+                        .accountNumberPrefix("000019")
+                        .accountNumber("2000145399")
                         .build(), "CZ6508000000192000145399"},
                 {new Iban.Builder()
                         .countryCode(CountryCode.DK)
@@ -342,7 +343,8 @@ final class TestDataHelper {
                 {new Iban.Builder()
                         .countryCode(CountryCode.SK)
                         .bankCode("1200")
-                        .accountNumber("0000198742637541")
+                        .accountNumberPrefix("000019")
+                        .accountNumber("8742637541")
                         .build(), "SK3112000000198742637541"},
                 {new Iban.Builder()
                         .countryCode(CountryCode.SI)
