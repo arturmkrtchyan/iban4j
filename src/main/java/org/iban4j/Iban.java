@@ -20,6 +20,7 @@ import java.util.Random;
 
 import org.iban4j.bban.BbanStructure;
 import org.iban4j.bban.BbanStructureEntry;
+import org.iban4j.bban.BbanStructureEntry.EntryCharacterType;
 
 import static org.iban4j.IbanFormatException.IbanFormatViolation.*;
 
@@ -504,6 +505,76 @@ public final class Iban {
                         break;
                 }
             }
+        }
+
+        /**
+         * Aligns non-null numeric fields to its required length by prepending '0'.
+         */
+        public Builder addLeftPadding() {
+            final BbanStructure structure = BbanStructure.forCountry(countryCode);
+
+            if (structure == null) {
+                throw new UnsupportedCountryException(countryCode.toString(),
+                        "Country code is not supported.");
+            }
+            char zero = '0';
+            for(final BbanStructureEntry entry : structure.getEntries()) {
+                if (entry.getCharacterType() == EntryCharacterType.n) {
+                    switch (entry.getEntryType()) {
+                        case bank_code:
+                            if (bankCode != null) {
+                                bankCode = addLeftPadding(bankCode, entry.getLength(), zero);
+                            }
+                            break;
+                        case branch_code:
+                            if (branchCode != null) {
+                            	branchCode = addLeftPadding(branchCode, entry.getLength(), zero);
+                            }
+                            break;
+                        case account_number:
+                            if (accountNumber != null) {
+                                accountNumber = addLeftPadding(accountNumber, entry.getLength(), zero);
+                            }
+                            break;
+                        case national_check_digit:
+                            if (nationalCheckDigit != null) {
+                                nationalCheckDigit = addLeftPadding(nationalCheckDigit, entry.getLength(), zero);
+                            }
+                            break;
+                        case account_type:
+                            if (accountType != null) {
+                                accountType = addLeftPadding(accountType, entry.getLength(), zero);
+                            }
+                            break;
+                        case owner_account_number:
+                            if (ownerAccountType != null) {
+                                ownerAccountType = addLeftPadding(ownerAccountType, entry.getLength(), zero);
+                            }
+                            break;
+                        case identification_number:
+                            if (identificationNumber != null) {
+                                identificationNumber = addLeftPadding(identificationNumber, entry.getLength(), zero);
+                            }
+                            break;
+                    }
+                }
+            }
+            return this;
+        }
+
+        /** 
+         * Aligns string {@code value} to required {@code lenght} by prepending a {@code paddingChar}
+         */
+        private String addLeftPadding(final String value, final int lenght, final char paddingChar) {
+            if (value.length() < lenght) {
+                StringBuilder s = new StringBuilder(lenght);
+                for (int i = value.length(); i < lenght; i++) {
+                    s.append(paddingChar);
+                }
+                s.append(value);
+                return s.toString();
+            }
+            return value;
         }
 
     }
