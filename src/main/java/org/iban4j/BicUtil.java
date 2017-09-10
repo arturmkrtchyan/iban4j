@@ -47,6 +47,7 @@ public class BicUtil {
             validateEmpty(bic);
             validateLength(bic);
             validateCase(bic);
+
             validateBankCode(bic);
             validateCountryCode(bic);
             validateLocationCode(bic);
@@ -64,27 +65,26 @@ public class BicUtil {
     private static void validateEmpty(final String bic) {
         if(bic == null) {
             throw new BicFormatException(BIC_NOT_NULL,
-                    "Null can't be a valid Bic.");
+                    "Null can't be a valid BIC.");
         }
-
-        if(bic.length() == 0) {
+        if(bic.isEmpty()) {
             throw new BicFormatException(BIC_NOT_EMPTY,
-                    "Empty string can't be a valid Bic.");
+                    "Empty string can't be a valid BIC.");
         }
     }
 
     private static void validateLength(final String bic) {
         if(bic.length() != BIC8_LENGTH && bic.length() != BIC11_LENGTH) {
             throw new BicFormatException(BIC_LENGTH_8_OR_11,
-                    String.format("Bic length must be %d or %d",
-                            BIC8_LENGTH, BIC11_LENGTH));
+                    String.format("BIC length must be %d or %d, but is %d in BIC '%s'.",
+                            BIC8_LENGTH, BIC11_LENGTH, bic.length(), bic));
         }
     }
 
     private static void validateCase(final String bic) {
         if(!bic.equals(bic.toUpperCase())) {
             throw new BicFormatException(BIC_ONLY_UPPER_CASE_LETTERS,
-                    "Bic must contain only upper case letters.");
+                    "BIC must contain only upper case letters but is '" + bic + "'.");
         }
     }
 
@@ -92,62 +92,67 @@ public class BicUtil {
         String bankCode = getBankCode(bic);
         for(final char ch : bankCode.toCharArray()) {
             if(!Character.isLetter(ch)) {
-                throw new BicFormatException(BANK_CODE_ONLY_LETTERS, ch,
-                        "Bank code must contain only letters.");
+                throw new BicFormatException(BANK_CODE_ONLY_LETTERS, "" + ch,
+                        "Bank code must contain only letters but is '" + bankCode + "' in BIC '" + bic + "'.");
             }
         }
     }
 
     private static void validateCountryCode(final String bic) {
         final String countryCode = getCountryCode(bic);
-        if(countryCode.trim().length() < COUNTRY_CODE_LENGTH ||
-                !countryCode.equals(countryCode.toUpperCase()) ||
-                !Character.isLetter(countryCode.charAt(0)) ||
-                !Character.isLetter(countryCode.charAt(1))) {
-            throw new BicFormatException(COUNTRY_CODE_ONLY_UPPER_CASE_LETTERS,
-                    countryCode,
-                    "Bic country code must contain upper case letters");
-        }
-
         if(CountryCode.getByCode(countryCode) == null) {
             throw new UnsupportedCountryException(countryCode,
-                    "Country code is not supported.");
+                    "Country code '" + countryCode + "' is not supported in BIC '" + bic + "'.");
         }
     }
 
     private static void validateLocationCode(final String bic) {
         final String locationCode = getLocationCode(bic);
-        for(char ch : locationCode.toCharArray()) {
+        for (int i=0;i<LOCATION_CODE_LENGTH;i++) {
+            char ch = locationCode.charAt(i);
             if(!Character.isLetterOrDigit(ch)) {
                 throw new BicFormatException(LOCATION_CODE_ONLY_LETTERS_OR_DIGITS,
-                        ch, "Location code must contain only letters or digits.");
+                        "" + ch, "Location code must contain only letters or digits but is '" + locationCode + "' in BIC '" + bic + "'.");
+            }
+            if (i == 0 && (ch == '0' || ch == '1')) {
+                throw new BicFormatException(LOCATION_CODE_RESTRICTION_FIRST_CHAR,
+                        "" + ch, "Location code's first letter must not be digits '0' or '1' in '" + locationCode + "' in BIC '" + bic + "'.");
+            }
+            if (i == 1 && (ch == 'O')) {
+                throw new BicFormatException(LOCATION_CODE_RESTRICTION_SECOND_CHAR,
+                        "" + ch, "Location code's second letter must not be 'O' (the letter 'oh') in '" + locationCode + "' in BIC '" + bic + "'.");
             }
         }
     }
 
     private static void validateBranchCode(final String bic) {
         final String branchCode = getBranchCode(bic);
-        for(final char ch : branchCode.toCharArray()) {
+        for (int i=0;i<BRANCH_CODE_LENGTH;i++) {
+            char ch = branchCode.charAt(i);
             if(!Character.isLetterOrDigit(ch)) {
                 throw new BicFormatException(BRANCH_CODE_ONLY_LETTERS_OR_DIGITS,
-                        ch, "Branch code must contain only letters or digits.");
+                        "" + ch, "Branch code must contain only letters or digits but is '" + branchCode + "' in BIC '" + bic + "'.");
             }
         }
     }
 
     static String getBankCode(final String bic) {
+        // may throw if "bic" string does not have enough characters
         return bic.substring(BANK_CODE_INDEX, BANK_CODE_INDEX + BANK_CODE_LENGTH);
     }
 
     static String getCountryCode(final String bic) {
+        // may throw if "bic" string does not have enough characters
         return bic.substring(COUNTRY_CODE_INDEX, COUNTRY_CODE_INDEX + COUNTRY_CODE_LENGTH);
     }
 
     static String getLocationCode(final String bic) {
+        // may throw if "bic" string does not have enough characters
         return bic.substring(LOCATION_CODE_INDEX, LOCATION_CODE_INDEX + LOCATION_CODE_LENGTH);
     }
 
     static String getBranchCode(final String bic) {
+        // may throw if "bic" string does not have enough characters
         return bic.substring(BRANCH_CODE_INDEX, BRANCH_CODE_INDEX + BRANCH_CODE_LENGTH);
     }
 

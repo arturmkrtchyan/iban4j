@@ -433,16 +433,4 @@ final class TestDataHelper {
         });
     }
 
-    public static Collection<Object[]> getBicData() {
-        return Arrays.asList(new Object[][]{
-                {"DEUTDEFF"},
-                {"DEUTDEFF500"},
-                {"NEDSZAJJXXX"},
-                {"DABADKKK"},
-                {"UNCRIT2B912"},
-                {"DSBACNBXSHA"},
-                {"BNORPHMM"}
-        });
-    }
-
 }

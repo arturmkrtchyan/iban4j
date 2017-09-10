@@ -24,104 +24,8 @@ public class BicFormatException extends Iban4jException {
 
     private static final long serialVersionUID = 1764207967955765664L;
 
-    private BicFormatViolation formatViolation;
-
-    private Object expected;
-    private Object actual;
-
-    /**
-     * Constructs a <code>BicFormatException</code> with no detail message.
-     */
-    public BicFormatException() {
-        super();
-    }
-
-    /**
-     * Constructs a <code>BicFormatException</code> with the
-     * specified detail message.
-     *
-     * @param s the detail message.
-     */
-    public BicFormatException(final String s) {
-        super(s);
-    }
-
-    /**
-     * Constructs a <code>BicFormatException</code> with the
-     * specified detail message and cause.
-     *
-     * @param s the detail message.
-     * @param t the cause.
-     */
-    public BicFormatException(final String s, final Throwable t) {
-        super(s, t);
-    }
-
-    /**
-     * Constructs a <code>BicFormatException</code> with the
-     * specified violation, actual value, expected value and detail message.
-     *
-     * @param violation the violation.
-     * @param actual the actual value.
-     * @param expected the expected value.
-     * @param s the detail message.
-     */
-    public BicFormatException(BicFormatViolation violation,
-                              Object actual, Object expected, final String s) {
-        super(s);
-        this.actual = actual;
-        this.expected = expected;
-        this.formatViolation = violation;
-    }
-
-    /**
-     * Constructs a <code>BicFormatException</code> with the
-     * specified violation and detail message.
-     *
-     * @param violation the violation.
-     * @param s the detail message.
-     */
-    public BicFormatException(BicFormatViolation violation, final String s) {
-        super(s);
-        this.formatViolation = violation;
-    }
-
-    /**
-     * Constructs a <code>BicFormatException</code> with the
-     * specified violation, actual value and detail message.
-     *
-     * @param violation the violation.
-     * @param actual the actual value.
-     * @param s the detail message.
-     */
-    public BicFormatException(BicFormatViolation violation, Object actual,
-                              final String s) {
-        super(s);
-        this.actual = actual;
-        this.formatViolation = violation;
-    }
-
-    /**
-     * Constructs a <code>BicFormatException</code> with the
-     * specified cause.
-     *
-     * @param t the cause.
-     */
-    public BicFormatException(final Throwable t) {
-        super(t);
-    }
-
-    public BicFormatViolation getFormatViolation() {
-        return formatViolation;
-    }
-
-    public Object getExpected() {
-        return expected;
-    }
-
-    public Object getActual() {
-        return actual;
-    }
+    public final BicFormatViolation formatViolation; // may be null
+    public final String moreInfo; // may be null
 
     public static enum BicFormatViolation {
         UNKNOWN,
@@ -134,6 +38,40 @@ public class BicFormatException extends Iban4jException {
         BRANCH_CODE_ONLY_LETTERS_OR_DIGITS,
         LOCATION_CODE_ONLY_LETTERS_OR_DIGITS,
         BANK_CODE_ONLY_LETTERS,
-        COUNTRY_CODE_ONLY_UPPER_CASE_LETTERS
+
+        LOCATION_CODE_RESTRICTION_FIRST_CHAR,
+        LOCATION_CODE_RESTRICTION_SECOND_CHAR
+
     }
+
+    /**
+     * Constructs a <code>BicFormatException</code> with the
+     * specified violation and detail message. The "moreInfo" String stays null.
+     *
+     * @param violation the violation (possibly null)
+     * @param message the detail message  (possibly null)
+     */
+
+    public BicFormatException(BicFormatViolation violation, String message) {
+        super(message);
+        this.formatViolation = violation;
+        this.moreInfo = null;
+    }
+
+    /**
+     * Constructs a <code>BicFormatException</code> with the
+     * specified violation and detail message and "moreInfo" string (may stay null)
+     *
+     * @param violation the violation (possibly null)
+     * @param moreInfo the problematic character  (possibly null)
+     * @param message the detail message  (possibly null)
+     */
+
+
+    public BicFormatException(BicFormatViolation violation, String moreInfo, String message) {
+        super(message);
+        this.formatViolation = violation;
+        this.moreInfo = moreInfo;
+    }
+
 }

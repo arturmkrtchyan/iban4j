@@ -14,7 +14,12 @@
   limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+<!-- 2017-09-10: Oracle JDK7 build on github travis breaks
+     https://github.com/travis-ci/travis-ci/issues/7884#issuecomment-308451879 -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.iban4j</groupId>
@@ -38,8 +43,8 @@
         <connection>scm:git:git@github.com:arturmkrtchyan/iban4j.git</connection>
         <developerConnection>scm:git:git@github.com:arturmkrtchyan/iban4j.git</developerConnection>
         <url>git@github.com:arturmkrtchyan/iban4j.git</url>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <developers>
         <developer>
@@ -57,8 +62,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jdkVersion>1.5</jdkVersion>
-        <jdk5Signature>java15</jdk5Signature>
+        <jdkVersion>1.7</jdkVersion>
         <skipSigning>true</skipSigning>
     </properties>
 
@@ -66,7 +70,8 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <!-- 4.12 needed for code to compile -->
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -121,7 +126,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.2.201409121644</version>
+                <version>0.7.9</version>
                 <executions>
                     <!--
                        Prepares the property pointing to the JaCoCo runtime agent which
@@ -136,7 +141,7 @@
                             <!-- Sets the path to the file which contains the execution data. -->
                             <destFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</destFile>
                             <!--
-                               Sets the name of the property containing the settings
+                               Sets the displayName of the property containing the settings
                                for JaCoCo runtime agent.
                            -->
                             <propertyName>surefireArgLine</propertyName>
@@ -187,11 +192,11 @@
                     </execution>
                 </executions>
             </plugin>
-            
+
             <plugin>
-              <groupId>org.eluder.coveralls</groupId>
-              <artifactId>coveralls-maven-plugin</artifactId>
-              <version>3.0.1</version>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+                <version>3.0.1</version>
             </plugin>
 
             <!-- Generating Javadoc during verify phase -->
@@ -240,10 +245,12 @@
             </plugin>
 
             <!-- Checking a project against API signatures  -->
+            <!-- Why do we check against Java 5 ??? -->
+            <!-- Moving up to Java 7 -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>animal-sniffer-maven-plugin</artifactId>
-                <version>1.11</version>
+                <version>1.16</version>
                 <executions>
                     <execution>
                         <id>check-java-api</id>
@@ -255,7 +262,7 @@
                             <signature>
                                 <groupId>org.codehaus.mojo.signature
                                 </groupId>
-                                <artifactId>${jdk5Signature}</artifactId>
+                                <artifactId>java17</artifactId>
                                 <version>1.0</version>
                             </signature>
                         </configuration>
