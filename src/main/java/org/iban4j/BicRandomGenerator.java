@@ -49,24 +49,13 @@ public class BicRandomGenerator {
 	}
 
 	/**
-	 * This is a trick to confuse the compiler enough so that warnings "always returns true" go away
+	 * Helper to check passed argument. Throws on bad argument.
 	 */
 
-	private static boolean giveMeTrue() {
-		int a = rand.nextInt();
-		return (a & ~a) == 0;
-	}
-
-	/**
-	 * Helper to check passed argument. Throws on bad argument. Always returns true, so that it can be
-	 * put into the body of an assert and thus "compiled out"
-	 */
-
-	private static boolean checkRand(Random rand) {
+	private static void checkRand(Random rand) {
 		if (rand == null) {
 			throw new IllegalArgumentException("The passed java.util.Random instance is null");
 		}
-		return giveMeTrue();
 	}
 
 	/**
@@ -89,7 +78,7 @@ public class BicRandomGenerator {
 	 */
 
 	private static char nextUcAlphaNum(Random rand) {
-		assert checkRand(rand);
+		checkRand(rand);
 		String template = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 		return template.charAt(rand.nextInt(template.length()));
 	}
@@ -99,7 +88,7 @@ public class BicRandomGenerator {
 	 */
 
 	private static char nextUcAlpha(Random rand) {
-		assert checkRand(rand);
+		checkRand(rand);
 		String template = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		return template.charAt(rand.nextInt(template.length()));
 	}
@@ -117,8 +106,8 @@ public class BicRandomGenerator {
 	 */
 
 	public static String genRandomBranchCode(Random rand, String[] template) {
-		assert checkRand(rand);
-		assert checkTemplate(template);
+		checkRand(rand);
+		checkTemplate(template);
 		String selected = template[randomInInterval(rand, 0, template.length - 1)];
 		Matcher m = branchCodeTemplatePattern.matcher(selected);
 		if (!m.matches()) {
@@ -178,8 +167,8 @@ public class BicRandomGenerator {
 	 */
 
 	public static String genRandomInstitutionCode(Random rand, String[] template) {
-		assert checkRand(rand);
-		assert checkTemplate(template);
+		checkRand(rand);
+		checkTemplate(template);
 		String selected = template[randomInInterval(rand, 0, template.length - 1)];
 		Matcher m = institutionCodeTemplatePattern.matcher(selected);
 		if (!m.matches()) {
@@ -200,7 +189,7 @@ public class BicRandomGenerator {
 	 */
 
 	public static CountryCode genRandomCountryCode(Random rand, boolean liveOnly) {
-		assert checkRand(rand);
+		checkRand(rand);
 		CountryCode[] all = CountryCode.values();
 		CountryCode cc;
 		do {
@@ -221,7 +210,7 @@ public class BicRandomGenerator {
 	 */
 
 	public static Bic genRandomBic(Random rand, String institution, CountryCode cc, String location, String branch) {
-		assert checkRand(rand);
+		checkRand(rand);
 		// Do not trim/uppercase passed values. should we?
 		String institutionHere = (institution != null ? institution : genRandomInstitutionCode(rand, new String[]{"_"}));
 		String ccHere = (cc != null ? cc : genRandomCountryCode(rand, true)).name();
