@@ -24,8 +24,8 @@ public class BicFormatException extends Iban4jException {
 
     private static final long serialVersionUID = 1764207967955765664L;
 
-    public final BicFormatViolation formatViolation;
-    public final String moreInfo;
+    public final BicFormatViolation formatViolation; // may be null
+    public final String moreInfo; // may be null
 
     public static enum BicFormatViolation {
         UNKNOWN,
@@ -73,15 +73,5 @@ public class BicFormatException extends Iban4jException {
         this.formatViolation = violation;
         this.moreInfo = moreInfo;
     }
-
-    /**
-     * Accessor. It is recommended to just access the public field.
-     * @return the stored violation (possibly null)
-     */
-
-    public BicFormatViolation getFormatViolation() {
-        return formatViolation;
-    }
-
 
 }
