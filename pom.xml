@@ -14,7 +14,12 @@
   limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+<!-- 2017-09-10: Oracle JDK7 build on github travis breaks
+     https://github.com/travis-ci/travis-ci/issues/7884#issuecomment-308451879 -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.iban4j</groupId>
@@ -38,8 +43,8 @@
         <connection>scm:git:git@github.com:arturmkrtchyan/iban4j.git</connection>
         <developerConnection>scm:git:git@github.com:arturmkrtchyan/iban4j.git</developerConnection>
         <url>git@github.com:arturmkrtchyan/iban4j.git</url>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <developers>
         <developer>
@@ -65,7 +70,8 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <!-- 4.12 needed for code to compile -->
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -135,7 +141,7 @@
                             <!-- Sets the path to the file which contains the execution data. -->
                             <destFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</destFile>
                             <!--
-                               Sets the name of the property containing the settings
+                               Sets the displayName of the property containing the settings
                                for JaCoCo runtime agent.
                            -->
                             <propertyName>surefireArgLine</propertyName>
@@ -186,11 +192,11 @@
                     </execution>
                 </executions>
             </plugin>
-            
+
             <plugin>
-              <groupId>org.eluder.coveralls</groupId>
-              <artifactId>coveralls-maven-plugin</artifactId>
-              <version>3.0.1</version>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+                <version>3.0.1</version>
             </plugin>
 
             <!-- Generating Javadoc during verify phase -->
