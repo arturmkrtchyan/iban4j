@@ -195,13 +195,19 @@ public class CountryCodeTest {
 	}
 
 	@Test
-	public void thereMustBeLiveAndAllNonEmptySets() {
+	public void thereMustBeNonEmptySetsOfCountryCodes() {
 		assertThat(CountryCodeSets.getIban4jCodes(true).isEmpty(), is(false));
 		assertThat(CountryCodeSets.getIban4jCodes(false).isEmpty(), is(false));
 	}
 
 	@Test
-	public void unitedStatesCountryCodeMustBeMemberOfAllSets() {
+	public void thereMustBeNonEmptySetsOfCountry2LetterStrings() {
+		assertThat(CountryCodeSets.getIban4jTwoLetters(true).isEmpty(), is(false));
+		assertThat(CountryCodeSets.getIban4jTwoLetters(false).isEmpty(), is(false));
+	}
+
+	@Test
+	public void unitedStatesCountryCodeMustBeMemberOfEverySetOfCountryCodes() {
 		CountryCode ccLive = CountryCode.getByCode("US", false);
 		assertThat(ccLive.name(), equalTo("US"));
 		assertThat(ccLive.isTransitional(), is(false));
@@ -210,12 +216,66 @@ public class CountryCodeTest {
 	}
 
 	@Test
-	public void neutralTerritoriesCountryCodeMustNotBeMemberOfAllSets() {
+	public void unitedStatesCountryCodeMustBeMemberOfEverySetOf2LetterStrings() {
+		CountryCode ccLive = CountryCode.getByCode("US", false);
+		assertThat(ccLive.name(), equalTo("US"));
+		assertThat(ccLive.isTransitional(), is(false));
+		assertThat(CountryCodeSets.getIban4jTwoLetters(true), hasItem(ccLive.name()));
+		assertThat(CountryCodeSets.getIban4jTwoLetters(false), hasItem(ccLive.name()));
+	}
+
+	@Test
+	public void neutralTerritoriesCountryCodeMustNotBeMemberOfEverySetOfCountryCodes() {
 		CountryCode ccTrans = CountryCode.getByCode("NT", false);
 		assertThat(ccTrans.name(), equalTo("NT"));
 		assertThat(ccTrans.isTransitional(), is(true));
 		assertThat(CountryCodeSets.getIban4jCodes(true), not(hasItem(ccTrans)));
 		assertThat(CountryCodeSets.getIban4jCodes(false), hasItem(ccTrans));
+	}
+
+	@Test
+	public void neutralTerritoriesCountryCodeMustNotBeMemberOfEverySetOf2LetterStrings() {
+		CountryCode ccTrans = CountryCode.getByCode("NT", false);
+		assertThat(ccTrans.name(), equalTo("NT"));
+		assertThat(ccTrans.isTransitional(), is(true));
+		assertThat(CountryCodeSets.getIban4jTwoLetters(true), not(hasItem(ccTrans.name())));
+		assertThat(CountryCodeSets.getIban4jTwoLetters(false), hasItem(ccTrans.name()));
+	}
+
+	@Test
+	public void startOfTransitionalPeriodSetIffTransitional() {
+		for (CountryCode cc : CountryCode.values()) {
+			assertTrue(cc.isTransitional() == (cc.getStartOfTransitionalPeriod()!=null));
+		}
+	}
+
+	@Test
+	public void createYMtwoWays() {
+		for (int i=1;i<=12;i++) {
+			CountryCode.YM ym1 = new CountryCode.YM("1999-" + i);
+			CountryCode.YM ym2 = new CountryCode.YM(1999, i);
+			assertTrue(ym1.toString().equals(ym2.toString()));
+		}
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void createBadYm1() {
+		new CountryCode.YM(1999,0);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void createBadYm2() {
+		new CountryCode.YM(1999,13);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void createBadYm3() {
+		new CountryCode.YM(0,11);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void createBadYm4() {
+		new CountryCode.YM("jojo");
 	}
 
 }

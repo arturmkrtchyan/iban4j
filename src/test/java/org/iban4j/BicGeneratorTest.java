@@ -64,12 +64,8 @@ public class BicGeneratorTest {
 		System.out.println("Generated " + limit + " random BICs in " + (end-start) + " ms");
 	}
 
-	public void passesRegex1() {
-		assertTrue(Bic.passesRegex("DEUTDEFF500"));
-		assertTrue(Bic.passesRegex("DEUTDEFF"));
-		assertTrue(Bic.passesRegex("DEUTDEFFXXX"));
-		assertFalse(Bic.passesRegex(" DEUTDEFF500 "));
-		assertFalse(Bic.passesRegex(""));
-		assertFalse(Bic.passesRegex("XXX"));
+	@Test(expected = IllegalArgumentException.class)
+	public void badArguments() {
+		Bic res = BicRandomGenerator.genRandomBic(null,"MUMU",CountryCode.LU,"MI","");
 	}
 }

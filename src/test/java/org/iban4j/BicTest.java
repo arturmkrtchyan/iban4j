@@ -7,8 +7,8 @@ import org.junit.rules.ExpectedException;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 
 /**
  * Run various tests on the Bic class.
@@ -102,6 +102,71 @@ public class BicTest {
 		Bic bic = new Bic("DEUTDEFF500");
 
 		assertThat(bic.toString(), is(equalTo("DEUTDEFF500")));
+	}
+
+	@Test
+	public void passesRegex1() {
+		assertTrue(Bic.passesRegex("DEUTDEFF500"));
+		assertTrue(Bic.passesRegex("DEUTDEFF"));
+		assertTrue(Bic.passesRegex("DEUTDEFFXXX"));
+		assertFalse(Bic.passesRegex(" DEUTDEFF500 "));
+		assertFalse(Bic.passesRegex(""));
+		assertFalse(Bic.passesRegex("XXX"));
+	}
+
+	@Test(expected = BicFormatException.class)
+	public void buildBadBic1() {
+		new Bic("deutDEFFXXX");
+	}
+
+	@Test(expected = BicFormatException.class)
+	public void buildBadBic2() {
+		new Bic("DEUTdeFFXXX");
+	}
+
+	@Test(expected = BicFormatException.class)
+	public void buildBadBic3() {
+		new Bic("DEUTDEffXXX");
+	}
+
+	@Test(expected = BicFormatException.class)
+	public void buildBadBic4() {
+		new Bic("DEUTDEFFxxx");
+	}
+
+	@Test(expected = BicFormatException.class)
+	public void buildBadBic5() {
+		new Bic("???DEFFXXX");
+	}
+
+	@Test(expected = UnsupportedCountryException.class)
+	public void buildBadBic6() {
+		new Bic("DEUT??FFXXX");
+	}
+
+	@Test(expected = BicFormatException.class)
+	public void buildBadBic7() {
+		new Bic("DEUTDE??XXX");
+	}
+
+	@Test(expected = BicFormatException.class)
+	public void buildBadBic8() {
+		new Bic("DEUTDEFF???");
+	}
+
+	@Test(expected = BicFormatException.class)
+	public void buildBadBic9Subtle() {
+		new Bic("DEUTDE09XXX");
+	}
+
+	@Test(expected = BicFormatException.class)
+	public void buildBadBic10Subtle() {
+		new Bic("DEUTDE19XXX");
+	}
+
+	@Test(expected = BicFormatException.class)
+	public void buildBadBic11Subtle() {
+		new Bic("DEUTDE2OXXX");
 	}
 
 }
