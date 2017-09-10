@@ -126,7 +126,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.2.201409121644</version>
+                <version>0.7.9</version>
                 <executions>
                     <!--
                        Prepares the property pointing to the JaCoCo runtime agent which
@@ -245,10 +245,11 @@
             </plugin>
 
             <!-- Checking a project against API signatures  -->
+            <!-- Why do we check against Java5 ??? -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>animal-sniffer-maven-plugin</artifactId>
-                <version>1.11</version>
+                <version>1.16</version>
                 <executions>
                     <execution>
                         <id>check-java-api</id>
@@ -260,7 +261,7 @@
                             <signature>
                                 <groupId>org.codehaus.mojo.signature
                                 </groupId>
-                                <artifactId>${jdk5Signature}</artifactId>
+                                <artifactId>java15</artifactId>
                                 <version>1.0</version>
                             </signature>
                         </configuration>
