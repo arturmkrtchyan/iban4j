@@ -317,25 +317,35 @@ public enum CountryCode {
 		public final int month; // ranges from 1 to 12
 		public final String txt;
 
-		private final Pattern pat = Pattern.compile("^(\\d{4})-(\\d{2})$");
+		private final Pattern pat = Pattern.compile("^(\\d{4})-(\\d{1,2})$");
+
+		private void verify(int year, int month) {
+			if (year < 1800 || 10000 <= year) {
+				throw new IllegalArgumentException("Year '" + year + "' is out of range");
+			}
+			if (month < 1 || 12 < month) {
+				throw new IllegalArgumentException("Month '" + month + "' is out of range");
+			}
+		}
+
 
 		public YM(int year, int month) {
+			verify(year, month);
 			this.year = year;
 			this.month = month;
 			this.txt = String.format("%04d-%02d", year, month);
-			assert this.year > 1900;
-			assert 1 <= this.month && this.month <= 12;
 		}
 
 		public YM(String expr) {
 			Matcher m = pat.matcher(expr);
 			boolean ok = m.lookingAt();
-			assert ok;
+			if (!ok) {
+				throw new IllegalArgumentException("Cannot parse '" + expr + "'");
+			}
 			this.year = Integer.valueOf(m.group(1));
 			this.month = Integer.valueOf(m.group(2));
-			this.txt = expr;
-			assert this.year > 1900;
-			assert 1 <= this.month && this.month <= 12;
+			this.txt = String.format("%04d-%02d", year, month);
+			verify(this.year, this.month);
 		}
 
 		public String toString() {
@@ -540,7 +550,7 @@ public enum CountryCode {
 		buf.append(",");
 		buf.append(this.getAlpha3());
 		buf.append(",");
-		buf.append(this.getName());
+		buf.append(this.getDisplayName());
 		if (isTransitional()) {
 			buf.append(",Transitional from ");
 			buf.append(tpstart);
