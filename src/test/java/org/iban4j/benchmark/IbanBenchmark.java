@@ -20,7 +20,6 @@ public class IbanBenchmark {
 
     @BenchmarkOptions(benchmarkRounds = 3, warmupRounds = 1)
     @Test
-    @Ignore
     public void ibanConstruction() {
 
         for(int i = 0; i < LOOPS_COUNT; i++) {
@@ -34,7 +33,6 @@ public class IbanBenchmark {
 
     @BenchmarkOptions(benchmarkRounds = 3, warmupRounds = 1)
     @Test
-    @Ignore
     public void ibanValidation() {
 
         for(int i = 0; i < LOOPS_COUNT; i++) {
