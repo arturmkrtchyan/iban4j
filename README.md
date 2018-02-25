@@ -75,7 +75,7 @@ A Java library for generation and validation of the International Bank Account N
 
 - http://en.wikipedia.org/wiki/ISO_13616
 - http://en.wikipedia.org/wiki/ISO_9362
-- http://www.swift.com/dsp/resources/documents/IBAN_Registry.pdf
+- https://www.ecb.europa.eu/paym/retpaym/paymint/sepa/shared/pdf/iban_registry.pdf
 
 ## License
 Copyright 2015 Artur Mkrtchyan.
