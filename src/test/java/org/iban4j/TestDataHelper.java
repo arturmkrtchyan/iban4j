@@ -276,6 +276,13 @@ final class TestDataHelper {
                         .nationalCheckDigit("51")
                         .build(), "ME25505000012345678951"},
                 {new Iban.Builder()
+                        .countryCode(CountryCode.MG)
+                        .bankCode("91389")
+                        .branchCode("12738")
+                        .accountNumber("36945544212")
+                        .nationalCheckDigit("12")
+                        .build(), "MG5791389127383694554421212"},
+                {new Iban.Builder()
                         .countryCode(CountryCode.NL)
                         .bankCode("ABNA")
                         .accountNumber("0417164300")
