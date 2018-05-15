@@ -15,6 +15,7 @@
  */
 package org.iban4j;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Random;
 
@@ -29,7 +30,7 @@ import static org.iban4j.IbanFormatException.IbanFormatViolation.*;
  *
  * <a href="http://en.wikipedia.org/wiki/ISO_13616">ISO_13616</a>.
  */
-public final class Iban {
+public final class Iban implements Serializable {
 
     static final String DEFAULT_CHECK_DIGIT = "00";
 
