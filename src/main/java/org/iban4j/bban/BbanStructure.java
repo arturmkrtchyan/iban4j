@@ -229,7 +229,8 @@ public class BbanStructure {
         structures.put(CountryCode.KZ,
                 new BbanStructure(
                         BbanStructureEntry.bankCode(3, 'n'),
-                        BbanStructureEntry.accountNumber(13, 'c')));
+                        BbanStructureEntry.branchCode(2, 'c'),
+                        BbanStructureEntry.accountNumber(11, 'c')));
 
         structures.put(CountryCode.KW,
                 new BbanStructure(

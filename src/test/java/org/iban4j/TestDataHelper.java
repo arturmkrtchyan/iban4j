@@ -200,7 +200,8 @@ final class TestDataHelper {
                 {new Iban.Builder()
                         .countryCode(CountryCode.KZ)
                         .bankCode("125")
-                        .accountNumber("KZT5004100100")
+                        .branchCode("KZT")
+                        .accountNumber("5004100100")
                         .build(), "KZ86125KZT5004100100"},
                 {new Iban.Builder()
                         .countryCode(CountryCode.KW)
