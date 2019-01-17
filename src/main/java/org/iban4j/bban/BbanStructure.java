@@ -15,9 +15,13 @@
  */
 package org.iban4j.bban;
 
-import org.iban4j.CountryCode;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.List;
 
-import java.util.*;
+import org.iban4j.CountryCode;
 
 
 /**
@@ -208,6 +212,12 @@ public class BbanStructure {
                         BbanStructureEntry.branchCode(3, 'n'),
                         BbanStructureEntry.accountNumber(13, 'n')));
 
+        structures.put(CountryCode.IM,
+                new BbanStructure(
+                        BbanStructureEntry.bankCode(4, 'a'),
+                        BbanStructureEntry.branchCode(6, 'n'),
+                        BbanStructureEntry.accountNumber(8, 'n')));
+
         structures.put(CountryCode.IR,
                 new BbanStructure(
                         BbanStructureEntry.bankCode(3, 'n'),
@@ -220,6 +230,12 @@ public class BbanStructure {
                         BbanStructureEntry.branchCode(5, 'n'),
                         BbanStructureEntry.accountNumber(12, 'c')));
 
+        structures.put(CountryCode.JE,
+                new BbanStructure(
+                        BbanStructureEntry.bankCode(4, 'a'),
+                        BbanStructureEntry.branchCode(6, 'n'),
+                        BbanStructureEntry.accountNumber(8, 'n')));
+        
         structures.put(CountryCode.JO,
                 new BbanStructure(
                         BbanStructureEntry.bankCode(4, 'a'),
