@@ -1,4 +1,4 @@
-iban4j 
+iban4j with better title
 ======
 
 [![Build Status](https://api.travis-ci.org/repositories/arturmkrtchyan/iban4j.png)](https://travis-ci.org/arturmkrtchyan/iban4j) [![Coverage Status](https://img.shields.io/coveralls/arturmkrtchyan/iban4j.svg)](https://coveralls.io/r/arturmkrtchyan/iban4j) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.iban4j/iban4j/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.iban4j/iban4j)
@@ -32,7 +32,7 @@ A Java library for generation and validation of the International Bank Account N
                  .bankCode("19043")
                  .buildRandom();
 
- // How to validate Iban 
+ // How to validate Iban
  try {
      IbanUtil.validate("AT611904300234573201");
      IbanUtil.validate("DE89 3704 0044 0532 0130 00", IbanFormat.Default);
@@ -60,7 +60,7 @@ A Java library for generation and validation of the International Bank Account N
  }
 ```
 
-#### Maven dependency: 
+#### Maven dependency:
 ```
 <dependency>
   <groupId>org.iban4j</groupId>
