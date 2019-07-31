@@ -12,9 +12,7 @@ import org.junit.runners.Parameterized;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.*;
 
 import static org.junit.Assert.fail;
 
@@ -22,9 +20,12 @@ import static org.junit.Assert.fail;
 public class RegistryTest {
 
     private final static Registry registry;
-    private static String ignoredListRegistryFormatExampleMethod [] = {"IQ", "SC", "CR", "LC", "ST", "BY"};
-    private static String ignoredListCountryCodeMethod [] = {"IR"};
-    private static String ignoredListcountryBbanStructureMethod [] = {"CR", "IR", "PK", "TN", "MU"};
+
+    private static Set<String> ignoredListRegistryFormatExampleMethod = new HashSet<String>(Arrays.asList("IQ", "SC", "CR", "LC", "ST", "BY"));
+
+    private static Set<String> ignoredListCountryCodeMethod= new HashSet<String>(Arrays.asList("IR"));
+
+    private static Set<String> ignoredListcountryBbanStructureMethod = new HashSet<String>(Arrays.asList("CR", "IR", "PK", "TN", "MU"));
 
     static {
         ClassLoader classLoader = RegistryTest.class.getClassLoader();
@@ -50,6 +51,10 @@ public class RegistryTest {
         public static Collection<Object[]> registryFormats() {
             ArrayList<Object[]> params = new ArrayList<Object[]>();
             for (RegistryFormat registryFormat : registry.getRegistryFormats()) {
+                if(ignoredListRegistryFormatExampleMethod.contains(registryFormat.getCountryCode())){
+                    System.out.println(registryFormat.getCountryCode() + " ignored as part of the Parameterized tests");
+                    continue;
+                }
                 params.add(new Object[]{registryFormat});
             }
             return params;
@@ -58,10 +63,6 @@ public class RegistryTest {
 
         @Test
         public void registryFormatExample() {
-
-            if(Arrays.asList(ignoredListRegistryFormatExampleMethod).contains(registryFormat.getCountryCode())) {
-                return;
-            }
 
             try {
                 Iban.valueOf(registryFormat.getIbanElectronicFormatExample());
@@ -94,6 +95,10 @@ public class RegistryTest {
         public static Collection<Object[]> iban4jCountryCodes() {
             ArrayList<Object[]> params = new ArrayList<Object[]>();
             for (CountryCode countryCode : CountryCode.values()) {
+                if(ignoredListCountryCodeMethod.contains(countryCode.getAlpha2())) {
+                    System.out.println(countryCode.getAlpha2() + " ignored as part of the Parameterized tests");
+                    continue;
+                }
                 BbanStructure bbanStructure = BbanStructure.forCountry(countryCode);
                 if (bbanStructure != null) {
                     params.add(new Object[]{countryCode});
@@ -105,10 +110,6 @@ public class RegistryTest {
         @Test
         public void countryCode() {
 
-            if(Arrays.asList(ignoredListCountryCodeMethod).contains(countryCode.getAlpha2())) {
-                return;
-            }
-
             RegistryFormat registryFormat = registry.getRegistryFormat(countryCode.getAlpha2());
             if (registryFormat == null) {
                 fail(String.format(
@@ -118,20 +119,42 @@ public class RegistryTest {
                 ));
             }
         }
+    }
+
+    @RunWith(Parameterized.class)
+    public static class Iban4jSupportedByButNotInRegistry {
+
+        private final CountryCode countryCode;
+
+        public Iban4jSupportedByButNotInRegistry(CountryCode countryCode) {
+            this.countryCode = countryCode;
+        }
+
+        @Parameterized.Parameters
+        public static Collection<Object[]> iban4jCountryCodes() {
+            ArrayList<Object[]> params = new ArrayList<Object[]>();
+            for (CountryCode countryCode : CountryCode.values()) {
+                if(ignoredListcountryBbanStructureMethod.contains(countryCode.getAlpha2())) {
+                    System.out.println(countryCode.getAlpha2() + " ignored as part of the Parameterized tests");
+                    continue;
+                }
+                BbanStructure bbanStructure = BbanStructure.forCountry(countryCode);
+                if (bbanStructure != null) {
+                    params.add(new Object[]{countryCode});
+                }
+            }
+            return params;
+        }
 
         @Test
         public void countryBbanStructure() {
 
-            if(Arrays.asList(ignoredListcountryBbanStructureMethod).contains(countryCode.getAlpha2())) {
-                return;
-            }
-
             RegistryFormat registryFormat = registry.getRegistryFormat(countryCode.getAlpha2());
             if (registryFormat == null) {
                 fail(String.format(
-                    "%s (%s) country code is supported by iban4j but not in the IBAN registry",
-                    countryCode.getName(),
-                    countryCode.getAlpha2()
+                        "%s (%s) country code is supported by iban4j but not in the IBAN registry",
+                        countryCode.getName(),
+                        countryCode.getAlpha2()
                 ));
             }
 
@@ -142,11 +165,11 @@ public class RegistryTest {
 
             if (!registryPattern.getRegexPattern().matcher(iban.getBban()).matches()) {
                 fail(String.format(
-                    "%s (%s) random iban4j bban '%s' for country code did not match registry pattern '%s'",
-                    countryCode.getName(),
-                    countryCode.getAlpha2(),
-                    iban.getBban(),
-                    registryFormat.getBbanStructure()
+                        "%s (%s) random iban4j bban '%s' for country code did not match registry pattern '%s'",
+                        countryCode.getName(),
+                        countryCode.getAlpha2(),
+                        iban.getBban(),
+                        registryFormat.getBbanStructure()
                 ));
             }
         }
