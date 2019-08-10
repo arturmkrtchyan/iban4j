@@ -299,7 +299,39 @@
                 <skipSigning>false</skipSigning>
             </properties>
         </profile>
-
+        <profile>
+            <id>nexus</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <distributionManagement>
+                <repository>
+                    <id>central</id>
+                    <name>maven-nerd-releases</name>
+                    <url>http://repos.radical.systems/repository/libs-release-private/</url>
+                </repository>
+                <snapshotRepository>
+                    <id>snapshots</id>
+                    <name>maven-nerd-snapshots</name>
+                    <url>http://repos.radical.systems/repository/libs-snapshot-private/</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+        <profile>
+            <id>artifactory</id>
+            <distributionManagement>
+                <repository>
+                    <id>central</id>
+                    <name>maven-nerd-releases</name>
+                    <url>http://maven.radical.systems/libs-release-private/</url>
+                </repository>
+                <snapshotRepository>
+                    <id>snapshots</id>
+                    <name>maven-nerd-snapshots</name>
+                    <url>http://maven.radical.systems/libs-snapshot-private/</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
     </profiles>
 
 
