@@ -84,8 +84,9 @@ final class TestDataHelper {
                 {new Iban.Builder()
                         .countryCode(CountryCode.CR)
                         .bankCode("152")
+                        .reservedNumber("0")
                         .accountNumber("02001026284066")
-                        .build(), "CR0515202001026284066"},
+                        .build(), "CR05015202001026284066"},
                 {new Iban.Builder()
                         .countryCode(CountryCode.HR)
                         .bankCode("1001005")

@@ -91,6 +91,15 @@ public final class Iban {
     }
 
     /**
+     * Returns iban's reserved number.
+     *
+     * @return Reserved Number String
+     */
+    public String getReservedNumber() {
+        return IbanUtil.getReservedNumber(value);
+    }
+
+    /**
      * Returns iban's national check digit.
      *
      * @return nationalCheckDigit String
@@ -224,6 +233,7 @@ public final class Iban {
         private String branchCode;
         private String nationalCheckDigit;
         private String accountType;
+        private String reservedNumber;
         private String accountNumber;
         private String ownerAccountType;
         private String identificationNumber;
@@ -277,6 +287,17 @@ public final class Iban {
          */
         public Builder accountNumber(final String accountNumber) {
             this.accountNumber = accountNumber;
+            return this;
+        }
+
+        /**
+         * Sets iban's reserved number.
+         *
+         * @param reservedNumber String
+         * @return builder Builder
+         */
+        public Builder reservedNumber(final String reservedNumber) {
+            this.reservedNumber = reservedNumber;
             return this;
         }
 
@@ -415,6 +436,9 @@ public final class Iban {
                     case account_type:
                         sb.append(accountType);
                         break;
+                    case reserved_number:
+                        sb.append(reservedNumber);
+                        break;
                     case owner_account_number:
                         sb.append(ownerAccountType);
                         break;
@@ -482,6 +506,10 @@ public final class Iban {
                             accountNumber = entry.getRandom();
                         }
                         break;
+                    case reserved_number:;
+                        if(reservedNumber == null) {
+                            reservedNumber = entry.getRandom();
+                        }
                     case national_check_digit:
                         if (nationalCheckDigit == null) {
                             nationalCheckDigit = entry.getRandom();

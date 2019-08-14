@@ -25,5 +25,6 @@ public enum BbanEntryType {
         national_check_digit,
         account_type,
         owner_account_number,
-        identification_number
+        identification_number,
+        reserved_number
 }

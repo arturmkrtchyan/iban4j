@@ -21,11 +21,11 @@ public class RegistryTest {
 
     private final static Registry registry;
 
-    private static Set<String> ignoredListRegistryFormatExampleMethod = new HashSet<String>(Arrays.asList("IQ", "SC", "CR", "LC", "ST", "BY"));
+    private static Set<String> ignoredListRegistryFormatExampleMethod = new HashSet<String>(Arrays.asList("IQ", "SC", "LC", "ST", "BY"));
 
     private static Set<String> ignoredListCountryCodeMethod= new HashSet<String>(Arrays.asList("IR"));
 
-    private static Set<String> ignoredListcountryBbanStructureMethod = new HashSet<String>(Arrays.asList("CR", "IR", "PK", "TN", "MU"));
+    private static Set<String> ignoredListcountryBbanStructureMethod = new HashSet<String>(Arrays.asList("IR", "PK", "TN", "MU"));
 
     static {
         ClassLoader classLoader = RegistryTest.class.getClassLoader();

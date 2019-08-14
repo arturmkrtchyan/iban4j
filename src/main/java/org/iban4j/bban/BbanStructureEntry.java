@@ -71,6 +71,11 @@ public class BbanStructureEntry {
                 EntryCharacterType.valueOf(String.valueOf(characterType)), length);
     }
 
+    public static BbanStructureEntry reservedNumber(final int length, final char characterType) {
+        return new BbanStructureEntry(BbanEntryType.reserved_number,
+                EntryCharacterType.valueOf(String.valueOf(characterType)), length);
+    }
+
     public static BbanStructureEntry nationalCheckDigit(final int length, final char characterType) {
         return new BbanStructureEntry(BbanEntryType.national_check_digit,
                 EntryCharacterType.valueOf(String.valueOf(characterType)), length);
