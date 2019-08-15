@@ -479,6 +479,11 @@ public final class Iban {
                 throw new IbanFormatException(ACCOUNT_NUMBER_NOT_NULL,
                         "accountNumber is required; it cannot be null");
             }
+
+            if(countryCode.equals("CR") && reservedNumber != "0") {
+                throw new IbanFormatException(RESERVED_NUMBER_INCORRECT,
+                        "reserved number should be 0");
+            }
         }
 
         private void fillMissingFieldsRandomly() {
