@@ -129,9 +129,9 @@ public class IbanTest {
         public void ibanShouldReturnValidReservedNumber() {
             Iban iban = new Iban.Builder()
                     .countryCode(CountryCode.CR)
+                    .reservedNumber("0")
                     .bankCode("152")
                     .accountNumber("02001026284066")
-                    .reservedNumber("0")
                     .build();
 
             assertThat(iban.getReservedNumber(), is(equalTo("0")));

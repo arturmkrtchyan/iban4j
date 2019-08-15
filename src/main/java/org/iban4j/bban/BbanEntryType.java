@@ -19,12 +19,13 @@ package org.iban4j.bban;
  * Basic Bank Account Number Entry Types.
  */
 public enum BbanEntryType {
+        reserved_number,
         bank_code,
         branch_code,
         account_number,
         national_check_digit,
         account_type,
         owner_account_number,
-        identification_number,
-        reserved_number
+        identification_number
+
 }

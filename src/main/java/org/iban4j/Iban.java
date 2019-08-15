@@ -237,7 +237,6 @@ public final class Iban {
         private String accountNumber;
         private String ownerAccountType;
         private String identificationNumber;
-
         private final Random random = new Random();
 
         /**
@@ -372,7 +371,7 @@ public final class Iban {
                 IllegalArgumentException, UnsupportedCountryException {
 
             // null checks
-            require(countryCode, bankCode, accountNumber);
+            require(countryCode, bankCode, accountNumber, reservedNumber);
 
             // iban is formatted with default check digit.
             final String formattedIban = formatIban();
@@ -421,6 +420,9 @@ public final class Iban {
 
             for(final BbanStructureEntry entry : structure.getEntries()) {
                 switch (entry.getEntryType()) {
+                    case reserved_number:
+                        sb.append(reservedNumber);
+                        break;
                     case bank_code:
                         sb.append(bankCode);
                         break;
@@ -435,9 +437,6 @@ public final class Iban {
                         break;
                     case account_type:
                         sb.append(accountType);
-                        break;
-                    case reserved_number:
-                        sb.append(reservedNumber);
                         break;
                     case owner_account_number:
                         sb.append(ownerAccountType);
@@ -463,7 +462,8 @@ public final class Iban {
 
         private void require(final CountryCode countryCode,
                              final String bankCode,
-                             final String accountNumber)
+                             final String accountNumber,
+                             final String reservedNumber)
                 throws IbanFormatException {
             if(countryCode == null) {
                 throw new IbanFormatException(COUNTRY_CODE_NOT_NULL,
