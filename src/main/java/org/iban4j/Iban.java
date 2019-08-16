@@ -95,8 +95,8 @@ public final class Iban {
      *
      * @return Reserved Number String
      */
-    public String getReservedNumber() {
-        return IbanUtil.getReservedNumber(value);
+    public String getReserved() {
+        return IbanUtil.getReserved(value);
     }
 
     /**
@@ -233,7 +233,6 @@ public final class Iban {
         private String branchCode;
         private String nationalCheckDigit;
         private String accountType;
-        private String reservedNumber;
         private String accountNumber;
         private String ownerAccountType;
         private String identificationNumber;
@@ -286,17 +285,6 @@ public final class Iban {
          */
         public Builder accountNumber(final String accountNumber) {
             this.accountNumber = accountNumber;
-            return this;
-        }
-
-        /**
-         * Sets iban's reserved number.
-         *
-         * @param reservedNumber String
-         * @return builder Builder
-         */
-        public Builder reservedNumber(final String reservedNumber) {
-            this.reservedNumber = reservedNumber;
             return this;
         }
 
@@ -371,7 +359,7 @@ public final class Iban {
                 IllegalArgumentException, UnsupportedCountryException {
 
             // null checks
-            require(countryCode, bankCode, accountNumber, reservedNumber);
+            require(countryCode, bankCode, accountNumber);
 
             // iban is formatted with default check digit.
             final String formattedIban = formatIban();
@@ -420,8 +408,8 @@ public final class Iban {
 
             for(final BbanStructureEntry entry : structure.getEntries()) {
                 switch (entry.getEntryType()) {
-                    case reserved_number:
-                        sb.append(reservedNumber);
+                    case reserved:
+                        sb.append(entry.getReserved());
                         break;
                     case bank_code:
                         sb.append(bankCode);
@@ -462,8 +450,7 @@ public final class Iban {
 
         private void require(final CountryCode countryCode,
                              final String bankCode,
-                             final String accountNumber,
-                             final String reservedNumber)
+                             final String accountNumber)
                 throws IbanFormatException {
             if(countryCode == null) {
                 throw new IbanFormatException(COUNTRY_CODE_NOT_NULL,
@@ -478,11 +465,6 @@ public final class Iban {
             if(accountNumber == null) {
                 throw new IbanFormatException(ACCOUNT_NUMBER_NOT_NULL,
                         "accountNumber is required; it cannot be null");
-            }
-
-            if(countryCode.equals("CR") && reservedNumber != "0") {
-                throw new IbanFormatException(RESERVED_NUMBER_INCORRECT,
-                        "reserved number should be 0");
             }
         }
 
@@ -511,10 +493,6 @@ public final class Iban {
                             accountNumber = entry.getRandom();
                         }
                         break;
-                    case reserved_number:;
-                        if(reservedNumber == null) {
-                            reservedNumber = entry.getRandom();
-                        }
                     case national_check_digit:
                         if (nationalCheckDigit == null) {
                             nationalCheckDigit = entry.getRandom();
