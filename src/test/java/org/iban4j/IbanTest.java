@@ -126,6 +126,17 @@ public class IbanTest {
         }
 
         @Test
+        public void ibanShouldReturnValidReservedNumber() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.CR)
+                    .bankCode("152")
+                    .accountNumber("02001026284066")
+                    .build();
+
+            assertThat(iban.getReserved(), is(equalTo("0")));
+        }
+
+        @Test
         public void ibanShouldReturnValidAccountNumber() {
             Iban iban = new Iban.Builder()
                     .countryCode(CountryCode.AT)
@@ -419,6 +430,14 @@ public class IbanTest {
                     .accountNumber("12345678901")
                     .buildRandom();
             assertThat(iban.getAccountNumber(), is(equalTo("12345678901")));
+        }
+
+        @Test
+        public void ibanContructionRandomDoesNotOverwriteReservedNumber() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.CR)
+                    .buildRandom();
+            assertThat(iban.getReserved(), is(equalTo("0")));
         }
 
         @Test

@@ -199,6 +199,16 @@ public final class IbanUtil {
     }
 
     /**
+     * Returns iban's reserved.
+     *
+     * @param iban String
+     * @return bankCode String
+     */
+    public static String getReserved(final String iban) {
+        return extractBbanEntry(iban, BbanEntryType.reserved);
+    }
+
+    /**
      * Returns iban's branch code.
      *
      * @param iban String

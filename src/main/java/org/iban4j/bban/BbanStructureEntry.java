@@ -26,6 +26,7 @@ public class BbanStructureEntry {
 
     private final BbanEntryType entryType;
     private final EntryCharacterType characterType;
+    private final String reserved;
     private final int length;
 
     private static Map<EntryCharacterType, char[]> charByCharacterType;
@@ -53,6 +54,17 @@ public class BbanStructureEntry {
                        final int length) {
         this.entryType = entryType;
         this.characterType = characterType;
+        this.reserved = null;
+        this.length = length;
+    }
+
+    private BbanStructureEntry(final BbanEntryType entryType,
+                       final EntryCharacterType characterType,
+                       final String reserved,
+                       final int length) {
+        this.entryType = entryType;
+        this.characterType = characterType;
+        this.reserved = reserved;
         this.length = length;
     }
 
@@ -69,6 +81,11 @@ public class BbanStructureEntry {
     public static BbanStructureEntry accountNumber(final int length, final char characterType) {
         return new BbanStructureEntry(BbanEntryType.account_number,
                 EntryCharacterType.valueOf(String.valueOf(characterType)), length);
+    }
+
+    public static BbanStructureEntry reserved(final String characters) {
+        return new BbanStructureEntry(BbanEntryType.reserved,
+                EntryCharacterType.r, characters, characters.length());
     }
 
     public static BbanStructureEntry nationalCheckDigit(final int length, final char characterType) {
@@ -99,6 +116,10 @@ public class BbanStructureEntry {
         return characterType;
     }
 
+    public String getReserved() {
+        return reserved;
+    }
+
     public int getLength() {
         return length;
     }
@@ -106,7 +127,8 @@ public class BbanStructureEntry {
     public enum EntryCharacterType {
         n,  // Digits (numeric characters 0 to 9 only)
         a,  // Upper case letters (alphabetic characters A-Z only)
-        c  // upper and lower case alphanumeric characters (A-Z, a-z and 0-9)
+        c,  // upper and lower case alphanumeric characters (A-Z, a-z and 0-9)
+        r   // reserved characters
     }
 
     public String getRandom() {

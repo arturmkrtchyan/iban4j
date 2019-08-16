@@ -91,6 +91,15 @@ public final class Iban {
     }
 
     /**
+     * Returns iban's reserved number.
+     *
+     * @return Reserved Number String
+     */
+    public String getReserved() {
+        return IbanUtil.getReserved(value);
+    }
+
+    /**
      * Returns iban's national check digit.
      *
      * @return nationalCheckDigit String
@@ -227,7 +236,6 @@ public final class Iban {
         private String accountNumber;
         private String ownerAccountType;
         private String identificationNumber;
-
         private final Random random = new Random();
 
         /**
@@ -400,6 +408,9 @@ public final class Iban {
 
             for(final BbanStructureEntry entry : structure.getEntries()) {
                 switch (entry.getEntryType()) {
+                    case reserved:
+                        sb.append(entry.getReserved());
+                        break;
                     case bank_code:
                         sb.append(bankCode);
                         break;
