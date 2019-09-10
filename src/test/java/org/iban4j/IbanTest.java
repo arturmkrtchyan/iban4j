@@ -20,11 +20,10 @@ import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.util.Arrays;
 import java.util.Collection;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThat;
 
@@ -401,6 +400,15 @@ public class IbanTest {
 
             iban = Iban.random(CountryCode.AT);
             assertThat(iban.getCountryCode(), is(equalTo(CountryCode.AT)));
+        }
+
+        @Test
+        public void ibanContructionRandomAcctRetainsSpecifiedCountries() {
+            Iban iban = new Iban.Builder().countryCodes(Arrays.asList(CountryCode.AT, CountryCode.NL)).buildRandom();
+            assertThat(iban.getCountryCode(), either(equalTo(CountryCode.AT)).or(equalTo(CountryCode.NL)));
+
+            iban = Iban.random(Arrays.asList(CountryCode.NL, CountryCode.AT));
+            assertThat(iban.getCountryCode(), either(equalTo(CountryCode.AT)).or(equalTo(CountryCode.NL)));
         }
 
         @Test

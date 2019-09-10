@@ -201,6 +201,10 @@ public final class Iban {
         return new Iban.Builder().countryCode(cc).buildRandom();
     }
 
+    public static Iban random(List<CountryCode> countryCodes) {
+        return new Iban.Builder().countryCodes(countryCodes).buildRandom();
+    }
+
     @Override
     public boolean equals(final Object obj) {
         if (obj instanceof Iban) {
@@ -220,6 +224,7 @@ public final class Iban {
     public final static class Builder {
 
         private CountryCode countryCode;
+        private List<CountryCode> countryCodes;
         private String bankCode;
         private String branchCode;
         private String nationalCheckDigit;
@@ -244,6 +249,17 @@ public final class Iban {
          */
         public Builder countryCode(final CountryCode countryCode) {
             this.countryCode = countryCode;
+            return this;
+        }
+
+        /**
+         * Sets iban's country codes for generation.
+         *
+         * @param countryCodes CountryCodes
+         * @return builder Builder
+         */
+        public Builder countryCodes(final List<CountryCode> countryCodes) {
+            this.countryCodes = countryCodes;
             return this;
         }
 
@@ -379,8 +395,14 @@ public final class Iban {
         public Iban buildRandom() throws IbanFormatException,
                 IllegalArgumentException, UnsupportedCountryException {
             if (countryCode == null) {
-                List<CountryCode> countryCodes = BbanStructure.supportedCountries();
-                this.countryCode(countryCodes.get(random.nextInt(countryCodes.size())));
+                List<CountryCode> countryCodesToChooseFrom;
+                if (this.countryCodes == null || this.countryCodes.isEmpty()) {
+                    countryCodesToChooseFrom = BbanStructure.supportedCountries();
+                }
+                else {
+                    countryCodesToChooseFrom = this.countryCodes;
+                }
+                this.countryCode(countryCodesToChooseFrom.get(random.nextInt(countryCodesToChooseFrom.size())));
             }
             fillMissingFieldsRandomly();
             return build();
