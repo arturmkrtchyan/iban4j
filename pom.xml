@@ -20,7 +20,7 @@
 
     <groupId>com.github.paylib-services</groupId>
     <artifactId>iban4j</artifactId>
-    <version>3.2.2-SNAPSHOT</version>
+    <version>3.2.4-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>iban4j</name>
