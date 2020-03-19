@@ -28,4 +28,4 @@ jobs:
           MAVEN_USERNAME: 'Paylib-Services'
           MAVEN_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - run: mvn --batch-mode versions:set -DnextSnapshot=true
-      - run: git add pom.xml && git commit -m 'Prepare next release' && git push origin HEAD:support/icdc
+      - run: git add pom.xml && git commit -m 'Prepare next release' && git push origin HEAD:master
