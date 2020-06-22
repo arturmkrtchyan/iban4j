@@ -71,6 +71,15 @@ public final class Bic {
     }
 
     /**
+     * Returns the Bic8 code from the Bic.
+     *
+     * @return string representation of Bic8 code.
+     */
+    public String getBic8() {
+        return getBankCode() + getCountryCode() + getLocationCode();
+    }
+
+    /**
      * Returns the branch code from the Bic.
      *
      * @return string representation of Bic's branch code, null if Bic has no branch code.
