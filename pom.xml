@@ -58,7 +58,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdkVersion>1.8</jdkVersion>
-        <jdk6Signature>java18</jdk6Signature>
+        <jdk8Signature>java18</jdk8Signature>
         <skipSigning>true</skipSigning>
     </properties>
 
@@ -243,7 +243,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>animal-sniffer-maven-plugin</artifactId>
-                <version>1.11</version>
+                <version>1.19</version>
                 <executions>
                     <execution>
                         <id>check-java-api</id>
@@ -255,7 +255,7 @@
                             <signature>
                                 <groupId>org.codehaus.mojo.signature
                                 </groupId>
-                                <artifactId>${jdk6Signature}</artifactId>
+                                <artifactId>${jdk8Signature}</artifactId>
                                 <version>1.0</version>
                             </signature>
                         </configuration>
