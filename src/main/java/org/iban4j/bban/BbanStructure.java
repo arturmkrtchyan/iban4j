@@ -534,6 +534,20 @@ public class BbanStructure {
         return structures.get(countryCode);
     }
 
+    /**
+     * Checks whether national Check digit is mandatory for specific country
+     *
+     * @param countryCode the country code
+     * @return true/false
+     */
+    public static boolean hasNationalCheckDigit(final CountryCode countryCode) {
+        Optional<BbanStructure> bbanStructure = Optional.ofNullable(forCountry(countryCode));
+        return bbanStructure.map(structure -> structure.getEntries()
+                .stream()
+                .anyMatch(e -> BbanEntryType.national_check_digit.equals(e.getEntryType())))
+                .orElse(false);
+    }
+
     public List<BbanStructureEntry> getEntries() {
         return Collections.unmodifiableList(Arrays.asList(entries));
     }

@@ -416,5 +416,14 @@ public class IbanTest {
                     .buildRandom();
             assertThat(iban.getIdentificationNumber(), is(equalTo("1234567890")));
         }
+
+        @Test(expected = IbanFormatException.class)
+        public void ibanConstructionWithLackingNationalCheckDigitShouldThrowExceptionIfValidationRequested() {
+            new Iban.Builder()
+                    .countryCode(CountryCode.NO)
+                    .bankCode("4435")
+                    .accountNumber("0343730")
+                    .build(true);
+        }
     }
 }
