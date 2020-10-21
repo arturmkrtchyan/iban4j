@@ -19,8 +19,6 @@ import org.iban4j.bban.BbanEntryType;
 import org.iban4j.bban.BbanStructure;
 import org.iban4j.bban.BbanStructureEntry;
 
-import java.util.Random;
-
 import static org.iban4j.IbanFormatException.IbanFormatViolation.*;
 /**
  * Iban Utility Class
@@ -39,8 +37,6 @@ public final class IbanUtil {
     private static final String ASSERT_UPPER_LETTERS = "[%s] must contain only upper case letters.";
     private static final String ASSERT_DIGITS_AND_LETTERS = "[%s] must contain only digits or letters.";
     private static final String ASSERT_DIGITS = "[%s] must contain only digits.";
-
-    private static final Random RANDOM = new Random();
 
     private IbanUtil() {
     }
@@ -88,6 +84,33 @@ public final class IbanUtil {
             throw e;
         } catch (RuntimeException e) {
             throw new IbanFormatException(UNKNOWN, e.getMessage());
+        }
+    }
+
+    /**
+     * Validates iban.
+     *
+     * @param iban to be validated.
+     * @param format to be used in validation.
+     * @throws IbanFormatException if iban is invalid.
+     *         UnsupportedCountryException if iban's country is not supported.
+     *         InvalidCheckDigitException if iban has invalid check digit.
+     */
+    public static void validate(final String iban, final IbanFormat format) throws IbanFormatException,
+            InvalidCheckDigitException, UnsupportedCountryException {
+        switch (format) {
+            case Default:
+                final String ibanWithoutSpaces = iban.replace(" ", "");
+                validate(ibanWithoutSpaces);
+                if(!toFormattedString(ibanWithoutSpaces).equals(iban)) {
+                    throw new IbanFormatException(IBAN_FORMATTING,
+                            String.format("Iban must be formatted using 4 characters and space combination. " +
+                                    "Instead of [%s]", iban));
+                }
+                break;
+            default:
+                validate(iban);
+                break;
         }
     }
 
@@ -175,23 +198,6 @@ public final class IbanUtil {
         return extractBbanEntry(iban, BbanEntryType.bank_code);
     }
 
-    protected static Iban randomIban() {
-        return randomIban(randomCountryCode());
-    }
-
-    protected static Iban randomIban(CountryCode countryCode) {
-        final BbanStructure bbanStructure = getBbanStructure(countryCode);
-
-        // TODO implement
-        return null;
-    }
-
-    static CountryCode randomCountryCode() {
-        final CountryCode[] countryCodes = CountryCode.values();
-        final int randomIndex = RANDOM.nextInt(countryCodes.length);
-        return countryCodes[randomIndex];
-    }
-
     /**
      * Returns iban's branch code.
      *
@@ -256,7 +262,21 @@ public final class IbanUtil {
         return getCountryCode(iban) + checkDigit + getBban(iban);
     }
 
+    /**
+     * Returns formatted version of Iban.
+     *
+     * @return A string representing formatted Iban for printing.
+     */
+    static String toFormattedString(final String iban) {
+        final StringBuilder ibanBuffer = new StringBuilder(iban);
+        final int length = ibanBuffer.length();
 
+        for (int i = 0; i < length / 4; i++) {
+            ibanBuffer.insert((i + 1) * 4 + i, ' ');
+        }
+
+        return ibanBuffer.toString().trim();
+    }
 
     private static void validateCheckDigit(final String iban) {
         if (calculateMod(iban) != 1) {

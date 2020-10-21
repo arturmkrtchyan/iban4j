@@ -99,6 +99,16 @@ public class IbanUtilTest {
         public void ibanCountrySupportCheckWithUnsupportedCountryShouldReturnFalse() {
             assertThat(IbanUtil.isSupportedCountry(CountryCode.AM), is(equalTo(false)));
         }
+
+        @Test
+        public void unformattedIbanValidationWithNoneFormattingShouldNotThrowException() {
+            IbanUtil.validate("AT611904300234573201", IbanFormat.None);
+        }
+
+        @Test
+        public void formattedIbanValidationWithDefaultFormattingShouldNotThrowException() {
+            IbanUtil.validate("AT61 1904 3002 3457 3201", IbanFormat.Default);
+        }
     }
 
     public static class InvalidIbanValidationTest {
@@ -200,6 +210,14 @@ public class IbanUtilTest {
         }
 
         @Test
+        public void ibanValidationWithSpaceShouldThrowException() {
+            expectedException.expect(IbanFormatException.class);
+            expectedException.expectMessage("length is 17");
+            expectedException.expectMessage("expected BBAN length is: 16");
+            IbanUtil.validate("AT61 1904300234573201");
+        }
+
+        @Test
         public void ibanValidationWithInvalidLengthShouldThrowException() {
             expectedException.expect(IbanFormatException.class);
             IbanUtil.validate("AT621904300");
@@ -231,6 +249,20 @@ public class IbanUtilTest {
             expectedException.expect(IbanFormatException.class);
             expectedException.expectMessage(containsString("must contain only upper case letters"));
             IbanUtil.validate("IT6010542811101000000123456");
+        }
+
+        @Test
+        public void unformattedIbanValidationWithDefaultFormattingShouldThrowException() {
+            expectedException.expect(IbanFormatException.class);
+            expectedException.expectMessage(containsString("Iban must be formatted using 4 characters and space"));
+            IbanUtil.validate("AT611904300234573201", IbanFormat.Default);
+        }
+
+        @Test
+        public void formattedIbanValidationWithNoneFormattingShouldThrowException() {
+            expectedException.expect(IbanFormatException.class);
+            expectedException.expectMessage(containsString("expected BBAN length is: 16"));
+            IbanUtil.validate("AT61 1904 3002 3457 3201", IbanFormat.None);
         }
     }
 

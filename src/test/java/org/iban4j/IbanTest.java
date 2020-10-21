@@ -22,9 +22,7 @@ import org.junit.runners.Parameterized;
 
 import java.util.Collection;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThat;
 
@@ -261,6 +259,28 @@ public class IbanTest {
                     .build();
             assertThat(iban.toFormattedString(), is(equalTo("AT14 1904 1023 4573 2012")));
         }
+
+        @Test
+        public void ibanConstructionWithShortBankCodeShouldNotThrowExceptionIfValidationIsDisabled() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.AT)
+                    .bankCode("1904")
+                    .accountNumber("A0234573201")
+                    .build(false);
+            assertThat(iban.toFormattedString(), is(equalTo("AT40 1904 A023 4573 201")));
+        }
+
+        @Test
+        public void ibanConstructionWithNoneFormattingShouldReturnIban() {
+            Iban iban = Iban.valueOf("AT611904300234573201", IbanFormat.None);
+            assertThat(iban.toFormattedString(), is(equalTo("AT61 1904 3002 3457 3201")));
+        }
+
+        @Test
+        public void ibanConstructionWithDefaultFormattingShouldReturnIban() {
+            Iban iban = Iban.valueOf("AT61 1904 3002 3457 3201", IbanFormat.Default);
+            assertThat(iban.toFormattedString(), is(equalTo("AT61 1904 3002 3457 3201")));
+        }
     }
 
     public static class IbanGenerationExceptionalTest {
@@ -295,7 +315,20 @@ public class IbanTest {
             Iban.valueOf("AZ21NABZ000000001370100_1944");
         }
 
+        @Test(expected = IbanFormatException.class)
+        public void ibanConstructionWithDefaultButInvalidFormatShouldThrowException() {
+            Iban.valueOf("AT61 1904 3002 34573201", IbanFormat.Default);
+        }
 
+        @Test(expected = IbanFormatException.class)
+        public void formattedIbanConstructionWithNoneFormatShouldThrowException() {
+            Iban.valueOf("AT61 1904 3002 3457 3201", IbanFormat.None);
+        }
+
+        @Test(expected = IbanFormatException.class)
+        public void unformattedIbanConstructionWithDefaultFormatShouldThrowException() {
+            Iban.valueOf("AT611904300234573201", IbanFormat.Default);
+        }
 
         @Test(expected = IbanFormatException.class)
         public void ibanConstructionWithoutCountryShouldThrowException() {
@@ -340,6 +373,104 @@ public class IbanTest {
                     .bankCode("1904")
                     .accountNumber("A0234573201")
                     .build();
+        }
+
+        @Test(expected = IbanFormatException.class)
+        public void ibanConstructionWithShortBankCodeShouldThrowExceptionIfValidationRequested() {
+            new Iban.Builder()
+                    .countryCode(CountryCode.AT)
+                    .bankCode("1904")
+                    .accountNumber("A0234573201")
+                    .build(true);
+        }
+
+        @Test
+        public void ibanContructionRandom() {
+            for (int i = 0; i < 100; i++) {
+                new Iban.Builder().buildRandom();
+                Iban.random();
+            }
+        }
+
+        @Test
+        public void ibanContructionRandomAcctRetainsSpecifiedCountry() {
+            Iban iban = new Iban.Builder().countryCode(CountryCode.AT).buildRandom();
+            assertThat(iban.getCountryCode(), is(equalTo(CountryCode.AT)));
+
+            iban = Iban.random(CountryCode.AT);
+            assertThat(iban.getCountryCode(), is(equalTo(CountryCode.AT)));
+        }
+
+        @Test
+        public void ibanContructionRandomRetainsSpecifiedBankCode() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.AT)
+                    .bankCode("12345")
+                    .buildRandom();
+            assertThat(iban.getBankCode(), is(equalTo("12345")));
+        }
+
+        @Test
+        public void ibanContructionRandomDoesNotOverwriteBankAccount() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.AT)
+                    .accountNumber("12345678901")
+                    .buildRandom();
+            assertThat(iban.getAccountNumber(), is(equalTo("12345678901")));
+        }
+
+        @Test
+        public void ibanContructionRandomDoesNotOverwriteBranchCode() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.AL)
+                    .branchCode("1234")
+                    .buildRandom();
+            assertThat(iban.getBranchCode(), is(equalTo("1234")));
+        }
+
+        @Test
+        public void ibanContructionRandomDoesNotOverwriteNationalCheckDigit() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.AL)
+                    .nationalCheckDigit("1")
+                    .buildRandom();
+            assertThat(iban.getNationalCheckDigit(), is(equalTo("1")));
+        }
+
+        @Test
+        public void ibanContructionRandomDoesNotOverwriteAccountType() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.BR)
+                    .accountType("A")
+                    .buildRandom();
+            assertThat(iban.getAccountType(), is(equalTo("A")));
+        }
+
+        @Test
+        public void ibanContructionRandomDoesNotOverwriteOwnerAccountType() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.BR)
+                    .ownerAccountType("C")
+                    .buildRandom();
+            assertThat(iban.getOwnerAccountType(), is(equalTo("C")));
+        }
+
+        @Test
+        public void ibanContructionRandomDoesNotOverwriteIdentificationNumber() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.IS)
+                    .identificationNumber("1234567890")
+                    .buildRandom();
+            assertThat(iban.getIdentificationNumber(), is(equalTo("1234567890")));
+        }
+
+        @Test(expected = IbanFormatException.class)
+        public void ibanConstructionWithLackingNationalCheckDigitShouldThrowExceptionIfValidationRequested() {
+            new Iban.Builder()
+                    .countryCode(CountryCode.NO)
+                    .bankCode("4435")
+                    .accountNumber("0343730")
+                    .build(true);
         }
     }
 }
