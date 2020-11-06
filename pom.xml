@@ -57,8 +57,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jdkVersion>1.6</jdkVersion>
-        <jdk6Signature>java16</jdk6Signature>
+        <jdkVersion>1.7</jdkVersion>
+        <jdk7Signature>java17</jdk7Signature>
         <skipSigning>true</skipSigning>
     </properties>
 
@@ -255,7 +255,7 @@
                             <signature>
                                 <groupId>org.codehaus.mojo.signature
                                 </groupId>
-                                <artifactId>${jdk6Signature}</artifactId>
+                                <artifactId>${jdk7Signature}</artifactId>
                                 <version>1.0</version>
                             </signature>
                         </configuration>
