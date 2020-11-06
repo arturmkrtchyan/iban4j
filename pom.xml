@@ -57,8 +57,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jdkVersion>1.8</jdkVersion>
-        <jdk8Signature>java18</jdk8Signature>
+        <jdkVersion>1.7</jdkVersion>
+        <jdk7Signature>java17</jdk7Signature>
         <skipSigning>true</skipSigning>
     </properties>
 
