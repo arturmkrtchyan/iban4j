@@ -491,6 +491,11 @@ final class TestDataHelper {
                         .accountNumber("31926819")
                         .build(), "GB29NWBK60161331926819"},
                 {new Iban.Builder()
+                        .countryCode(CountryCode.VA)
+                        .bankCode("001")
+                        .accountNumber("123000012345678")
+                        .build(), "VA59001123000012345678"},
+                {new Iban.Builder()
                         .countryCode(CountryCode.VG)
                         .bankCode("VPVG")
                         .accountNumber("0000012345678901")
