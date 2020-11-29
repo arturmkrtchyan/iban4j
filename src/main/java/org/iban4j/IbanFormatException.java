@@ -183,7 +183,8 @@ public class IbanFormatException extends Iban4jException {
         BBAN_ONLY_DIGITS_OR_LETTERS,
 
         BANK_CODE_NOT_NULL,
-        ACCOUNT_NUMBER_NOT_NULL
+        ACCOUNT_NUMBER_NOT_NULL,
+        NATIONAL_CHECK_DIGIT_NOT_NULL
 
     }
 }

@@ -15,11 +15,11 @@
  */
 package org.iban4j;
 
-import java.util.List;
-import java.util.Random;
-
 import org.iban4j.bban.BbanStructure;
 import org.iban4j.bban.BbanStructureEntry;
+
+import java.util.List;
+import java.util.Random;
 
 import static org.iban4j.IbanFormatException.IbanFormatViolation.*;
 
@@ -351,7 +351,7 @@ public final class Iban {
                 IllegalArgumentException, UnsupportedCountryException {
 
             // null checks
-            require(countryCode, bankCode, accountNumber);
+            require(countryCode, bankCode, accountNumber, nationalCheckDigit);
 
             // iban is formatted with default check digit.
             final String formattedIban = formatIban();
@@ -439,7 +439,8 @@ public final class Iban {
 
         private void require(final CountryCode countryCode,
                              final String bankCode,
-                             final String accountNumber)
+                             final String accountNumber,
+                             final String nationalCheckDigit)
                 throws IbanFormatException {
             if(countryCode == null) {
                 throw new IbanFormatException(COUNTRY_CODE_NOT_NULL,
@@ -454,6 +455,12 @@ public final class Iban {
             if(accountNumber == null) {
                 throw new IbanFormatException(ACCOUNT_NUMBER_NOT_NULL,
                         "accountNumber is required; it cannot be null");
+            }
+            if (BbanStructure.hasNationalCheckDigit(countryCode)) {
+                if (nationalCheckDigit == null) {
+                    throw new IbanFormatException(NATIONAL_CHECK_DIGIT_NOT_NULL,
+                            "nationalCheckDigit is required; it cannot be null");
+                }
             }
         }
 

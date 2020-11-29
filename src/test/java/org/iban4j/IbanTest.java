@@ -22,9 +22,7 @@ import org.junit.runners.Parameterized;
 
 import java.util.Collection;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThat;
 
@@ -464,6 +462,15 @@ public class IbanTest {
                     .identificationNumber("1234567890")
                     .buildRandom();
             assertThat(iban.getIdentificationNumber(), is(equalTo("1234567890")));
+        }
+
+        @Test(expected = IbanFormatException.class)
+        public void ibanConstructionWithLackingNationalCheckDigitShouldThrowExceptionIfValidationRequested() {
+            new Iban.Builder()
+                    .countryCode(CountryCode.NO)
+                    .bankCode("4435")
+                    .accountNumber("0343730")
+                    .build(true);
         }
     }
 }
