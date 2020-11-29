@@ -14,12 +14,13 @@
   limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.iban4j</groupId>
     <artifactId>iban4j</artifactId>
-    <version>3.2.2-SNAPSHOT</version>
+    <version>3.3.0-RELEASE</version>
     <packaging>jar</packaging>
 
     <name>iban4j</name>
@@ -38,15 +39,17 @@
         <connection>scm:git:git@github.com:arturmkrtchyan/iban4j.git</connection>
         <developerConnection>scm:git:git@github.com:arturmkrtchyan/iban4j.git</developerConnection>
         <url>git@github.com:arturmkrtchyan/iban4j.git</url>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <developers>
         <developer>
             <name>Artur Mkrtchyan</name>
         </developer>
+        <developer>
+            <name>Stefan Scheid</name>
+        </developer>
     </developers>
-
 
     <parent>
         <groupId>org.sonatype.oss</groupId>
@@ -187,11 +190,11 @@
                     </execution>
                 </executions>
             </plugin>
-            
+
             <plugin>
-              <groupId>org.eluder.coveralls</groupId>
-              <artifactId>coveralls-maven-plugin</artifactId>
-              <version>3.0.1</version>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+                <version>3.0.1</version>
             </plugin>
 
             <!-- Generating Javadoc during verify phase -->

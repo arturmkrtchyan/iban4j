@@ -20,6 +20,7 @@ import org.iban4j.bban.BbanStructure;
 import org.iban4j.bban.BbanStructureEntry;
 
 import static org.iban4j.IbanFormatException.IbanFormatViolation.*;
+
 /**
  * Iban Utility Class
  */
@@ -46,9 +47,8 @@ public final class IbanUtil {
      * <a href="http://en.wikipedia.org/wiki/ISO_13616#Generating_IBAN_check_digits">Check Digit</a>.
      *
      * @param iban string value
-     * @throws IbanFormatException if iban contains invalid character.
-     *
      * @return check digit as String
+     * @throws IbanFormatException if iban contains invalid character.
      */
     public static String calculateCheckDigit(final String iban) throws IbanFormatException {
         final String reformattedIban = replaceCheckDigit(iban,
@@ -64,8 +64,8 @@ public final class IbanUtil {
      *
      * @param iban to be validated.
      * @throws IbanFormatException if iban is invalid.
-     *         UnsupportedCountryException if iban's country is not supported.
-     *         InvalidCheckDigitException if iban has invalid check digit.
+     *                             UnsupportedCountryException if iban's country is not supported.
+     *                             InvalidCheckDigitException if iban has invalid check digit.
      */
     public static void validate(final String iban) throws IbanFormatException,
             InvalidCheckDigitException, UnsupportedCountryException {
@@ -90,11 +90,11 @@ public final class IbanUtil {
     /**
      * Validates iban.
      *
-     * @param iban to be validated.
+     * @param iban   to be validated.
      * @param format to be used in validation.
      * @throws IbanFormatException if iban is invalid.
-     *         UnsupportedCountryException if iban's country is not supported.
-     *         InvalidCheckDigitException if iban has invalid check digit.
+     *                             UnsupportedCountryException if iban's country is not supported.
+     *                             InvalidCheckDigitException if iban has invalid check digit.
      */
     public static void validate(final String iban, final IbanFormat format) throws IbanFormatException,
             InvalidCheckDigitException, UnsupportedCountryException {
@@ -102,7 +102,7 @@ public final class IbanUtil {
             case Default:
                 final String ibanWithoutSpaces = iban.replace(" ", "");
                 validate(ibanWithoutSpaces);
-                if(!toFormattedString(ibanWithoutSpaces).equals(iban)) {
+                if (!toFormattedString(ibanWithoutSpaces).equals(iban)) {
                     throw new IbanFormatException(IBAN_FORMATTING,
                             String.format("Iban must be formatted using 4 characters and space combination. " +
                                     "Instead of [%s]", iban));
@@ -116,12 +116,23 @@ public final class IbanUtil {
 
     /**
      * Checks whether country is supporting iban.
-     * @param countryCode {@link org.iban4j.CountryCode}
      *
+     * @param countryCode {@link org.iban4j.CountryCode}
      * @return boolean true if country supports iban, false otherwise.
      */
     public static boolean isSupportedCountry(final CountryCode countryCode) {
         return BbanStructure.forCountry(countryCode) != null;
+    }
+
+    /**
+     * Check if IBAN country is from a SEPA member country
+     *
+     * @param iban IBAN
+     * @return true if country is a SEPA member country
+     */
+    public static boolean isSepaCountry(final String iban) {
+        CountryCode cc = CountryCode.getByCode(getCountryCode(iban));
+        return cc.isSepaCountry();
     }
 
     /**
@@ -291,12 +302,12 @@ public final class IbanUtil {
     }
 
     private static void validateEmpty(final String iban) {
-        if(iban == null) {
+        if (iban == null) {
             throw new IbanFormatException(IBAN_NOT_NULL,
                     "Null can't be a valid Iban.");
         }
 
-        if(iban.length() == 0) {
+        if (iban.length() == 0) {
             throw new IbanFormatException(IBAN_NOT_EMPTY,
                     "Empty string can't be a valid Iban.");
         }
@@ -304,7 +315,7 @@ public final class IbanUtil {
 
     private static void validateCountryCode(final String iban) {
         // check if iban contains 2 char country code
-        if(iban.length() < COUNTRY_CODE_LENGTH) {
+        if (iban.length() < COUNTRY_CODE_LENGTH) {
             throw new IbanFormatException(COUNTRY_CODE_TWO_LETTERS, iban,
                     "Iban must contain 2 char country code.");
         }
@@ -312,14 +323,14 @@ public final class IbanUtil {
         final String countryCode = getCountryCode(iban);
 
         // check case sensitivity
-        if(!countryCode.equals(countryCode.toUpperCase()) ||
-            !Character.isLetter(countryCode.charAt(0)) ||
-            !Character.isLetter(countryCode.charAt(1))) {
+        if (!countryCode.equals(countryCode.toUpperCase()) ||
+                !Character.isLetter(countryCode.charAt(0)) ||
+                !Character.isLetter(countryCode.charAt(1))) {
             throw new IbanFormatException(COUNTRY_CODE_UPPER_CASE_LETTERS, countryCode,
                     "Iban country code must contain upper case letters.");
         }
 
-        if(CountryCode.getByCode(countryCode) == null) {
+        if (CountryCode.getByCode(countryCode) == null) {
             throw new IbanFormatException(COUNTRY_CODE_EXISTS, countryCode,
                     "Iban contains non existing country code.");
         }
@@ -335,7 +346,7 @@ public final class IbanUtil {
 
     private static void validateCheckDigitPresence(final String iban) {
         // check if iban contains 2 digit check digit
-        if(iban.length() < COUNTRY_CODE_LENGTH + CHECK_DIGIT_LENGTH) {
+        if (iban.length() < COUNTRY_CODE_LENGTH + CHECK_DIGIT_LENGTH) {
             throw new IbanFormatException(CHECK_DIGIT_TWO_DIGITS,
                     iban.substring(COUNTRY_CODE_LENGTH),
                     "Iban must contain 2 digit check digit.");
@@ -344,8 +355,8 @@ public final class IbanUtil {
         final String checkDigit = getCheckDigit(iban);
 
         // check digits
-        if(!Character.isDigit(checkDigit.charAt(0)) ||
-           !Character.isDigit(checkDigit.charAt(1))) {
+        if (!Character.isDigit(checkDigit.charAt(0)) ||
+                !Character.isDigit(checkDigit.charAt(1))) {
             throw new IbanFormatException(CHECK_DIGIT_ONLY_DIGITS, checkDigit,
                     "Iban's check digit should contain only digits.");
         }
@@ -368,7 +379,7 @@ public final class IbanUtil {
                                             final BbanStructure structure) {
         final String bban = getBban(iban);
         int bbanEntryOffset = 0;
-        for(final BbanStructureEntry entry : structure.getEntries()) {
+        for (final BbanStructureEntry entry : structure.getEntries()) {
             final int entryLength = entry.getLength();
             final String entryValue = bban.substring(bbanEntryOffset,
                     bbanEntryOffset + entryLength);
@@ -384,8 +395,8 @@ public final class IbanUtil {
                                                        final String entryValue) {
         switch (entry.getCharacterType()) {
             case a:
-                for(char ch: entryValue.toCharArray()) {
-                    if(!Character.isUpperCase(ch)) {
+                for (char ch : entryValue.toCharArray()) {
+                    if (!Character.isUpperCase(ch)) {
                         throw new IbanFormatException(BBAN_ONLY_UPPER_CASE_LETTERS,
                                 entry.getEntryType(), entryValue, ch,
                                 String.format(ASSERT_UPPER_LETTERS, entryValue));
@@ -393,8 +404,8 @@ public final class IbanUtil {
                 }
                 break;
             case c:
-                for(char ch: entryValue.toCharArray()) {
-                    if(!Character.isLetterOrDigit(ch)) {
+                for (char ch : entryValue.toCharArray()) {
+                    if (!Character.isLetterOrDigit(ch)) {
                         throw new IbanFormatException(BBAN_ONLY_DIGITS_OR_LETTERS,
                                 entry.getEntryType(), entryValue, ch,
                                 String.format(ASSERT_DIGITS_AND_LETTERS, entryValue));
@@ -402,8 +413,8 @@ public final class IbanUtil {
                 }
                 break;
             case n:
-                for(char ch: entryValue.toCharArray()) {
-                    if(!Character.isDigit(ch)) {
+                for (char ch : entryValue.toCharArray()) {
+                    if (!Character.isDigit(ch)) {
                         throw new IbanFormatException(BBAN_ONLY_DIGITS,
                                 entry.getEntryType(), entryValue, ch,
                                 String.format(ASSERT_DIGITS, entryValue));
@@ -453,13 +464,13 @@ public final class IbanUtil {
         final String bban = getBban(iban);
         final BbanStructure structure = getBbanStructure(iban);
         int bbanEntryOffset = 0;
-        for(final BbanStructureEntry entry : structure.getEntries()) {
+        for (final BbanStructureEntry entry : structure.getEntries()) {
             final int entryLength = entry.getLength();
             final String entryValue = bban.substring(bbanEntryOffset,
                     bbanEntryOffset + entryLength);
 
             bbanEntryOffset = bbanEntryOffset + entryLength;
-            if(entry.getEntryType() == entryType) {
+            if (entry.getEntryType() == entryType) {
                 return entryValue;
             }
         }
