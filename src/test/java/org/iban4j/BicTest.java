@@ -111,6 +111,13 @@ public class BicTest {
         }
 
         @Test
+        public void bicShouldReturnBic8Code() {
+            Bic bic = Bic.valueOf("DEUTDEFF500");
+
+            assertThat(bic.getBic8(), is(equalTo("DEUTDEFF")));
+        }
+
+        @Test
         public void bicToStringShouldReturnString() {
             Bic bic = Bic.valueOf("DEUTDEFF500");
 
