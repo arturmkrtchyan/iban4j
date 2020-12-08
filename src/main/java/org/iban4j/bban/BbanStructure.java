@@ -471,6 +471,40 @@ public class BbanStructure {
                         BbanStructureEntry.accountNumber(10, 'n'),
                         BbanStructureEntry.nationalCheckDigit(2, 'n')));
 
+        structures.put(CountryCode.SC,
+                new BbanStructure(
+                        BbanStructureEntry.bankCode(4, 'a'),
+                        BbanStructureEntry.branchCode(4, 'n'),
+                        BbanStructureEntry.accountNumber(16, 'n'),
+                        BbanStructureEntry.accountType(3, 'a'))); // Currency
+
+        structures.put(CountryCode.LC,
+                new BbanStructure(
+                        BbanStructureEntry.bankCode(4, 'a'),
+                        BbanStructureEntry.accountNumber(24, 'n')));
+
+        structures.put(CountryCode.ST,
+                new BbanStructure(
+                        BbanStructureEntry.bankCode(4, 'n'),
+                        BbanStructureEntry.bankCode(4, 'n'),
+                        BbanStructureEntry.accountNumber(13, 'n')));
+
+        // IBAN structures according to Nordea
+
+        structures.put(CountryCode.CI,
+                new BbanStructure(
+                        BbanStructureEntry.bankCode(1, 'a'),
+                        BbanStructureEntry.accountNumber(23, 'n')));
+
+        structures.put(CountryCode.ML,
+                new BbanStructure(
+                        BbanStructureEntry.bankCode(1, 'a'),
+                        BbanStructureEntry.accountNumber(23, 'n')));
+
+        structures.put(CountryCode.SN,
+                new BbanStructure(
+                        BbanStructureEntry.bankCode(1, 'a'),
+                        BbanStructureEntry.accountNumber(23, 'n')));
     }
 
     /**
