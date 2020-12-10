@@ -34,8 +34,8 @@ public final class Bic {
      *
      * @param bic the String to be parsed.
      * @return a Bic object holding the value represented by the string argument.
-     * @throws BicFormatException if the String doesn't contain parsable Bic.
-     *         UnsupportedCountryException if bic's country is not supported.
+     * @throws BicFormatException          if the String doesn't contain parsable Bic.
+     * @throws UnsupportedCountryException if bic's country is not supported.
      */
     public static Bic valueOf(final String bic) throws BicFormatException,
             UnsupportedCountryException {
@@ -76,7 +76,7 @@ public final class Bic {
      * @return string representation of Bic's branch code, null if Bic has no branch code.
      */
     public String getBranchCode() {
-        if(BicUtil.hasBranchCode(value)) {
+        if (BicUtil.hasBranchCode(value)) {
             return BicUtil.getBranchCode(value);
         }
         return null;
@@ -85,7 +85,7 @@ public final class Bic {
     @Override
     public boolean equals(final Object obj) {
         if (obj instanceof Bic) {
-            return value.equals(((Bic)obj).value);
+            return value.equals(((Bic) obj).value);
         }
         return false;
     }
