@@ -466,4 +466,75 @@ public class IbanTest {
             assertThat(iban.getIdentificationNumber(), is(equalTo("1234567890")));
         }
     }
+
+    public static class IbanLeftPaddingTest {
+
+        @Test
+        public void ibanConstructionPaddingShortBankCode() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.CZ)
+                    .bankCode("100")
+                    .accountNumber("0000001023457320")
+                    .addLeftPadding()
+                    .build();
+            assertThat(iban.getBankCode(), is(equalTo("0100")));
+        }
+
+        @Test
+        public void ibanConstructionPaddingShouldNotChangeFullAlphabeticalFields() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.AZ)
+                    .bankCode("NABZ")
+                    .accountNumber("00000000137010001944")
+                    .addLeftPadding()
+                    .build();
+            assertThat(iban.getBankCode(), is(equalTo("NABZ")));
+        }
+
+        @Test(expected = IbanFormatException.class)
+        public void ibanConstructionPaddingShouldNotChangeShortAlphabeticFieldsShouldThrowException() {
+            new Iban.Builder()
+                    .countryCode(CountryCode.AZ)
+                    .bankCode("ABZ")
+                    .accountNumber("00000000137010001944")
+                    .addLeftPadding()
+                    .build();
+        }
+
+        @Test(expected = IbanFormatException.class)
+        public void ibanConstructionPaddingShouldNotChangeShortAlphanumericFieldsShouldThrowException() {
+            new Iban.Builder()
+                    .countryCode(CountryCode.AZ)
+                    .bankCode("NABZ")
+                    .accountNumber("137010001944")
+                    .addLeftPadding()
+                    .build();
+        }
+
+        @Test(expected = IbanFormatException.class)
+        public void ibanConstructionPaddingShouldNotFillInMissingFieldsShouldThrowException() {
+            new Iban.Builder()
+                    .countryCode(CountryCode.BR)
+                    .bankCode("00360305")
+                    .accountNumber("0009795493")
+                    .accountType("P")
+                    .ownerAccountType("1")
+                    .addLeftPadding()
+                    .build();
+        }
+
+        @Test
+        public void ibanConstructionPaddingFields() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.BR)
+                    .bankCode("360305")
+                    .branchCode("1")
+                    .accountNumber("9795493")
+                    .accountType("P")
+                    .ownerAccountType("1")
+                    .addLeftPadding()
+                    .build();
+            assertThat(iban.toString(), is(equalTo("BR9700360305000010009795493P1")));
+        }
+    }
 }
