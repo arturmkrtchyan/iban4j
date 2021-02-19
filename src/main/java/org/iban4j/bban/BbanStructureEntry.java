@@ -66,6 +66,11 @@ public class BbanStructureEntry {
                 EntryCharacterType.valueOf(String.valueOf(characterType)), length);
     }
 
+    public static BbanStructureEntry accountNumberPrefix(final int length, final char characterType) {
+        return new BbanStructureEntry(BbanEntryType.account_number_prefix,
+                EntryCharacterType.valueOf(String.valueOf(characterType)), length);
+    }
+
     public static BbanStructureEntry accountNumber(final int length, final char characterType) {
         return new BbanStructureEntry(BbanEntryType.account_number,
                 EntryCharacterType.valueOf(String.valueOf(characterType)), length);
