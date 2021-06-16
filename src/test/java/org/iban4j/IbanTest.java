@@ -20,11 +20,11 @@ import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.io.*;
 import java.util.Collection;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThat;
 
@@ -35,6 +35,7 @@ public class IbanTest {
     public static class IbanGenerationTest1 {
 
         private final Iban iban;
+
         private final String expectedIbanString;
 
         public IbanGenerationTest1(Iban iban, String expectedIbanString) {
@@ -54,7 +55,37 @@ public class IbanTest {
 
         @Parameterized.Parameters
         public static Collection<Object[]> ibanParameters() {
-              return TestDataHelper.getIbanData();
+            return TestDataHelper.getIbanData();
+        }
+    }
+
+    public static class IbanSerializationTest {
+
+        @Test
+        public void ibanShouldSerializeAndDeserialize() throws IOException, ClassNotFoundException {
+            Iban iban = Iban.random();
+
+            byte[] serializedForm = pickle(iban);
+
+            Iban iban2 = unpickle(serializedForm, Iban.class);
+
+            assertEquals(iban, iban2);
+        }
+
+
+        private static <T extends Serializable> byte[] pickle(T obj) throws IOException {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
+            oos.writeObject(obj);
+            oos.close();
+            return baos.toByteArray();
+        }
+
+        private static <T extends Serializable> T unpickle(byte[] b, Class<T> cl) throws IOException, ClassNotFoundException {
+            ByteArrayInputStream bais = new ByteArrayInputStream(b);
+            ObjectInputStream ois = new ObjectInputStream(bais);
+            Object o = ois.readObject();
+            return cl.cast(o);
         }
     }
 
