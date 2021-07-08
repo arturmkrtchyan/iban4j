@@ -399,29 +399,32 @@ public final class Iban {
             }
 
             for(final BbanStructureEntry entry : structure.getEntries()) {
+                String padded = null;
                 switch (entry.getEntryType()) {
                     case bank_code:
-                        sb.append(bankCode);
+                        padded=bankCode;
                         break;
                     case branch_code:
-                        sb.append(branchCode);
+                        padded=branchCode;
                         break;
                     case account_number:
-                        sb.append(accountNumber);
+                        padded=accountNumber;
                         break;
                     case national_check_digit:
-                        sb.append(nationalCheckDigit);
+                        padded=nationalCheckDigit;
                         break;
                     case account_type:
-                        sb.append(accountType);
+                        padded=accountType;
                         break;
                     case owner_account_number:
-                        sb.append(ownerAccountType);
+                        padded=ownerAccountType;
                         break;
                     case identification_number:
-                        sb.append(identificationNumber);
+                        padded=identificationNumber;
                         break;
                 }
+                if (entry.getCharacterType() == BbanStructureEntry.EntryCharacterType.n) padded = String.format("%"+entry.getLength()+"s",padded).replace(" ","0");
+                sb.append(padded);
             }
             return sb.toString();
         }
