@@ -204,7 +204,7 @@ public final class Iban {
     @Override
     public boolean equals(final Object obj) {
         if (obj instanceof Iban) {
-            return value.equals(((Iban)obj).value);
+            return value.equals(((Iban) obj).value);
         }
         return false;
     }
@@ -351,7 +351,7 @@ public final class Iban {
                 IllegalArgumentException, UnsupportedCountryException {
 
             // null checks
-            require(countryCode, bankCode, accountNumber);
+            checkRequiredFields();
 
             // iban is formatted with default check digit.
             final String formattedIban = formatIban();
@@ -394,11 +394,10 @@ public final class Iban {
             final BbanStructure structure = BbanStructure.forCountry(countryCode);
 
             if (structure == null) {
-                throw new UnsupportedCountryException(countryCode.toString(),
-                        "Country code is not supported.");
+                throw new UnsupportedCountryException(countryCode.toString());
             }
 
-            for(final BbanStructureEntry entry : structure.getEntries()) {
+            for (final BbanStructureEntry entry : structure.getEntries()) {
                 switch (entry.getEntryType()) {
                     case bank_code:
                         sb.append(bankCode);
@@ -437,23 +436,64 @@ public final class Iban {
             return sb.toString();
         }
 
-        private void require(final CountryCode countryCode,
-                             final String bankCode,
-                             final String accountNumber)
+        private void checkRequiredFields()
                 throws IbanFormatException {
-            if(countryCode == null) {
+
+            if (countryCode == null) {
                 throw new IbanFormatException(COUNTRY_CODE_NOT_NULL,
                         "countryCode is required; it cannot be null");
             }
 
-            if(bankCode == null) {
-                throw new IbanFormatException(BANK_CODE_NOT_NULL,
-                        "bankCode is required; it cannot be null");
+            final BbanStructure structure = BbanStructure.forCountry(countryCode);
+            if (structure == null) {
+                throw new UnsupportedCountryException(countryCode.toString());
             }
 
-            if(accountNumber == null) {
-                throw new IbanFormatException(ACCOUNT_NUMBER_NOT_NULL,
-                        "accountNumber is required; it cannot be null");
+            for (final BbanStructureEntry entry : structure.getEntries()) {
+                switch (entry.getEntryType()) {
+                    case bank_code:
+                        if (bankCode == null) {
+                            throw new IbanFormatException(BANK_CODE_NOT_NULL,
+                                    "bankCode is required; it cannot be null");
+                        }
+                        break;
+                    case branch_code:
+                        if (branchCode == null) {
+                            throw new IbanFormatException(BRANCH_CODE_NOT_NULL,
+                                    "branchCode is required; it cannot be null");
+                        }
+                        break;
+                    case account_number:
+                        if (accountNumber == null) {
+                            throw new IbanFormatException(ACCOUNT_NUMBER_NOT_NULL,
+                                    "accountNumber is required; it cannot be null");
+                        }
+                        break;
+                    case national_check_digit:
+                        if (nationalCheckDigit == null) {
+                            throw new IbanFormatException(NATIONAL_CHECK_DIGIT_NOT_NULL,
+                                    "nationalCheckDigit is required; it cannot be null");
+                        }
+                        break;
+                    case account_type:
+                        if (accountType == null) {
+                            throw new IbanFormatException(ACCOUNT_TYPE_NOT_NULL,
+                                    "accountType is required; it cannot be null");
+                        }
+                        break;
+                    case owner_account_number:
+                        if (ownerAccountType == null) {
+                            throw new IbanFormatException(OWNER_ACCOUNT_NUMBER_NOT_NULL,
+                                    "ownerAccountNumber is required; it cannot be null");
+                        }
+                        break;
+                    case identification_number:
+                        if (identificationNumber == null) {
+                            throw new IbanFormatException(IDENTIFICATION_NUMBER_NOT_NULL,
+                                    "identificationNumber is required; it cannot be null");
+                        }
+                        break;
+                }
             }
         }
 
@@ -461,11 +501,10 @@ public final class Iban {
             final BbanStructure structure = BbanStructure.forCountry(countryCode);
 
             if (structure == null) {
-                throw new UnsupportedCountryException(countryCode.toString(),
-                        "Country code is not supported.");
+                throw new UnsupportedCountryException(countryCode.toString());
             }
 
-            for(final BbanStructureEntry entry : structure.getEntries()) {
+            for (final BbanStructureEntry entry : structure.getEntries()) {
                 switch (entry.getEntryType()) {
                     case bank_code:
                         if (bankCode == null) {
