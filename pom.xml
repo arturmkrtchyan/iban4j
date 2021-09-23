@@ -19,7 +19,7 @@
 
     <groupId>org.iban4j</groupId>
     <artifactId>iban4j</artifactId>
-    <version>3.2.3-RELEASE</version>
+    <version>4.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>iban4j</name>
