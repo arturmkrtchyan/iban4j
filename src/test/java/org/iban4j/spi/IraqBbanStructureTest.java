@@ -24,6 +24,7 @@ import java.util.ServiceLoader;
 import org.iban4j.CountryCode;
 import org.iban4j.IbanUtil;
 import org.iban4j.UnsupportedCountryException;
+import org.iban4j.bban.BbanStructure;
 import org.junit.Test;
 
 /**
@@ -74,5 +75,10 @@ public class IraqBbanStructureTest {
             }
         }
         assertTrue("IraqBbanStructureProvider not loaded", tested);
+    }
+
+    @Test
+    public void shouldHaveIraqAsSupportedCountry() {
+        assertTrue(BbanStructure.supportedCountries().contains(CountryCode.IQ));
     }
 }
