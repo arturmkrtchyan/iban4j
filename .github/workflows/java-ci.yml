@@ -45,11 +45,8 @@ jobs:
         with:
           junit_files: "**/surefire-reports/TEST-*.xml"
 
-      - name: Archive Jacoco reports
+      - name: Upload JaCoCo coverage report as a workflow artifact
         uses: actions/upload-artifact@v3
-        if: ${{ always() }}
-        continue-on-error: true
         with:
-          name: jacoco-reports
-          path: test-coverage/target/site/jacoco-aggregate
-          retention-days: 28
+          name: jacoco-report
+          path: target/site/jacoco/
