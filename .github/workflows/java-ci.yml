@@ -52,7 +52,7 @@ jobs:
         id: jacoco
         uses: madrapps/jacoco-report@v1
         with:
-          paths: ./target/site/jacoco/jacoco.xml
+          path: ./target/site/jacoco/jacoco.xml
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Archive Jacoco reports
