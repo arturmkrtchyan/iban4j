@@ -52,5 +52,12 @@ jobs:
         id: jacoco
         uses: madrapps/jacoco-report@v1
         with:
-          paths: ${{ github.workspace }}/target/site/jacoco/jacoco.xml
+          paths: ./target/site/jacoco/jacoco.xml
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Archive Jacoco reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: jacoco-reports
+          path: test-coverage/target/site/jacoco-aggregate
+          retention-days: 28
