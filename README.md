@@ -26,9 +26,14 @@ A Java library for generation and validation of the International Bank Account N
 
  // How to generate random Iban
  Iban iban = Iban.random(CountryCode.AT);
+ Iban iban = Iban.random(Arrays.asList(CountryCode.AT, CountryCode.NL));
  Iban iban = Iban.random();
  Iban iban = new Iban.Builder()
                  .countryCode(CountryCode.AT)
+                 .bankCode("19043")
+                 .buildRandom();
+ Iban iban = new Iban.Builder()
+                 .countryCodes(Arrays.asList(CountryCode.AT, CountryCode.N))
                  .bankCode("19043")
                  .buildRandom();
 
