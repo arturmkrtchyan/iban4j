@@ -37,3 +37,7 @@ jobs:
 
       - name: Maven Verify
         run: ./mvnw --batch-mode --update-snapshots verify
+
+      - name: Publish Test Report
+        if: ${{ always() }}
+        uses: scacap/action-surefire-report@v1
