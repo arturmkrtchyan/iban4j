@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import java.util.Random;
 
 @DisplayName("Iban general test")
 public class IbanTest {
@@ -268,6 +269,57 @@ public class IbanTest {
             for (int i = 0; i < 100; i++) {
                 new Iban.Builder().buildRandom();
                 Iban.random();
+            }
+        }
+
+        @Test
+        public void ibanConstructionSeeded() {
+            assertIbanUtilRandomWithSeedEquals("TR77 8734 4EAA SPP1 RIYK UO5K 8M", 1);
+            assertIbanUtilRandomWithSeedEquals("CH33 2079 06R7 O22Y UE87 R", 2);
+            assertIbanUtilRandomWithSeedEquals("BE95 0018 2949 1527", 3);
+        }
+
+        private static void assertIbanUtilRandomWithSeedEquals(
+            String expected,
+            int seed
+        ) {
+            Iban generated = Iban.random(new Random(seed));
+            assertEquals(
+                "expect that creating an IBAN with seed '" + seed + "' is deterministic",
+                expected,
+                generated.toFormattedString()
+            );
+        }
+
+        @Test
+        public void ibanBuilderConstructionSeeded() {
+            assertIbanBuilderRandomWithSeedEquals("TR77 8734 4EAA SPP1 RIYK UO5K 8M", 1);
+            assertIbanBuilderRandomWithSeedEquals("CH33 2079 06R7 O22Y UE87 R", 2);
+            assertIbanBuilderRandomWithSeedEquals("BE95 0018 2949 1527", 3);
+        }
+
+        private static void assertIbanBuilderRandomWithSeedEquals(
+            String expected,
+            int seed
+        ) {
+            Iban generated = new Iban.Builder(new Random(seed)).buildRandom();
+            assertEquals(
+                "expect that creating an IBAN with seed '" + seed + "' is deterministic",
+                expected,
+                generated.toFormattedString()
+            );
+        }
+
+        @Test
+        public void ibanSeededExpectUtilAndBuilderGenerateTheSame() {
+            for (int i = 0; i < 100; i++) {
+                Iban util = Iban.random(new Random(i));
+                Iban builder = new Iban.Builder(new Random(i)).buildRandom();
+                assertEquals(
+                    "expect that the same random IBAN is generated from both util and builder methods",
+                    util,
+                    builder
+                );
             }
         }
 

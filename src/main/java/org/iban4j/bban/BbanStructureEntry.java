@@ -29,7 +29,6 @@ public class BbanStructureEntry {
     private final int length;
 
     private static Map<EntryCharacterType, char[]> charByCharacterType;
-    private final Random random = new Random();
 
     static {
         charByCharacterType = new HashMap<EntryCharacterType, char[]>();
@@ -104,12 +103,27 @@ public class BbanStructureEntry {
     }
 
     public enum EntryCharacterType {
-        n,  // Digits (numeric characters 0 to 9 only)
-        a,  // Upper case letters (alphabetic characters A-Z only)
-        c  // upper and lower case alphanumeric characters (A-Z, a-z and 0-9)
+        /**
+         * Numerical digits (0-9 only)
+         */
+        n,
+        /**
+         * Alphabetical characters (A-Z only)
+         */
+        a,
+        // TODO 'c' used to say:  // upper and lower case alphanumeric characters (A-Z, a-z and 0-9)
+        //      but only generates A-Z0-9. Which is correct? Should it generate a-z too?
+        /**
+         * Combined alphabetical (uppercase) and numeric characters (A-Z and 0-9)
+         */
+        c
     }
 
     public String getRandom() {
+        return getRandom(new Random());
+    }
+
+    public String getRandom(Random random) {
         StringBuilder s = new StringBuilder("");
         char[] charChoices = charByCharacterType.get(characterType);
         if (charChoices == null) {
@@ -120,6 +134,15 @@ public class BbanStructureEntry {
             s.append(charChoices[random.nextInt(charChoices.length)]);
         }
         return s.toString();
+    }
+
+    @Override
+    public String toString() {
+        return "BbanStructureEntry{" +
+            "entryType=" + entryType +
+            ", characterType=" + characterType +
+            ", length=" + length +
+            '}';
     }
 }
 
