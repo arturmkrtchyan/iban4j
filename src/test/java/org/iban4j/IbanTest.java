@@ -263,9 +263,25 @@ public class IbanTest {
             assertThat(iban.toFormattedString(), is(equalTo("AT61 1904 3002 3457 3201")));
         }
 
-        @DisplayName("ibanConstruction with padding left zeros")
         @Test
-        public void ibanConstructionWithLeftZeroPadding() {
+        public void ibanConstructionRandom() {
+            for (int i = 0; i < 100; i++) {
+                new Iban.Builder().buildRandom();
+                Iban.random();
+            }
+        }
+
+        @Test
+        public void ibanConstructionRandomAcctRetainsSpecifiedCountry() {
+            Iban iban = new Iban.Builder().countryCode(CountryCode.AT).buildRandom();
+            assertThat(iban.getCountryCode(), is(equalTo(CountryCode.AT)));
+
+            iban = Iban.random(CountryCode.AT);
+            assertThat(iban.getCountryCode(), is(equalTo(CountryCode.AT)));
+        }
+
+        @Test
+        public void ibanConstructionRandomRetainsSpecifiedBankCode() {
             Iban iban = new Iban.Builder()
                     .leftPadding(true)
                     .countryCode(CountryCode.DE)
@@ -277,7 +293,7 @@ public class IbanTest {
 
         @DisplayName("ibanConstruction with padding non default character")
         @Test
-        public void ibanConstructionWithPaddingCharacter() {
+        public void ibanConstructionRandomDoesNotOverwriteBankAccount() {
             Iban iban = new Iban.Builder()
                     .leftPadding(true)
                     .paddingCharacter('1')
@@ -287,6 +303,50 @@ public class IbanTest {
                     .build();
             assertThat(iban.toFormattedString(), is(equalTo("DE45 6628 0099 1123 4567 00")));
         }
-    }
 
+        @Test
+        public void ibanConstructionRandomDoesNotOverwriteBranchCode() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.AL)
+                    .branchCode("1234")
+                    .buildRandom();
+            assertThat(iban.getBranchCode(), is(equalTo("1234")));
+        }
+
+        @Test
+        public void ibanConstructionRandomDoesNotOverwriteNationalCheckDigit() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.AL)
+                    .nationalCheckDigit("1")
+                    .buildRandom();
+            assertThat(iban.getNationalCheckDigit(), is(equalTo("1")));
+        }
+
+        @Test
+        public void ibanConstructionRandomDoesNotOverwriteAccountType() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.BR)
+                    .accountType("A")
+                    .buildRandom();
+            assertThat(iban.getAccountType(), is(equalTo("A")));
+        }
+
+        @Test
+        public void ibanConstructionRandomDoesNotOverwriteOwnerAccountType() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.BR)
+                    .ownerAccountType("C")
+                    .buildRandom();
+            assertThat(iban.getOwnerAccountType(), is(equalTo("C")));
+        }
+
+        @Test
+        public void ibanConstructionRandomDoesNotOverwriteIdentificationNumber() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.IS)
+                    .identificationNumber("1234567890")
+                    .buildRandom();
+            assertThat(iban.getIdentificationNumber(), is(equalTo("1234567890")));
+        }
+    }
 }
