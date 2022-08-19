@@ -41,22 +41,27 @@ jobs:
       - name: Publish Test Report
         uses: scacap/action-surefire-report@v1
         if: ${{ always() }}
+        continue-on-error: true
 
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: ${{ always() }}
+        continue-on-error: true
         with:
           junit_files: "**/surefire-reports/TEST-*.xml"
 
       - name: Add coverage to PR
         uses: madrapps/jacoco-report@v1
         if: ${{ always() }}
+        continue-on-error: true
         with:
-          path: ./target/site/jacoco/jacoco.xml
+          path: ${{ github.workspace }}/target/site/jacoco/jacoco.xml
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Archive Jacoco reports
         uses: actions/upload-artifact@v3
+        if: ${{ always() }}
+        continue-on-error: true
         with:
           name: jacoco-reports
           path: test-coverage/target/site/jacoco-aggregate
