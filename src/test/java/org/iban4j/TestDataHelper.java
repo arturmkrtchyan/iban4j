@@ -547,7 +547,13 @@ final class TestDataHelper {
                         .branchCode("12345")
                         .accountNumber("123456789AB")
                         .nationalCheckDigit("13")
-                        .build(), "YT021234512345123456789AB13"}
+                        .build(), "YT021234512345123456789AB13"},
+                {new Iban.Builder()
+                .countryCode(CountryCode.IQ)
+                .bankCode("NBIQ")
+                        .branchCode("850")
+                .accountNumber("123456789012")
+                .build(), "IQ98NBIQ850123456789012"}
         });
     }
 
