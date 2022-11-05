@@ -497,6 +497,11 @@ public class BbanStructure {
 
         structures.put(CountryCode.YT, BbanStructure.FRENCH_STRUCTURE);
 
+        structures.put(CountryCode.IQ,
+                new BbanStructure(
+                        BbanStructureEntry.bankCode(4, 'a'),
+                        BbanStructureEntry.branchCode(3, 'n'),
+                        BbanStructureEntry.accountNumber(12, 'n')));
     }
 
     /**
