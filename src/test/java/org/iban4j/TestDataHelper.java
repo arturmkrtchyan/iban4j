@@ -553,7 +553,13 @@ final class TestDataHelper {
                 .bankCode("NBIQ")
                         .branchCode("850")
                 .accountNumber("123456789012")
-                .build(), "IQ98NBIQ850123456789012"}
+                .build(), "IQ98NBIQ850123456789012"},
+                {new Iban.Builder()
+                        .countryCode(CountryCode.GA)
+                        .bankCode("40001")
+                        .branchCode("09080")
+                        .accountNumber("0008120005890")
+                        .build(), "GA2140001090800008120005890"}
         });
     }
 
