@@ -204,6 +204,12 @@ public class BbanStructure {
                         BbanStructureEntry.branchCode(5, 'n'),
                         BbanStructureEntry.accountNumber(13, 'c')));
 
+        structures.put(CountryCode.GA,
+                new BbanStructure(
+                        BbanStructureEntry.bankCode(5, 'n'),
+                        BbanStructureEntry.branchCode(5, 'n'),
+                        BbanStructureEntry.accountNumber(13, 'c')));
+
         structures.put(CountryCode.GE,
                 new BbanStructure(
                         BbanStructureEntry.bankCode(2, 'a'),
