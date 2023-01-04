@@ -139,6 +139,12 @@ final class TestDataHelper {
                         .nationalCheckDigit("5")
                         .build(), "FI2112345600000785"},
                 {new Iban.Builder()
+                        .countryCode(CountryCode.AX)
+                        .bankCode("987654")
+                        .accountNumber("0002033")
+                        .nationalCheckDigit("5")
+                        .build(), "AX7898765400020335"},
+                {new Iban.Builder()
                         .countryCode(CountryCode.FR)
                         .bankCode("20041")
                         .branchCode("01005")
@@ -490,6 +496,24 @@ final class TestDataHelper {
                         .branchCode("601613")
                         .accountNumber("31926819")
                         .build(), "GB29NWBK60161331926819"},
+                {new Iban.Builder()
+                        .countryCode(CountryCode.IM)
+                        .bankCode("HBUK")
+                        .branchCode("401276")
+                        .accountNumber("12345678")
+                        .build(), "IM20HBUK40127612345678"},
+                {new Iban.Builder()
+                        .countryCode(CountryCode.GG)
+                        .bankCode("INGB")
+                        .branchCode("238859")
+                        .accountNumber("12345678")
+                        .build(), "GG65INGB23885912345678"},
+                {new Iban.Builder()
+                        .countryCode(CountryCode.JE)
+                        .bankCode("DEUT")
+                        .branchCode("405081")
+                        .accountNumber("12345678")
+                        .build(), "JE51DEUT40508112345678"},
                 {new Iban.Builder()
                         .countryCode(CountryCode.VA)
                         .bankCode("001")
