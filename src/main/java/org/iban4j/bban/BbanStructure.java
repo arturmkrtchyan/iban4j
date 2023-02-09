@@ -502,6 +502,12 @@ public class BbanStructure {
                         BbanStructureEntry.bankCode(4, 'a'),
                         BbanStructureEntry.branchCode(3, 'n'),
                         BbanStructureEntry.accountNumber(12, 'n')));
+        
+        structures.put(CountryCode.CV, 
+               new BbanStructure(
+                   new BbanStructureEntry[]{BbanStructureEntry.bankCode(4, 'n'), 
+                                            BbanStructureEntry.branchCode(4, 'n'), 
+                                            BbanStructureEntry.accountNumber(13, 'c')}));
     }
 
     /**
