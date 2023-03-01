@@ -133,6 +133,12 @@ final class TestDataHelper {
                         .nationalCheckDigit("5")
                         .build(), "EE382200221020145685"},
                 {new Iban.Builder()
+                        .countryCode(CountryCode.EG)
+                        .bankCode("0019")
+                        .branchCode("0005")
+                        .accountNumber("00000000263180002")
+                        .build(), "EG380019000500000000263180002"},
+                {new Iban.Builder()
                         .countryCode(CountryCode.FI)
                         .bankCode("123456")
                         .accountNumber("0000078")
