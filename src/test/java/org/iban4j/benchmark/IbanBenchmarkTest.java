@@ -2,25 +2,23 @@
 package org.iban4j.benchmark;
 
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
-import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 import org.iban4j.CountryCode;
 import org.iban4j.Iban;
 import org.iban4j.IbanUtil;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TestRule;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
-public class IbanBenchmark {
+public class IbanBenchmarkTest {
 
     private static final long LOOPS_COUNT = 1000000;
 
-    @Rule
-    public TestRule benchmarkRun = new BenchmarkRule();
+//    @Rule
+//    public TestRule benchmarkRun = new BenchmarkRule();
 
     @BenchmarkOptions(benchmarkRounds = 3, warmupRounds = 1)
     @Test
-    @Ignore
+    @Disabled
     public void ibanConstruction() {
 
         for(int i = 0; i < LOOPS_COUNT; i++) {
@@ -29,12 +27,13 @@ public class IbanBenchmark {
                             .bankCode("52060170")
                             .accountNumber("0012335785")
                             .build();
+            Assertions.assertNotNull(iban);
         }
     }
 
     @BenchmarkOptions(benchmarkRounds = 3, warmupRounds = 1)
     @Test
-    @Ignore
+    @Disabled
     public void ibanValidation() {
 
         for(int i = 0; i < LOOPS_COUNT; i++) {
