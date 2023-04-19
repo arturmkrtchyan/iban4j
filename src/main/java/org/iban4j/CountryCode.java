@@ -244,7 +244,7 @@ public enum CountryCode {
     GF("French Guiana", "GUF"),
 
 
-    GG("Guemsey", "GGY"),
+    GG("Guernsey", "GGY"),
 
 
     GH("Ghana", "GHA"),
