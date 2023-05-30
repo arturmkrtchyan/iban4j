@@ -549,11 +549,17 @@ final class TestDataHelper {
                         .nationalCheckDigit("13")
                         .build(), "YT021234512345123456789AB13"},
                 {new Iban.Builder()
-                .countryCode(CountryCode.IQ)
-                .bankCode("NBIQ")
+                        .countryCode(CountryCode.IQ)
+                        .bankCode("NBIQ")
                         .branchCode("850")
-                .accountNumber("123456789012")
-                .build(), "IQ98NBIQ850123456789012"}
+                        .accountNumber("123456789012")
+                        .build(), "IQ98NBIQ850123456789012"},
+                {new Iban.Builder()
+                        .countryCode(CountryCode.CV)
+                        .bankCode("0002")
+                        .branchCode("0000")
+                        .accountNumber("0311180710148")
+                        .build(), "CV64000200000311180710148"}
         });
     }
 
