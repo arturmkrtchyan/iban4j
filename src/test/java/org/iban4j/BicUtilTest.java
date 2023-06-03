@@ -15,91 +15,123 @@
  */
 package org.iban4j;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.experimental.runners.Enclosed;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(Enclosed.class)
+
+@DisplayName("BIC Util Test class")
 public class BicUtilTest {
 
     public static class InvalidBicValidationTest {
 
-        @Rule
-        public ExpectedException expectedException = ExpectedException.none();
+//        @Rule
+//        public ExpectedException expectedException = ExpectedException.none();
 
 
         @Test
         public void bicValidationWithNullShouldThrowException() {
-            expectedException.expect(BicFormatException.class);
-            expectedException.expectMessage(containsString("Null can't be a valid Bic"));
-            BicUtil.validate(null);
+            BicFormatException thrown = assertThrows(
+                    BicFormatException.class,
+                    () ->             BicUtil.validate(null),
+                    "Expected doThing() to throw, but it didn't"
+            );
+            assertTrue(thrown.getMessage().contentEquals("Null can't be a valid Bic"));
         }
 
         @Test
         public void bicValidationWithEmptyStringShouldThrowException() {
-            expectedException.expect(BicFormatException.class);
-            expectedException.expectMessage(containsString("Empty string can't be a valid Bic"));
-            BicUtil.validate("");
+            BicFormatException thrown = assertThrows(
+                    BicFormatException.class,
+                    () ->             BicUtil.validate(""),
+                    "Expected doThing() to throw, but it didn't"
+            );
+            assertTrue(thrown.getMessage().contentEquals("Empty string can't be a valid Bic"));
         }
 
         @Test
         public void bicValidationWithLessCharactersShouldThrowException() {
-            expectedException.expect(BicFormatException.class);
-            expectedException.expectMessage(containsString("Bic length must be 8 or 11"));
-            BicUtil.validate("DEUTFF");
+            BicFormatException thrown = assertThrows(
+                    BicFormatException.class,
+                    () ->             BicUtil.validate("DEUTFF"),
+                    "Expected doThing() to throw, but it didn't"
+            );
+            assertTrue(thrown.getMessage().contentEquals("Bic length must be 8 or 11"));
         }
 
         @Test
         public void bicValidationWithMoreCharactersShouldThrowException() {
-            expectedException.expect(BicFormatException.class);
-            expectedException.expectMessage(containsString("Bic length must be 8 or 11"));
-            BicUtil.validate("DEUTFFDEUTFF");
+            BicFormatException thrown = assertThrows(
+                    BicFormatException.class,
+                    () ->             BicUtil.validate("DEUTFFDEUTFF"),
+                    "Expected doThing() to throw, but it didn't"
+            );
+            assertTrue(thrown.getMessage().contentEquals("Bic length must be 8 or 11"));
         }
 
         @Test
         public void bicValidationWithLowercaseShouldThrowException() {
-            expectedException.expect(BicFormatException.class);
-            expectedException.expectMessage(containsString("Bic must contain only upper case letters"));
-            BicUtil.validate("DEUTdeFF");
+            BicFormatException thrown = assertThrows(
+                    BicFormatException.class,
+                    () ->             BicUtil.validate("DEUTdeFF"),
+                    "Expected doThing() to throw, but it didn't"
+            );
+            assertTrue(thrown.getMessage().contentEquals("Bic must contain only upper case letters"));
         }
 
         @Test
         public void bicValidationWithInvalidBankCodeShouldThrowException() {
-            expectedException.expect(BicFormatException.class);
-            expectedException.expectMessage(containsString("Bank code must contain only letters"));
-            BicUtil.validate("DEU1DEFF");
+            BicFormatException thrown = assertThrows(
+                    BicFormatException.class,
+                    () ->             BicUtil.validate("DEU1DEFF"),
+                    "Expected doThing() to throw, but it didn't"
+            );
+            assertTrue(thrown.getMessage().contentEquals("Bank code must contain only letters"));
+
         }
 
         @Test
         public void bicValidationWithNonExistingCountryCodeShouldThrowException() {
-            expectedException.expect(UnsupportedCountryException.class);
-            expectedException.expectMessage(containsString("Country code is not supported"));
-            BicUtil.validate("DEUTDDFF");
+            BicFormatException thrown = assertThrows(
+                    BicFormatException.class,
+                    () ->             BicUtil.validate("DEUTDDFF"),
+                    "Expected doThing() to throw, but it didn't"
+            );
+            assertTrue(thrown.getMessage().contentEquals("Country code is not supported"));
         }
 
         @Test
         public void bicValidationWithInvalidCountryCodeShouldThrowException() {
-            expectedException.expect(BicFormatException.class);
-            expectedException.expectMessage(containsString("Bic country code must contain upper case letters"));
-            BicUtil.validate("DEUT_1FF");
+            BicFormatException thrown = assertThrows(
+                    BicFormatException.class,
+                    () ->             BicUtil.validate("DEUT_1FF"),
+                    "Expected doThing() to throw, but it didn't"
+            );
+            assertTrue(thrown.getMessage().contentEquals("Bic country code must contain upper case letters"));
         }
 
         @Test
         public void bicValidationWithInvalidLocationCodeShouldThrowException() {
-            expectedException.expect(BicFormatException.class);
-            expectedException.expectMessage(containsString("Location code must contain only letters or digits"));
-            BicUtil.validate("DEUTDEF ");
+            BicFormatException thrown = assertThrows(
+                    BicFormatException.class,
+                    () ->             BicUtil.validate("DEUTDEF "),
+                    "Expected doThing() to throw, but it didn't"
+            );
+            assertTrue(thrown.getMessage().contentEquals("Location code must contain only letters or digits"));
+
         }
 
         @Test
         public void bicValidationWithInvalidBranchCodeShouldThrowException() {
-            expectedException.expect(BicFormatException.class);
-            expectedException.expectMessage(containsString("Branch code must contain only letters or digits"));
-            BicUtil.validate("DEUTDEFF50_");
+            BicFormatException thrown = assertThrows(
+                    BicFormatException.class,
+                    () ->             BicUtil.validate("DEUTDEFF50_"),
+                    "Expected doThing() to throw, but it didn't"
+            );
+            assertTrue(thrown.getMessage().contentEquals("Branch code must contain only letters or digits"));
+
         }
     }
 
