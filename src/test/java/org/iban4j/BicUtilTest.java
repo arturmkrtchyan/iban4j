@@ -18,8 +18,7 @@ package org.iban4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @DisplayName("BIC Util Test class")
@@ -27,18 +26,15 @@ public class BicUtilTest {
 
     public static class InvalidBicValidationTest {
 
-//        @Rule
-//        public ExpectedException expectedException = ExpectedException.none();
-
+        String defaultExceptionMessage ="Expected doThing() to throw, but it didn't";
 
         @Test
         public void bicValidationWithNullShouldThrowException() {
             BicFormatException thrown = assertThrows(
                     BicFormatException.class,
-                    () ->             BicUtil.validate(null),
-                    "Expected doThing() to throw, but it didn't"
-            );
-            assertTrue(thrown.getMessage().contentEquals("Null can't be a valid Bic"));
+                    () -> BicUtil.validate(null),
+                    defaultExceptionMessage);
+            assertEquals("Null can't be a valid Bic", thrown.getMessage());
         }
 
         @Test
@@ -46,9 +42,8 @@ public class BicUtilTest {
             BicFormatException thrown = assertThrows(
                     BicFormatException.class,
                     () ->             BicUtil.validate(""),
-                    "Expected doThing() to throw, but it didn't"
-            );
-            assertTrue(thrown.getMessage().contentEquals("Empty string can't be a valid Bic"));
+                    defaultExceptionMessage);
+            assertEquals("Empty string can't be a valid Bic", thrown.getMessage());
         }
 
         @Test
@@ -56,9 +51,8 @@ public class BicUtilTest {
             BicFormatException thrown = assertThrows(
                     BicFormatException.class,
                     () ->             BicUtil.validate("DEUTFF"),
-                    "Expected doThing() to throw, but it didn't"
-            );
-            assertTrue(thrown.getMessage().contentEquals("Bic length must be 8 or 11"));
+                    defaultExceptionMessage);
+            assertEquals("Bic length must be 8 or 11", thrown.getMessage());
         }
 
         @Test
@@ -66,9 +60,8 @@ public class BicUtilTest {
             BicFormatException thrown = assertThrows(
                     BicFormatException.class,
                     () ->             BicUtil.validate("DEUTFFDEUTFF"),
-                    "Expected doThing() to throw, but it didn't"
-            );
-            assertTrue(thrown.getMessage().contentEquals("Bic length must be 8 or 11"));
+                    defaultExceptionMessage);
+            assertEquals("Bic length must be 8 or 11", thrown.getMessage());
         }
 
         @Test
@@ -76,9 +69,8 @@ public class BicUtilTest {
             BicFormatException thrown = assertThrows(
                     BicFormatException.class,
                     () ->             BicUtil.validate("DEUTdeFF"),
-                    "Expected doThing() to throw, but it didn't"
-            );
-            assertTrue(thrown.getMessage().contentEquals("Bic must contain only upper case letters"));
+                    defaultExceptionMessage);
+            assertEquals("Bic must contain only upper case letters", thrown.getMessage());
         }
 
         @Test
@@ -86,10 +78,8 @@ public class BicUtilTest {
             BicFormatException thrown = assertThrows(
                     BicFormatException.class,
                     () ->             BicUtil.validate("DEU1DEFF"),
-                    "Expected doThing() to throw, but it didn't"
-            );
-            assertTrue(thrown.getMessage().contentEquals("Bank code must contain only letters"));
-
+                    defaultExceptionMessage);
+            assertEquals("Bank code must contain only letters", thrown.getMessage());
         }
 
         @Test
@@ -97,9 +87,8 @@ public class BicUtilTest {
             BicFormatException thrown = assertThrows(
                     BicFormatException.class,
                     () ->             BicUtil.validate("DEUTDDFF"),
-                    "Expected doThing() to throw, but it didn't"
-            );
-            assertTrue(thrown.getMessage().contentEquals("Country code is not supported"));
+                    defaultExceptionMessage);
+            assertEquals("Country code is not supported", thrown.getMessage());
         }
 
         @Test
@@ -107,9 +96,8 @@ public class BicUtilTest {
             BicFormatException thrown = assertThrows(
                     BicFormatException.class,
                     () ->             BicUtil.validate("DEUT_1FF"),
-                    "Expected doThing() to throw, but it didn't"
-            );
-            assertTrue(thrown.getMessage().contentEquals("Bic country code must contain upper case letters"));
+                    defaultExceptionMessage);
+            assertEquals("Bic country code must contain upper case letters", thrown.getMessage());
         }
 
         @Test
@@ -117,10 +105,8 @@ public class BicUtilTest {
             BicFormatException thrown = assertThrows(
                     BicFormatException.class,
                     () ->             BicUtil.validate("DEUTDEF "),
-                    "Expected doThing() to throw, but it didn't"
-            );
-            assertTrue(thrown.getMessage().contentEquals("Location code must contain only letters or digits"));
-
+                    defaultExceptionMessage);
+            assertEquals("Location code must contain only letters or digits", thrown.getMessage());
         }
 
         @Test
@@ -128,10 +114,8 @@ public class BicUtilTest {
             BicFormatException thrown = assertThrows(
                     BicFormatException.class,
                     () ->             BicUtil.validate("DEUTDEFF50_"),
-                    "Expected doThing() to throw, but it didn't"
-            );
-            assertTrue(thrown.getMessage().contentEquals("Branch code must contain only letters or digits"));
-
+                    defaultExceptionMessage);
+            assertEquals("Branch code must contain only letters or digits", thrown.getMessage());
         }
     }
 
