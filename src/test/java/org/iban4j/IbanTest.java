@@ -126,6 +126,18 @@ public class IbanTest {
         }
 
         @Test
+        public void ibanShouldReturnValidAccountNumberPrefix() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.SK)
+                    .bankCode("1200")
+                    .accountNumberPrefix("000019")
+                    .accountNumber("8742637541")
+                    .build();
+
+            assertThat(iban.getAccountNumberPrefix(), is(equalTo("000019")));
+        }
+
+        @Test
         public void ibanShouldReturnValidAccountNumber() {
             Iban iban = new Iban.Builder()
                     .countryCode(CountryCode.AT)
@@ -378,6 +390,16 @@ public class IbanTest {
         }
 
         @Test(expected = IbanFormatException.class)
+        public void ibanConstructionWithShortAccountPrefixShouldThrowException() {
+            new Iban.Builder()
+                    .countryCode(CountryCode.SK)
+                    .bankCode("1200")
+                    .accountNumberPrefix("19")
+                    .accountNumber("8742637541")
+                    .build();
+        }
+
+        @Test(expected = IbanFormatException.class)
         public void ibanConstructionWithShortBankCodeShouldThrowExceptionIfValidationRequested() {
             new Iban.Builder()
                     .countryCode(CountryCode.AT)
@@ -410,6 +432,15 @@ public class IbanTest {
                     .bankCode("12345")
                     .buildRandom();
             assertThat(iban.getBankCode(), is(equalTo("12345")));
+        }
+
+        @Test
+        public void ibanContructionRandomDoesNotOverwriteBankAccountPrefix() {
+            Iban iban = new Iban.Builder()
+                    .countryCode(CountryCode.SK)
+                    .accountNumberPrefix("078901")
+                    .buildRandom();
+            assertThat(iban.getAccountNumberPrefix(), is(equalTo("078901")));
         }
 
         @Test

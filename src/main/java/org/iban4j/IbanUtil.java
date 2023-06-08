@@ -182,6 +182,16 @@ public final class IbanUtil {
      * Returns iban's account number.
      *
      * @param iban String
+     * @return accountNumberPrefix String
+     */
+    public static String getAccountNumberPrefix(final String iban) {
+        return extractBbanEntry(iban, BbanEntryType.account_number_prefix);
+    }
+
+    /**
+     * Returns iban's account number.
+     *
+     * @param iban String
      * @return accountNumber String
      */
     public static String getAccountNumber(final String iban) {
