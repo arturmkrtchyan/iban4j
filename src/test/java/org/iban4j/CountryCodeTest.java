@@ -23,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 
 @DisplayName("Country code Test class")
-
 public class CountryCodeTest {
     @Test
     public void getByCodeWithAlpha2CodeShouldReturnCountry() {
