@@ -45,7 +45,7 @@ public class BicTest {
         public void bicsWithDifferentDataShouldNotBeEqual() {
             Bic bic1 = Bic.valueOf("DEUTDEFF500");
             Bic bic2 = Bic.valueOf("DEUTDEFF501");
-            Assertions.assertEquals(bic1, bic2);
+            Assertions.assertNotEquals(bic1, bic2);
         }
 
         @Test
