@@ -165,13 +165,13 @@ public class InvalidIbanValidationTest {
         assertThat(thrown.getMessage(), containsString("must contain only upper case letters"));
     }
 
-//    @Test
-//    public void unformattedIbanValidationWithDefaultFormattingShouldThrowException() {
-//        expectedException.expect(IbanFormatException.class);
-//        expectedException.expectMessage(containsString("Iban must be formatted using 4 characters and space"));
-//        IbanUtil.validate("AT611904300234573201", IbanFormat.Default);
-//    }
-//
+    @Test
+    public void unformattedIbanValidationWithDefaultFormattingShouldThrowException() {
+        IbanFormatException thrown = assertThrows(IbanFormatException.class,
+                () -> IbanUtil.validate("AT611904300234573201", IbanFormat.Default));
+        assertThat(thrown.getMessage(), containsString("Iban must be formatted using 4 characters and space"));
+    }
+
 //    @Test
 //    public void formattedIbanValidationWithNoneFormattingShouldThrowException() {
 //        expectedException.expect(IbanFormatException.class);
