@@ -105,14 +105,15 @@ public class InvalidIbanValidationTest {
                 () -> IbanUtil.validate("AM611904300234573201"));
     }
 
-//    @Test
-//    public void ibanValidationWithNonExistingCountryShouldThrowException() {
-//        expectedException.expect(IbanFormatException.class);
-//        expectedException.expectMessage(containsString("Iban contains non existing country code."));
-//        expectedException.expect(new org.iban4j.matcher.IbanFormatViolationMatcher(IbanFormatException.IbanFormatViolation.COUNTRY_CODE_EXISTS));
-//        IbanUtil.validate("JJ611904300234573201");
-//    }
-//
+    @Test
+    public void ibanValidationWithNonExistingCountryShouldThrowException() {
+        Matcher<IbanFormatException> countryCodeMatcher = is(new IbanFormatViolationMatcher(IbanFormatException.IbanFormatViolation.COUNTRY_CODE_EXISTS));
+        IbanFormatException thrown = assertThrows(IbanFormatException.class,
+                () -> IbanUtil.validate("JJ611904300234573201"));
+        assertThat(thrown.getMessage(), containsString("Iban contains non existing country code."));
+        assertThat(thrown, countryCodeMatcher);
+    }
+
 //    @Test
 //    public void ibanValidationWithInvalidCheckDigitShouldThrowException() {
 //        expectedException.expect(InvalidCheckDigitException.class);
