@@ -8,7 +8,6 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.iban4j.IbanFormatException.IbanFormatViolation.COUNTRY_CODE_TWO_LETTERS;
-import static org.iban4j.IbanFormatException.IbanFormatViolation.IBAN_NOT_EMPTY;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("InvalidIbanValidationTest")
@@ -24,11 +23,11 @@ public class InvalidIbanValidationTest {
 
     @Test
     public void ibanValidationWithEmptyShouldThrowException() {
-        Matcher<Throwable> ibanNotNullException = is(new IbanFormatException(IBAN_NOT_EMPTY, ""));
+        Matcher<IbanFormatException> ibanNotNullException = is(new IbanFormatViolationMatcher(IbanFormatException.IbanFormatViolation.IBAN_NOT_EMPTY));
         IbanFormatException thrown = assertThrows(IbanFormatException.class,
                 () -> IbanUtil.validate(""));
         assertThat(thrown.getMessage(), containsString("Empty string can't be a valid Iban"));
-        assertThat(thrown.getCause(), ibanNotNullException);
+        assertThat(thrown, ibanNotNullException);
     }
 
     @Test
