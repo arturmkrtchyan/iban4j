@@ -158,13 +158,13 @@ public class InvalidIbanValidationTest {
         assertThat(thrown.getMessage(), containsString("must contain only digits"));
     }
 
-//    @Test
-//    public void ibanValidationWithInvalidNationalCheckDigitShouldThrowException() {
-//        expectedException.expect(IbanFormatException.class);
-//        expectedException.expectMessage(containsString("must contain only upper case letters"));
-//        IbanUtil.validate("IT6010542811101000000123456");
-//    }
-//
+    @Test
+    public void ibanValidationWithInvalidNationalCheckDigitShouldThrowException() {
+        IbanFormatException thrown = assertThrows(IbanFormatException.class,
+                () -> IbanUtil.validate("IT6010542811101000000123456"));
+        assertThat(thrown.getMessage(), containsString("must contain only upper case letters"));
+    }
+
 //    @Test
 //    public void unformattedIbanValidationWithDefaultFormattingShouldThrowException() {
 //        expectedException.expect(IbanFormatException.class);
