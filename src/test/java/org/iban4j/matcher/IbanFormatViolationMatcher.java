@@ -1,7 +1,8 @@
-package org.iban4j;
+package org.iban4j.matcher;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
+import org.iban4j.IbanFormatException;
 
 public class IbanFormatViolationMatcher extends TypeSafeMatcher<IbanFormatException> {
 
