@@ -2,6 +2,7 @@ package org.iban4j;
 
 import org.hamcrest.Matcher;
 import org.iban4j.matcher.IbanFormatExceptionActualValueMatcher;
+import org.iban4j.matcher.IbanFormatExceptionExpectedValueMatcher;
 import org.iban4j.matcher.IbanFormatViolationMatcher;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -66,33 +67,38 @@ public class InvalidIbanValidationTest {
 
     @Test
     public void ibanValidationWithCountryCodeAndCheckDigitOnlyShouldThrowException() {
-        expectedException.expect(new IbanFormatExceptionExpectedValueMatcher(16));
         Matcher<IbanFormatException> bbanMatcher = is(new IbanFormatViolationMatcher(IbanFormatException.IbanFormatViolation.BBAN_LENGTH));
         Matcher<IbanFormatException> actualMatcher = is(new IbanFormatExceptionActualValueMatcher(0));
+        Matcher<IbanFormatException> expectedMatcher = is(new IbanFormatExceptionExpectedValueMatcher(16));
         IbanFormatException thrown = assertThrows(IbanFormatException.class,
                 () -> IbanUtil.validate("AT48"));
         assertThat(thrown, bbanMatcher);
         assertThat(thrown, actualMatcher);
+        assertThat(thrown, expectedMatcher);
     }
 
-//    @Test
-//    public void ibanValidationWithLowercaseCountryShouldThrowException() {
-//        expectedException.expect(IbanFormatException.class);
-//        expectedException.expectMessage(containsString("Iban country code must contain upper case letters"));
-//        expectedException.expect(new org.iban4j.matcher.IbanFormatViolationMatcher(IbanFormatException.IbanFormatViolation.COUNTRY_CODE_UPPER_CASE_LETTERS));
-//        expectedException.expect(new org.iban4j.ValidCheckDigitCalculationTest.IbanFormatExceptionActualValueMatcher("at"));
-//        IbanUtil.validate("at611904300234573201");
-//    }
-//
-//    @Test
-//    public void ibanValidationWithEmptyCountryShouldThrowException() {
-//        expectedException.expect(IbanFormatException.class);
-//        expectedException.expectMessage(containsString("Iban country code must contain upper case letters"));
-//        expectedException.expect(new org.iban4j.matcher.IbanFormatViolationMatcher(IbanFormatException.IbanFormatViolation.COUNTRY_CODE_UPPER_CASE_LETTERS));
-//        expectedException.expect(new org.iban4j.ValidCheckDigitCalculationTest.IbanFormatExceptionActualValueMatcher(" _"));
-//        IbanUtil.validate(" _611904300234573201");
-//    }
-//
+    @Test
+    public void ibanValidationWithLowercaseCountryShouldThrowException() {
+        Matcher<IbanFormatException> countryCodeMatcher = is(new IbanFormatViolationMatcher(IbanFormatException.IbanFormatViolation.COUNTRY_CODE_UPPER_CASE_LETTERS));
+        Matcher<IbanFormatException> actualMatcher = is(new IbanFormatExceptionActualValueMatcher("at"));
+        IbanFormatException thrown = assertThrows(IbanFormatException.class,
+                () -> IbanUtil.validate("at611904300234573201"));
+        assertThat(thrown.getMessage(), containsString("Iban country code must contain upper case letters"));
+        assertThat(thrown, countryCodeMatcher);
+        assertThat(thrown, actualMatcher);
+    }
+
+    @Test
+    public void ibanValidationWithEmptyCountryShouldThrowException() {
+        Matcher<IbanFormatException> countryCodeMatcher = is(new IbanFormatViolationMatcher(IbanFormatException.IbanFormatViolation.COUNTRY_CODE_UPPER_CASE_LETTERS));
+        Matcher<IbanFormatException> actualMatcher = is(new IbanFormatExceptionActualValueMatcher(" _"));
+        IbanFormatException thrown = assertThrows(IbanFormatException.class,
+                () -> IbanUtil.validate(" _611904300234573201"));
+        assertThat(thrown.getMessage(), containsString("Iban country code must contain upper case letters"));
+        assertThat(thrown, countryCodeMatcher);
+        assertThat(thrown, actualMatcher);
+    }
+
 //    @Test(expected = UnsupportedCountryException.class)
 //    public void ibanValidationWithNonSupportedCountryShouldThrowException() {
 //        IbanUtil.validate("AM611904300234573201");
