@@ -172,12 +172,10 @@ public class InvalidIbanValidationTest {
         assertThat(thrown.getMessage(), containsString("Iban must be formatted using 4 characters and space"));
     }
 
-//    @Test
-//    public void formattedIbanValidationWithNoneFormattingShouldThrowException() {
-//        expectedException.expect(IbanFormatException.class);
-//        expectedException.expectMessage(containsString("expected BBAN length is: 16"));
-//        IbanUtil.validate("AT61 1904 3002 3457 3201", IbanFormat.None);
-//    }
-
-
+    @Test
+    public void formattedIbanValidationWithNoneFormattingShouldThrowException() {
+        IbanFormatException thrown = assertThrows(IbanFormatException.class,
+                () -> IbanUtil.validate("AT61 1904 3002 3457 3201"));
+        assertThat(thrown.getMessage(), containsString("expected BBAN length is: 16"));
+    }
 }
