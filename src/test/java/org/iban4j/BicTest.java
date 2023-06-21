@@ -106,21 +106,4 @@ public class BicTest {
         }
     }
 
-    @Nested
-
-    public  class BicCreationTest2 {
-
-        private final String bicString;
-
-        public BicCreationTest2(String bicString) {
-            this.bicString = bicString;
-        }
-
-        @Test
-        public void bicConstructionWithValueOfShouldReturnBic() {
-            Assertions.assertNotNull(Bic.valueOf(bicString));
-        }
-
-    }
-
 }
