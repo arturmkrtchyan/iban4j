@@ -7,18 +7,19 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.iban4j.IbanFormatException.IbanFormatViolation.*;
+import static org.iban4j.IbanFormatException.IbanFormatViolation.COUNTRY_CODE_TWO_LETTERS;
+import static org.iban4j.IbanFormatException.IbanFormatViolation.IBAN_NOT_EMPTY;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("InvalidIbanValidationTest")
 public class InvalidIbanValidationTest {
     @Test
     public void ibanValidationWithNullShouldThrowException() {
-        Matcher<Throwable> ibanNotNullException = is(new IbanFormatException(IBAN_NOT_NULL, ""));
+        Matcher<IbanFormatException> ibanNotNullException = is(new IbanFormatViolationMatcher(IbanFormatException.IbanFormatViolation.IBAN_NOT_NULL));
         IbanFormatException thrown = assertThrows(IbanFormatException.class,
                 () -> IbanUtil.validate(null));
         assertThat(thrown.getMessage(), containsString("Null can't be a valid Iban"));
-        assertThat(thrown.getCause(), ibanNotNullException);
+        assertThat(thrown, ibanNotNullException);
     }
 
     @Test
@@ -45,7 +46,7 @@ public class InvalidIbanValidationTest {
 //    public void ibanValidationWithCountryCodeOnlyShouldThrowException() {
 //        expectedException.expect(IbanFormatException.class);
 //        expectedException.expectMessage(containsString("Iban must contain 2 digit check digit."));
-//        expectedException.expect(new IbanFormatViolationMatcher(IbanFormatException.IbanFormatViolation.CHECK_DIGIT_TWO_DIGITS));
+//        expectedException.expect(new org.iban4j.IbanFormatViolationMatcher(IbanFormatException.IbanFormatViolation.CHECK_DIGIT_TWO_DIGITS));
 //        expectedException.expect(new IbanFormatExceptionActualValueMatcher(""));
 //        IbanUtil.validate("AT");
 //    }
@@ -54,7 +55,7 @@ public class InvalidIbanValidationTest {
 //    public void ibanValidationWithNonDigitCheckDigitShouldThrowException() {
 //        expectedException.expect(IbanFormatException.class);
 //        expectedException.expectMessage(containsString("Iban's check digit should contain only digits."));
-//        expectedException.expect(new IbanFormatViolationMatcher(IbanFormatException.IbanFormatViolation.CHECK_DIGIT_ONLY_DIGITS));
+//        expectedException.expect(new org.iban4j.IbanFormatViolationMatcher(IbanFormatException.IbanFormatViolation.CHECK_DIGIT_ONLY_DIGITS));
 //        expectedException.expect(new IbanFormatExceptionActualValueMatcher("4T"));
 //        IbanUtil.validate("AT4T");
 //    }
@@ -62,7 +63,7 @@ public class InvalidIbanValidationTest {
 //    @Test
 //    public void ibanValidationWithCountryCodeAndCheckDigitOnlyShouldThrowException() {
 //        expectedException.expect(IbanFormatException.class);
-//        expectedException.expect(new IbanFormatViolationMatcher(IbanFormatException.IbanFormatViolation.BBAN_LENGTH));
+//        expectedException.expect(new org.iban4j.IbanFormatViolationMatcher(IbanFormatException.IbanFormatViolation.BBAN_LENGTH));
 //        expectedException.expect(new IbanFormatExceptionActualValueMatcher(0));
 //        expectedException.expect(new IbanFormatExceptionExpectedValueMatcher(16));
 //        IbanUtil.validate("AT48");
@@ -72,7 +73,7 @@ public class InvalidIbanValidationTest {
 //    public void ibanValidationWithLowercaseCountryShouldThrowException() {
 //        expectedException.expect(IbanFormatException.class);
 //        expectedException.expectMessage(containsString("Iban country code must contain upper case letters"));
-//        expectedException.expect(new IbanFormatViolationMatcher(IbanFormatException.IbanFormatViolation.COUNTRY_CODE_UPPER_CASE_LETTERS));
+//        expectedException.expect(new org.iban4j.IbanFormatViolationMatcher(IbanFormatException.IbanFormatViolation.COUNTRY_CODE_UPPER_CASE_LETTERS));
 //        expectedException.expect(new IbanFormatExceptionActualValueMatcher("at"));
 //        IbanUtil.validate("at611904300234573201");
 //    }
@@ -81,7 +82,7 @@ public class InvalidIbanValidationTest {
 //    public void ibanValidationWithEmptyCountryShouldThrowException() {
 //        expectedException.expect(IbanFormatException.class);
 //        expectedException.expectMessage(containsString("Iban country code must contain upper case letters"));
-//        expectedException.expect(new IbanFormatViolationMatcher(IbanFormatException.IbanFormatViolation.COUNTRY_CODE_UPPER_CASE_LETTERS));
+//        expectedException.expect(new org.iban4j.IbanFormatViolationMatcher(IbanFormatException.IbanFormatViolation.COUNTRY_CODE_UPPER_CASE_LETTERS));
 //        expectedException.expect(new IbanFormatExceptionActualValueMatcher(" _"));
 //        IbanUtil.validate(" _611904300234573201");
 //    }
@@ -95,7 +96,7 @@ public class InvalidIbanValidationTest {
 //    public void ibanValidationWithNonExistingCountryShouldThrowException() {
 //        expectedException.expect(IbanFormatException.class);
 //        expectedException.expectMessage(containsString("Iban contains non existing country code."));
-//        expectedException.expect(new IbanFormatViolationMatcher(IbanFormatException.IbanFormatViolation.COUNTRY_CODE_EXISTS));
+//        expectedException.expect(new org.iban4j.IbanFormatViolationMatcher(IbanFormatException.IbanFormatViolation.COUNTRY_CODE_EXISTS));
 //        IbanUtil.validate("JJ611904300234573201");
 //    }
 //
