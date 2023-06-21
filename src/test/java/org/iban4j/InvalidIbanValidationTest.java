@@ -123,14 +123,14 @@ public class InvalidIbanValidationTest {
         assertThat(thrown.getMessage(), containsString("invalid check digit: 62"));
     }
 
-//    @Test
-//    public void ibanValidationWithSpaceShouldThrowException() {
-//        expectedException.expect(IbanFormatException.class);
-//        expectedException.expectMessage("length is 17");
-//        expectedException.expectMessage("expected BBAN length is: 16");
-//        IbanUtil.validate("AT61 1904300234573201");
-//    }
-//
+    @Test
+    public void ibanValidationWithSpaceShouldThrowException() {
+        IbanFormatException thrown = assertThrows(IbanFormatException.class,
+                () -> IbanUtil.validate("AT61 1904300234573201"));
+        assertThat(thrown.getMessage(), containsString("length is 17"));
+        assertThat(thrown.getMessage(), containsString("expected BBAN length is: 16"));
+    }
+
 //    @Test
 //    public void ibanValidationWithInvalidLengthShouldThrowException() {
 //        expectedException.expect(IbanFormatException.class);
