@@ -143,14 +143,14 @@ public class InvalidIbanValidationTest {
                 () -> IbanUtil.validate("AT61190430023457320"));
         assertThat(thrown.getMessage(), containsString("expected BBAN length is:"));
     }
-//
-//    @Test
-//    public void ibanValidationWithInvalidBankCodeShouldThrowException() {
-//        expectedException.expect(IbanFormatException.class);
-//        expectedException.expectMessage(containsString("must contain only digits"));
-//        IbanUtil.validate("AT611C04300234573201");
-//    }
-//
+
+    @Test
+    public void ibanValidationWithInvalidBankCodeShouldThrowException() {
+        IbanFormatException thrown = assertThrows(IbanFormatException.class,
+                () -> IbanUtil.validate("AT611C04300234573201"));
+        assertThat(thrown.getMessage(), containsString("must contain only digits"));
+    }
+
 //    @Test
 //    public void ibanValidationWithInvalidAccountNumberShouldThrowException() {
 //        expectedException.expect(IbanFormatException.class);
