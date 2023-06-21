@@ -99,11 +99,12 @@ public class InvalidIbanValidationTest {
         assertThat(thrown, actualMatcher);
     }
 
-//    @Test(expected = UnsupportedCountryException.class)
-//    public void ibanValidationWithNonSupportedCountryShouldThrowException() {
-//        IbanUtil.validate("AM611904300234573201");
-//    }
-//
+    @Test
+    public void ibanValidationWithNonSupportedCountryShouldThrowException() {
+        assertThrows(UnsupportedCountryException.class,
+                () -> IbanUtil.validate("AM611904300234573201"));
+    }
+
 //    @Test
 //    public void ibanValidationWithNonExistingCountryShouldThrowException() {
 //        expectedException.expect(IbanFormatException.class);
