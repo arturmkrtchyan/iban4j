@@ -15,17 +15,20 @@
  */
 package org.iban4j;
 
-import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
+
+@DisplayName("Country code Test class")
 public class CountryCodeTest {
     @Test
     public void getByCodeWithAlpha2CodeShouldReturnCountry() {
         for (CountryCode code : CountryCode.values()) {
             CountryCode newCode = CountryCode.getByCode(code.getAlpha2());
-            assertThat(newCode, is(equalTo(code)));
+            assertEquals(code,newCode);
         }
     }
 
@@ -33,7 +36,7 @@ public class CountryCodeTest {
     public void getByCodeWithLowerCaseAlpha2CodeShouldReturnCountry() {
         for (CountryCode code : CountryCode.values()) {
             CountryCode newCode = CountryCode.getByCode(code.getAlpha2().toLowerCase());
-            assertThat(newCode, is(equalTo(code)));
+            assertEquals(code,newCode);
         }
     }
 
@@ -41,7 +44,7 @@ public class CountryCodeTest {
     public void getByCodeWithUpperCaseAlpha2CodeShouldReturnCountry() {
         for (CountryCode code : CountryCode.values()) {
             CountryCode newCode = CountryCode.getByCode(code.getAlpha2().toUpperCase());
-            assertThat(newCode, is(equalTo(code)));
+            assertEquals(code,newCode);
         }
     }
 
@@ -49,7 +52,7 @@ public class CountryCodeTest {
     public void getByCodeWithAlpha3CodeShouldReturnCountryCode() {
         for (CountryCode code : CountryCode.values()) {
             CountryCode newCode = CountryCode.getByCode(code.getAlpha3());
-            assertThat(newCode, is(equalTo(code)));
+            assertEquals(code,newCode);
         }
     }
 
@@ -57,7 +60,7 @@ public class CountryCodeTest {
     public void getByCodeWithLowerCaseAlpha3CodeShouldReturnCountry() {
         for (CountryCode code : CountryCode.values()) {
             CountryCode newCode = CountryCode.getByCode(code.getAlpha3().toLowerCase());
-            assertThat(newCode, is(equalTo(code)));
+            assertEquals(code,newCode);
         }
     }
 
@@ -65,46 +68,45 @@ public class CountryCodeTest {
     public void getByCodeWithUpperCaseAlpha3CodeShouldReturnCountry() {
         for (CountryCode code : CountryCode.values()) {
             CountryCode newCode = CountryCode.getByCode(code.getAlpha3().toUpperCase());
-            assertThat(newCode, is(equalTo(code)));
+            assertEquals(code,newCode);
         }
     }
 
     @Test
     public void getByCodeWithNullCodeShouldReturnNull() {
-        CountryCode code = CountryCode.getByCode(null);
-        assertThat(code, is(nullValue()));
+        assertNull(CountryCode.getByCode(null));
     }
 
     @Test
     public void getByCodeWith4DigitCodeShouldReturnNull() {
         CountryCode code = CountryCode.getByCode("XXXX");
-        assertThat(code, is(nullValue()));
+        assertNull(code);
     }
 
     @Test
     public void getByCodeWithWrongAlpha2CodeShouldReturnNull() {
         CountryCode code = CountryCode.getByCode("XX");
-        assertThat(code, is(nullValue()));
+        assertNull(code);
     }
 
     @Test
     public void getByCodeWithWrongAlpha3CodeShouldReturnNull() {
         CountryCode code = CountryCode.getByCode("XXX");
-        assertThat(code, is(nullValue()));
+        assertNull(code);
     }
 
     @Test
     public void getNameWithDECodeShouldReturnGermany() {
-        assertThat(CountryCode.DE.getName(), is(equalTo("Germany")));
+        assertEquals("Germany",CountryCode.DE.getName());
     }
 
     @Test
     public void getAlpha2WithDECodeShouldReturnGermany() {
-        assertThat(CountryCode.DE.getAlpha2(), is(equalTo("DE")));
+        assertEquals("DE",CountryCode.DE.getAlpha2());
     }
 
     @Test
     public void getAlpha3WithDECodeShouldReturnGermany() {
-        assertThat(CountryCode.DE.getAlpha3(), is(equalTo("DEU")));
+        assertEquals("DEU",CountryCode.DE.getAlpha3());
     }
 }
