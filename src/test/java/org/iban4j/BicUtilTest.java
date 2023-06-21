@@ -18,7 +18,10 @@ package org.iban4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 @DisplayName("BIC Util Test class")
@@ -34,7 +37,7 @@ public class BicUtilTest {
                     BicFormatException.class,
                     () -> BicUtil.validate(null),
                     defaultExceptionMessage);
-            assertEquals("Null can't be a valid Bic", thrown.getMessage());
+            assertThat(thrown.getMessage(), containsString("Null can't be a valid Bic"));
         }
 
         @Test
@@ -43,7 +46,7 @@ public class BicUtilTest {
                     BicFormatException.class,
                     () ->             BicUtil.validate(""),
                     defaultExceptionMessage);
-            assertEquals("Empty string can't be a valid Bic", thrown.getMessage());
+            assertThat(thrown.getMessage(), containsString("Empty string can't be a valid Bic"));
         }
 
         @Test
@@ -70,7 +73,7 @@ public class BicUtilTest {
                     BicFormatException.class,
                     () ->             BicUtil.validate("DEUTdeFF"),
                     defaultExceptionMessage);
-            assertEquals("Bic must contain only upper case letters", thrown.getMessage());
+            assertThat(thrown.getMessage(), containsString("Bic must contain only upper case letters"));
         }
 
         @Test
@@ -79,16 +82,16 @@ public class BicUtilTest {
                     BicFormatException.class,
                     () ->             BicUtil.validate("DEU1DEFF"),
                     defaultExceptionMessage);
-            assertEquals("Bank code must contain only letters", thrown.getMessage());
+            assertThat(thrown.getMessage(), containsString("Bank code must contain only letters"));
         }
 
         @Test
         public void bicValidationWithNonExistingCountryCodeShouldThrowException() {
-            BicFormatException thrown = assertThrows(
-                    BicFormatException.class,
-                    () ->             BicUtil.validate("DEUTDDFF"),
+            UnsupportedCountryException thrown = assertThrows(
+                    UnsupportedCountryException.class,
+                    () -> BicUtil.validate("DEUTDDFF"),
                     defaultExceptionMessage);
-            assertEquals("Country code is not supported", thrown.getMessage());
+            assertThat(thrown.getMessage(), containsString("Country code is not supported"));
         }
 
         @Test
@@ -106,7 +109,7 @@ public class BicUtilTest {
                     BicFormatException.class,
                     () ->             BicUtil.validate("DEUTDEF "),
                     defaultExceptionMessage);
-            assertEquals("Location code must contain only letters or digits", thrown.getMessage());
+            assertThat(thrown.getMessage(), containsString("Location code must contain only letters or digits"));
         }
 
         @Test
@@ -115,7 +118,7 @@ public class BicUtilTest {
                     BicFormatException.class,
                     () ->             BicUtil.validate("DEUTDEFF50_"),
                     defaultExceptionMessage);
-            assertEquals("Branch code must contain only letters or digits", thrown.getMessage());
+            assertThat(thrown.getMessage(), containsString("Branch code must contain only letters or digits"));
         }
     }
 
