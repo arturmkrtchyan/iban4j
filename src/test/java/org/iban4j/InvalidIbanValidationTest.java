@@ -114,15 +114,15 @@ public class InvalidIbanValidationTest {
         assertThat(thrown, countryCodeMatcher);
     }
 
-//    @Test
-//    public void ibanValidationWithInvalidCheckDigitShouldThrowException() {
-//        expectedException.expect(InvalidCheckDigitException.class);
-//        expectedException.expectMessage("invalid check digit: 62");
-//        expectedException.expectMessage("expected check digit is: 61");
-//        expectedException.expectMessage("AT621904300234573201");
-//        IbanUtil.validate("AT621904300234573201");
-//    }
-//
+    @Test
+    public void ibanValidationWithInvalidCheckDigitShouldThrowException() {
+        InvalidCheckDigitException thrown = assertThrows(InvalidCheckDigitException.class,
+                () -> IbanUtil.validate("AT621904300234573201"));
+        assertThat(thrown.getMessage(), containsString("AT621904300234573201"));
+        assertThat(thrown.getMessage(), containsString("expected check digit is: 61"));
+        assertThat(thrown.getMessage(), containsString("invalid check digit: 62"));
+    }
+
 //    @Test
 //    public void ibanValidationWithSpaceShouldThrowException() {
 //        expectedException.expect(IbanFormatException.class);
