@@ -137,12 +137,12 @@ public class InvalidIbanValidationTest {
                 () -> IbanUtil.validate("AT621904300"));
     }
 
-//    @Test
-//    public void ibanValidationWithInvalidBbanLengthShouldThrowException() {
-//        expectedException.expect(IbanFormatException.class);
-//        expectedException.expectMessage(containsString("expected BBAN length is:"));
-//        IbanUtil.validate("AT61190430023457320");
-//    }
+    @Test
+    public void ibanValidationWithInvalidBbanLengthShouldThrowException() {
+        IbanFormatException thrown = assertThrows(IbanFormatException.class,
+                () -> IbanUtil.validate("AT61190430023457320"));
+        assertThat(thrown.getMessage(), containsString("expected BBAN length is:"));
+    }
 //
 //    @Test
 //    public void ibanValidationWithInvalidBankCodeShouldThrowException() {
