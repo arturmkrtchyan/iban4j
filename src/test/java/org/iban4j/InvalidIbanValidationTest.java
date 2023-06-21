@@ -151,13 +151,13 @@ public class InvalidIbanValidationTest {
         assertThat(thrown.getMessage(), containsString("must contain only digits"));
     }
 
-//    @Test
-//    public void ibanValidationWithInvalidAccountNumberShouldThrowException() {
-//        expectedException.expect(IbanFormatException.class);
-//        expectedException.expectMessage(containsString("must contain only digits"));
-//        IbanUtil.validate("DE8937040044053201300A");
-//    }
-//
+    @Test
+    public void ibanValidationWithInvalidAccountNumberShouldThrowException() {
+        IbanFormatException thrown = assertThrows(IbanFormatException.class,
+                () -> IbanUtil.validate("DE8937040044053201300A"));
+        assertThat(thrown.getMessage(), containsString("must contain only digits"));
+    }
+
 //    @Test
 //    public void ibanValidationWithInvalidNationalCheckDigitShouldThrowException() {
 //        expectedException.expect(IbanFormatException.class);
