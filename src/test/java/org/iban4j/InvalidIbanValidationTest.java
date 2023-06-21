@@ -64,15 +64,17 @@ public class InvalidIbanValidationTest {
         assertThat(thrown, actualMatcher);
     }
 
-//    @Test
-//    public void ibanValidationWithCountryCodeAndCheckDigitOnlyShouldThrowException() {
-//        expectedException.expect(IbanFormatException.class);
-//        expectedException.expect(new org.iban4j.matcher.IbanFormatViolationMatcher(IbanFormatException.IbanFormatViolation.BBAN_LENGTH));
-//        expectedException.expect(new org.iban4j.ValidCheckDigitCalculationTest.IbanFormatExceptionActualValueMatcher(0));
-//        expectedException.expect(new IbanFormatExceptionExpectedValueMatcher(16));
-//        IbanUtil.validate("AT48");
-//    }
-//
+    @Test
+    public void ibanValidationWithCountryCodeAndCheckDigitOnlyShouldThrowException() {
+        expectedException.expect(new IbanFormatExceptionExpectedValueMatcher(16));
+        Matcher<IbanFormatException> bbanMatcher = is(new IbanFormatViolationMatcher(IbanFormatException.IbanFormatViolation.BBAN_LENGTH));
+        Matcher<IbanFormatException> actualMatcher = is(new IbanFormatExceptionActualValueMatcher(0));
+        IbanFormatException thrown = assertThrows(IbanFormatException.class,
+                () -> IbanUtil.validate("AT48"));
+        assertThat(thrown, bbanMatcher);
+        assertThat(thrown, actualMatcher);
+    }
+
 //    @Test
 //    public void ibanValidationWithLowercaseCountryShouldThrowException() {
 //        expectedException.expect(IbanFormatException.class);
