@@ -15,11 +15,11 @@
  */
 package org.iban4j;
 
-import java.util.List;
-import java.util.Random;
-
 import org.iban4j.bban.BbanStructure;
 import org.iban4j.bban.BbanStructureEntry;
+
+import java.util.List;
+import java.util.Random;
 
 import static org.iban4j.IbanFormatException.IbanFormatViolation.*;
 
@@ -227,6 +227,8 @@ public final class Iban {
         private String accountNumber;
         private String ownerAccountType;
         private String identificationNumber;
+        private boolean enableLeftPadding;
+        private char padChar = '0';
 
         private final Random random = new Random();
 
@@ -325,12 +327,24 @@ public final class Iban {
         }
 
         /**
+         * Sets iban's left zero padding flag
+         *
+         * @param enableLeftPadding used to determine must left pad or not, default value is false
+         * @return builder Builder
+         */
+        public Builder leftPadding(boolean enableLeftPadding) {
+            this.enableLeftPadding = enableLeftPadding;
+            return this;
+        }
+
+
+        /**
          * Builds new iban instance. This methods validates the generated IBAN.
          *
          * @return new iban instance.
-         * @exception IbanFormatException if values are not parsable by Iban Specification
-         *  <a href="http://en.wikipedia.org/wiki/ISO_13616">ISO_13616</a>
-         * @exception UnsupportedCountryException if country is not supported
+         * @throws IbanFormatException         if values are not parsable by Iban Specification
+         *                                     <a href="http://en.wikipedia.org/wiki/ISO_13616">ISO_13616</a>
+         * @throws UnsupportedCountryException if country is not supported
          */
         public Iban build() throws IbanFormatException,
                 IllegalArgumentException, UnsupportedCountryException {
@@ -401,13 +415,19 @@ public final class Iban {
             for(final BbanStructureEntry entry : structure.getEntries()) {
                 switch (entry.getEntryType()) {
                     case bank_code:
-                        sb.append(bankCode);
+                        if (enableLeftPadding)
+                            sb.append(IbanUtil.padLeft(bankCode, entry.getLength(), padChar));
+                        else
+                            sb.append(bankCode);
                         break;
                     case branch_code:
                         sb.append(branchCode);
                         break;
                     case account_number:
-                        sb.append(accountNumber);
+                        if (enableLeftPadding)
+                            sb.append(IbanUtil.padLeft(accountNumber, entry.getLength(), padChar));
+                        else
+                            sb.append(accountNumber);
                         break;
                     case national_check_digit:
                         sb.append(nationalCheckDigit);
