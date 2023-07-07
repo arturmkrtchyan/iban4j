@@ -274,6 +274,19 @@ public class IbanTest {
                     .build();
             assertThat(iban.toFormattedString(), is(equalTo("DE90 6628 0099 0123 4567 00")));
         }
+
+        @DisplayName("ibanConstruction with padding non default character")
+        @Test
+        public void ibanConstructionWithPaddingCharacter() {
+            Iban iban = new Iban.Builder()
+                    .leftPadding(true)
+                    .countryCode(CountryCode.DE)
+                    .bankCode("66280099")
+                    .accountNumber("123456700")
+                    .paddingCharacter('1')
+                    .build();
+            assertThat(iban.toFormattedString(), is(equalTo("DE45 6628 0099 1123 4567 00")));
+        }
     }
 
 }

@@ -337,9 +337,18 @@ public final class Iban {
             return this;
         }
 
+        /**
+         * @param paddingCharacter which is going to replace the default one which is '0'
+         * @return builder Builder
+         */
+        public Builder paddingCharacter(char paddingCharacter) {
+            this.padChar = paddingCharacter;
+            return this;
+        }
+
 
         /**
-         * Builds new iban instance. This methods validates the generated IBAN.
+         * Builds new iban instance. This method validates the generated IBAN.
          *
          * @return new iban instance.
          * @throws IbanFormatException         if values are not parsable by Iban Specification
@@ -415,19 +424,13 @@ public final class Iban {
             for(final BbanStructureEntry entry : structure.getEntries()) {
                 switch (entry.getEntryType()) {
                     case bank_code:
-                        if (enableLeftPadding)
-                            sb.append(IbanUtil.padLeft(bankCode, entry.getLength(), padChar));
-                        else
-                            sb.append(bankCode);
+                        sb.append(getPaddedString(bankCode, entry.getLength()));
                         break;
                     case branch_code:
                         sb.append(branchCode);
                         break;
                     case account_number:
-                        if (enableLeftPadding)
-                            sb.append(IbanUtil.padLeft(accountNumber, entry.getLength(), padChar));
-                        else
-                            sb.append(accountNumber);
+                        sb.append(getPaddedString(accountNumber, entry.getLength()));
                         break;
                     case national_check_digit:
                         sb.append(nationalCheckDigit);
@@ -444,6 +447,18 @@ public final class Iban {
                 }
             }
             return sb.toString();
+        }
+
+        /**
+         * @param input is the bban portion to be padded
+         * @param len   is the length of the bban structure
+         * @return
+         */
+        private String getPaddedString(String input, int len) {
+            if (enableLeftPadding)
+                return IbanUtil.padLeft(input, len, padChar);
+            else
+                return input;
         }
 
         /**
