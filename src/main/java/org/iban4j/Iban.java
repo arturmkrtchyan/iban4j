@@ -427,7 +427,7 @@ public final class Iban {
                         sb.append(getPaddedString(bankCode, entry.getLength()));
                         break;
                     case branch_code:
-                        sb.append(branchCode);
+                        sb.append(getPaddedString(branchCode, entry.getLength()));
                         break;
                     case account_number:
                         sb.append(getPaddedString(accountNumber, entry.getLength()));

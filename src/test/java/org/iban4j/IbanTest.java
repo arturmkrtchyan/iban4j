@@ -280,10 +280,10 @@ public class IbanTest {
         public void ibanConstructionWithPaddingCharacter() {
             Iban iban = new Iban.Builder()
                     .leftPadding(true)
+                    .paddingCharacter('1')
                     .countryCode(CountryCode.DE)
                     .bankCode("66280099")
                     .accountNumber("123456700")
-                    .paddingCharacter('1')
                     .build();
             assertThat(iban.toFormattedString(), is(equalTo("DE45 6628 0099 1123 4567 00")));
         }
