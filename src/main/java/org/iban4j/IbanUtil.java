@@ -459,11 +459,29 @@ public final class IbanUtil {
                     bbanEntryOffset + entryLength);
 
             bbanEntryOffset = bbanEntryOffset + entryLength;
-            if(entry.getEntryType() == entryType) {
+            if (entry.getEntryType() == entryType) {
                 return entryValue;
             }
         }
         return null;
+    }
+
+    /**
+     * Left padding a string with the given character
+     *
+     * @param str     The string to be padded
+     * @param length  The total fix length of the string
+     * @param padChar The pad character
+     * @return The padded string
+     */
+    public static String padLeft(String str, int length, char padChar) {
+        if (str.length() >= length)
+            return str;
+        StringBuilder pad = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            pad.append(padChar);
+        }
+        return pad.substring(str.length()) + str;
     }
 
 }

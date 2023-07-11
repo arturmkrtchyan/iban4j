@@ -16,6 +16,7 @@
 package org.iban4j;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -24,41 +25,44 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 @DisplayName("Iban general test")
 public class IbanTest {
 
-    public static class IbanGenerationTest2 {
+    public static class IbanGenerationTest {
 
         @DisplayName("IBANs With Same Data Should Be Equal")
+        @Test
         public void ibansWithSameDataShouldBeEqual() {
             Iban iban1 = new Iban.Builder()
                     .countryCode(CountryCode.AT)
-                    .bankCode("1904")
-                    .accountNumber("102345732012")
+                    .bankCode("19041")
+                    .accountNumber("02345732012")
                     .build();
             Iban iban2 = new Iban.Builder()
                     .countryCode(CountryCode.AT)
-                    .bankCode("1904")
-                    .accountNumber("102345732012")
+                    .bankCode("19041")
+                    .accountNumber("02345732012")
                     .build();
 
             assertThat(iban1, is(equalTo(iban2)));
         }
 
         @DisplayName("ibansWithDifferentDataShouldNotBeEqual")
+        @Test
         public void ibansWithDifferentDataShouldNotBeEqual() {
             Iban iban1 = new Iban.Builder()
                     .countryCode(CountryCode.AT)
-                    .bankCode("1904")
-                    .accountNumber("102345732012")
+                    .bankCode("19041")
+                    .accountNumber("02345732012")
                     .build();
             Iban iban2 = new Iban.Builder()
                     .countryCode(CountryCode.AT)
-                    .bankCode("1904")
-                    .accountNumber("102345732011")
+                    .bankCode("19041")
+                    .accountNumber("02345732011")
                     .build();
 
             assertThat(iban1, is(not(equalTo(iban2))));
         }
 
         @DisplayName("ibansWithStringValueAndIbanShouldNotBeEqual")
+        @Test
         public void ibansWithStringValueAndIbanShouldNotBeEqual() {
             Iban iban1 = new Iban.Builder()
                     .countryCode(CountryCode.AT)
@@ -69,6 +73,7 @@ public class IbanTest {
         }
 
         @DisplayName("ibanShouldReturnValidCountryCode")
+        @Test
         public void ibanShouldReturnValidCountryCode() {
             Iban iban = new Iban.Builder()
                     .countryCode(CountryCode.AT)
@@ -79,6 +84,7 @@ public class IbanTest {
         }
 
         @DisplayName("ibanShouldReturnValidBankCode")
+        @Test
         public void ibanShouldReturnValidBankCode() {
             Iban iban = new Iban.Builder()
                     .countryCode(CountryCode.AT)
@@ -89,6 +95,7 @@ public class IbanTest {
         }
 
         @DisplayName("ibanShouldReturnValidAccountNumber")
+        @Test
         public void ibanShouldReturnValidAccountNumber() {
             Iban iban = new Iban.Builder()
                     .countryCode(CountryCode.AT)
@@ -99,6 +106,7 @@ public class IbanTest {
         }
 
         @DisplayName("ibanShouldReturnValidBranchCode")
+        @Test
         public void ibanShouldReturnValidBranchCode() {
             Iban iban = new Iban.Builder()
                     .countryCode(CountryCode.AD)
@@ -110,6 +118,7 @@ public class IbanTest {
         }
 
         @DisplayName("ibanShouldReturnValidNationalCheckDigit")
+        @Test
         public void ibanShouldReturnValidNationalCheckDigit() {
             Iban iban = new Iban.Builder()
                     .countryCode(CountryCode.AL)
@@ -122,6 +131,7 @@ public class IbanTest {
         }
 
         @DisplayName("ibanShouldReturnValidAccountType")
+        @Test
         public void ibanShouldReturnValidAccountType() {
             Iban iban = new Iban.Builder()
                     .countryCode(CountryCode.BR)
@@ -135,6 +145,7 @@ public class IbanTest {
         }
 
         @DisplayName("ibanShouldReturnValidOwnerAccountType")
+        @Test
         public void ibanShouldReturnValidOwnerAccountType() {
             Iban iban = new Iban.Builder()
                     .countryCode(CountryCode.BR)
@@ -148,6 +159,7 @@ public class IbanTest {
         }
 
         @DisplayName("ibanShouldReturnValidIdentificationNumber")
+        @Test
         public void ibanShouldReturnValidIdentificationNumber() {
             Iban iban = new Iban.Builder()
                     .countryCode(CountryCode.IS)
@@ -160,6 +172,7 @@ public class IbanTest {
         }
 
         @DisplayName("ibanShouldReturnValidBban")
+        @Test
         public void ibanShouldReturnValidBban() {
             Iban iban = new Iban.Builder()
                     .countryCode(CountryCode.AT)
@@ -170,6 +183,7 @@ public class IbanTest {
         }
 
         @DisplayName("ibanShouldReturnValidCheckDigit")
+        @Test
         public void ibanShouldReturnValidCheckDigit() {
             Iban iban = new Iban.Builder()
                     .countryCode(CountryCode.AT)
@@ -181,47 +195,51 @@ public class IbanTest {
         }
 
         @DisplayName("ibansWithSameDataShouldHaveSameHashCode")
+        @Test
         public void ibansWithSameDataShouldHaveSameHashCode() {
             Iban iban1 = new Iban.Builder()
                     .countryCode(CountryCode.AT)
-                    .bankCode("1904")
-                    .accountNumber("102345732012")
+                    .bankCode("19041")
+                    .accountNumber("02345732012")
                     .build();
             Iban iban2 = new Iban.Builder()
                     .countryCode(CountryCode.AT)
-                    .bankCode("1904")
-                    .accountNumber("102345732012")
+                    .bankCode("19041")
+                    .accountNumber("02345732012")
                     .build();
 
             assertThat(iban1.hashCode(), is(equalTo(iban2.hashCode())));
         }
 
         @DisplayName("ibansWithDifferentDataShouldNotHaveSameHashCode")
+        @Test
         public void ibansWithDifferentDataShouldNotHaveSameHashCode() {
             Iban iban1 = new Iban.Builder()
                     .countryCode(CountryCode.AT)
-                    .bankCode("1904")
-                    .accountNumber("102345732012")
+                    .bankCode("19041")
+                    .accountNumber("02345732012")
                     .build();
             Iban iban2 = new Iban.Builder()
                     .countryCode(CountryCode.AT)
-                    .bankCode("1904")
-                    .accountNumber("102345732011")
+                    .bankCode("19041")
+                    .accountNumber("02345732011")
                     .build();
             assertThat(iban1.hashCode(), is(not(equalTo(iban2.hashCode()))));
         }
 
         @DisplayName("ibanToFormattedStringShouldHaveSpacesAfterEach4Character")
+        @Test
         public void ibanToFormattedStringShouldHaveSpacesAfterEach4Character() {
             Iban iban = new Iban.Builder()
                     .countryCode(CountryCode.AT)
-                    .bankCode("1904")
-                    .accountNumber("102345732012")
+                    .bankCode("19041")
+                    .accountNumber("02345732012")
                     .build();
             assertThat(iban.toFormattedString(), is(equalTo("AT14 1904 1023 4573 2012")));
         }
 
         @DisplayName("ibanConstructionWithShortBankCodeShouldNotThrowExceptionIfValidationIsDisabled")
+        @Test
         public void ibanConstructionWithShortBankCodeShouldNotThrowExceptionIfValidationIsDisabled() {
             Iban iban = new Iban.Builder()
                     .countryCode(CountryCode.AT)
@@ -232,15 +250,42 @@ public class IbanTest {
         }
 
         @DisplayName("ibanConstructionWithNoneFormattingShouldReturnIban")
+        @Test
         public void ibanConstructionWithNoneFormattingShouldReturnIban() {
             Iban iban = Iban.valueOf("AT611904300234573201", IbanFormat.None);
             assertThat(iban.toFormattedString(), is(equalTo("AT61 1904 3002 3457 3201")));
         }
 
         @DisplayName("ibanConstructionWithDefaultFormattingShouldReturnIban")
+        @Test
         public void ibanConstructionWithDefaultFormattingShouldReturnIban() {
             Iban iban = Iban.valueOf("AT61 1904 3002 3457 3201", IbanFormat.Default);
             assertThat(iban.toFormattedString(), is(equalTo("AT61 1904 3002 3457 3201")));
+        }
+
+        @DisplayName("ibanConstruction with padding left zeros")
+        @Test
+        public void ibanConstructionWithLeftZeroPadding() {
+            Iban iban = new Iban.Builder()
+                    .leftPadding(true)
+                    .countryCode(CountryCode.DE)
+                    .bankCode("66280099")
+                    .accountNumber("123456700")
+                    .build();
+            assertThat(iban.toFormattedString(), is(equalTo("DE90 6628 0099 0123 4567 00")));
+        }
+
+        @DisplayName("ibanConstruction with padding non default character")
+        @Test
+        public void ibanConstructionWithPaddingCharacter() {
+            Iban iban = new Iban.Builder()
+                    .leftPadding(true)
+                    .paddingCharacter('1')
+                    .countryCode(CountryCode.DE)
+                    .bankCode("66280099")
+                    .accountNumber("123456700")
+                    .build();
+            assertThat(iban.toFormattedString(), is(equalTo("DE45 6628 0099 1123 4567 00")));
         }
     }
 

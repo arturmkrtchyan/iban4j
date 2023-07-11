@@ -227,6 +227,8 @@ public final class Iban {
         private String accountNumber;
         private String ownerAccountType;
         private String identificationNumber;
+        private boolean enableLeftPadding;
+        private char padChar = '0';
 
         private final Random random = new Random();
 
@@ -325,12 +327,33 @@ public final class Iban {
         }
 
         /**
-         * Builds new iban instance. This methods validates the generated IBAN.
+         * Sets iban's left zero padding flag
+         *
+         * @param enableLeftPadding used to determine must left pad or not, default value is false
+         * @return builder Builder
+         */
+        public Builder leftPadding(boolean enableLeftPadding) {
+            this.enableLeftPadding = enableLeftPadding;
+            return this;
+        }
+
+        /**
+         * @param paddingCharacter which is going to replace the default one which is '0'
+         * @return builder Builder
+         */
+        public Builder paddingCharacter(char paddingCharacter) {
+            this.padChar = paddingCharacter;
+            return this;
+        }
+
+
+        /**
+         * Builds new iban instance. This method validates the generated IBAN.
          *
          * @return new iban instance.
-         * @exception IbanFormatException if values are not parsable by Iban Specification
-         *  <a href="http://en.wikipedia.org/wiki/ISO_13616">ISO_13616</a>
-         * @exception UnsupportedCountryException if country is not supported
+         * @throws IbanFormatException         if values are not parsable by Iban Specification
+         *                                     <a href="http://en.wikipedia.org/wiki/ISO_13616">ISO_13616</a>
+         * @throws UnsupportedCountryException if country is not supported
          */
         public Iban build() throws IbanFormatException,
                 IllegalArgumentException, UnsupportedCountryException {
@@ -401,13 +424,13 @@ public final class Iban {
             for(final BbanStructureEntry entry : structure.getEntries()) {
                 switch (entry.getEntryType()) {
                     case bank_code:
-                        sb.append(bankCode);
+                        sb.append(getPaddedString(bankCode, entry.getLength()));
                         break;
                     case branch_code:
-                        sb.append(branchCode);
+                        sb.append(getPaddedString(branchCode, entry.getLength()));
                         break;
                     case account_number:
-                        sb.append(accountNumber);
+                        sb.append(getPaddedString(accountNumber, entry.getLength()));
                         break;
                     case national_check_digit:
                         sb.append(nationalCheckDigit);
@@ -424,6 +447,18 @@ public final class Iban {
                 }
             }
             return sb.toString();
+        }
+
+        /**
+         * @param input is the bban portion to be padded
+         * @param len   is the length of the bban structure
+         * @return
+         */
+        private String getPaddedString(String input, int len) {
+            if (enableLeftPadding)
+                return IbanUtil.padLeft(input, len, padChar);
+            else
+                return input;
         }
 
         /**
