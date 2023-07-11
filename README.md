@@ -53,16 +53,38 @@ Codes (<a href="http://en.wikipedia.org/wiki/ISO_9362" target="_blank">BIC ISO_9
  Bic bic = Bic.valueOf("DEUTDEFF");
 
 
- //How to validate Bic
- try {
-     BicUtil.validate("DEUTDEFF500");
-     // valid
- } catch (BicFormatException e) {
-     // invalid
- }
+         //How to validate Bic
+         try{
+         BicUtil.validate("DEUTDEFF500");
+         // valid
+         }catch(BicFormatException e){
+         // invalid
+         }
 ```
 
-#### Maven dependency: 
+#### Enable left padding examples:
+
+```java
+ //How to left pad('account number', 'bank code' and 'branch code') with zero
+ Iban iban1=new Iban.Builder()
+         .leftPadding(true)
+         .countryCode(CountryCode.DE)
+         .bankCode("66280099")
+         .accountNumber("123456700")
+         .build();
+
+         //How to change default padding character ('0') with other
+         Iban iban2=new Iban.Builder()
+         .leftPadding(true)
+         .paddingCharacter('1')
+         .countryCode(CountryCode.DE)
+         .bankCode("66280099")
+         .accountNumber("123456700")
+         .build();
+```
+
+#### Maven dependency:
+
 ```
 <dependency>
   <groupId>org.iban4j</groupId>
