@@ -73,8 +73,8 @@ Codes (<a href="http://en.wikipedia.org/wiki/ISO_9362" target="_blank">BIC ISO_9
          .accountNumber("123456700")
          .build();
 
-//How to change default padding character ('0') with other
-         Iban iban2=new Iban.Builder()
+ //How to change default padding character ('0') with other
+ Iban iban2=new Iban.Builder()
          .leftPadding(true)
          .paddingCharacter('1')
          .countryCode(CountryCode.DE)
