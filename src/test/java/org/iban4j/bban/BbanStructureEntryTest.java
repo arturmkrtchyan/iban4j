@@ -1,15 +1,13 @@
 package org.iban4j.bban;
 
-import org.junit.Test;
-
 import java.nio.CharBuffer;
 import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BbanStructureEntryTest {
 
@@ -47,9 +45,9 @@ public class BbanStructureEntryTest {
     ) {
         String generated = entry.getRandom(new Random(seed));
         assertEquals(
-            "expect that creating " + entry + " with seed '" + seed + "' is deterministic",
             expected,
-            generated
+            generated,
+            "expect that creating " + entry + " with seed '" + seed + "' is deterministic"
         );
     }
 
@@ -61,8 +59,8 @@ public class BbanStructureEntryTest {
             String generated = entry.getRandom();
 
             assertTrue(
-                "expect '" + generated + "' is alphabetic. (" + entry + ")",
-                generated.matches("[a-zA-Z0-9]+")
+                generated.matches("[a-zA-Z0-9]+"),
+                "expect '" + generated + "' is alphabetic. (" + entry + ")"
             );
             assertEquals(5, entry.getLength());
         }
@@ -76,8 +74,8 @@ public class BbanStructureEntryTest {
             String generated = entry.getRandom();
 
             assertTrue(
-                "expect '" + generated + "' only has capitalized letters. (" + entry + ")",
-                generated.matches("[A-Z]+")
+                generated.matches("[A-Z]+"),
+                "expect '" + generated + "' only has capitalized letters. (" + entry + ")"
             );
             assertEquals(6, entry.getLength());
         }
@@ -91,8 +89,8 @@ public class BbanStructureEntryTest {
             String generated = entry.getRandom();
 
             assertTrue(
-                "expect '" + generated + "' only has numbers. (" + entry + ")",
-                generated.matches("[0-9]+")
+                generated.matches("[0-9]+"),
+                "expect '" + generated + "' only has numbers. (" + entry + ")"
             );
             assertEquals(7, entry.getLength());
         }
@@ -105,9 +103,9 @@ public class BbanStructureEntryTest {
             String generated = entry.getRandom();
 
             assertEquals(
-                "expect that entry with length=0 generates zero-length strings. (" + entry + ")",
                 "",
-                generated
+                generated,
+                "expect that entry with length=0 generates zero-length strings. (" + entry + ")"
             );
         }
     }

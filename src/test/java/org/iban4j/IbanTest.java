@@ -17,11 +17,11 @@ package org.iban4j;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import java.util.Random;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import java.util.Random;
+import static org.hamcrest.MatcherAssert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Iban general test")
 public class IbanTest {
@@ -285,9 +285,9 @@ public class IbanTest {
         ) {
             Iban generated = Iban.random(new Random(seed));
             assertEquals(
-                "expect that creating an IBAN with seed '" + seed + "' is deterministic",
                 expected,
-                generated.toFormattedString()
+                generated.toFormattedString(),
+                "expect that creating an IBAN with seed '" + seed + "' is deterministic"
             );
         }
 
@@ -303,10 +303,11 @@ public class IbanTest {
             int seed
         ) {
             Iban generated = new Iban.Builder(new Random(seed)).buildRandom();
+            String actual = generated.toFormattedString();
             assertEquals(
-                "expect that creating an IBAN with seed '" + seed + "' is deterministic",
                 expected,
-                generated.toFormattedString()
+                actual,
+                "expect that creating an IBAN with seed '" + seed + "' is deterministic"
             );
         }
 
@@ -316,9 +317,9 @@ public class IbanTest {
                 Iban util = Iban.random(new Random(i));
                 Iban builder = new Iban.Builder(new Random(i)).buildRandom();
                 assertEquals(
-                    "expect that the same random IBAN is generated from both util and builder methods",
                     util,
-                    builder
+                    builder,
+                    "expect that the same random IBAN is generated from both util and builder methods"
                 );
             }
         }
