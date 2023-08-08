@@ -264,6 +264,18 @@ public class IbanTest {
             assertThat(iban.toFormattedString(), is(equalTo("AT61 1904 3002 3457 3201")));
         }
 
+        @DisplayName("ibanConstruction with padding left zeros")
+        @Test
+        public void ibanConstructionWithLeftZeroPadding() {
+            Iban iban = new Iban.Builder()
+                .leftPadding(true)
+                .countryCode(CountryCode.DE)
+                .bankCode("66280099")
+                .accountNumber("123456700")
+                .build();
+            assertThat(iban.toFormattedString(), is(equalTo("DE90 6628 0099 0123 4567 00")));
+        }
+
         @Test
         public void ibanConstructionRandom() {
             for (int i = 0; i < 100; i++) {
