@@ -111,8 +111,6 @@ public class BbanStructureEntry {
          * Alphabetical characters (A-Z only)
          */
         a,
-        // TODO 'c' used to say:  // upper and lower case alphanumeric characters (A-Z, a-z and 0-9)
-        //      but only generates A-Z0-9. Which is correct? Should it generate a-z too?
         /**
          * Combined alphabetical (uppercase) and numeric characters (A-Z and 0-9)
          */
