@@ -28,10 +28,10 @@ public class BbanStructureEntry {
     private final EntryCharacterType characterType;
     private final int length;
 
-    private static Map<EntryCharacterType, char[]> charByCharacterType;
+    private static final Map<EntryCharacterType, char[]> charByCharacterType;
 
     static {
-        charByCharacterType = new HashMap<EntryCharacterType, char[]>();
+        charByCharacterType = new HashMap<>();
         StringBuilder charTypeN = new StringBuilder();
         for (char ch = '0'; ch <= '9'; ch++) {
             charTypeN.append(ch);
@@ -122,7 +122,7 @@ public class BbanStructureEntry {
     }
 
     public String getRandom(Random random) {
-        StringBuilder s = new StringBuilder("");
+        StringBuilder s = new StringBuilder();
         char[] charChoices = charByCharacterType.get(characterType);
         if (charChoices == null) {
             throw new RuntimeException(String.format("programmer has not implemented choices for character type %s",
@@ -143,4 +143,3 @@ public class BbanStructureEntry {
             '}';
     }
 }
-
