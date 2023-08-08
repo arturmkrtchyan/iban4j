@@ -346,7 +346,7 @@ public class IbanTest {
 
         @DisplayName("ibanConstruction with padding non default character")
         @Test
-        public void ibanConstructionRandomDoesNotOverwriteBankAccount() {
+        public void ibanConstructionWithPaddingCharacter() {
             Iban iban = new Iban.Builder()
                     .leftPadding(true)
                     .paddingCharacter('1')
