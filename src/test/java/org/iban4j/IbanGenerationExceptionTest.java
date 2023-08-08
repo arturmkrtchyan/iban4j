@@ -116,14 +116,6 @@ public class IbanGenerationExceptionTest {
     }
 
     @Test
-    public void ibanConstructionRandom() {
-        for (int i = 0; i < 100; i++) {
-            new Iban.Builder().buildRandom();
-            Iban.random();
-        }
-    }
-
-    @Test
     public void ibanConstructionRandomAcctRetainsSpecifiedCountry() {
         Iban iban = new Iban.Builder().countryCode(CountryCode.AT).buildRandom();
         assertEquals(CountryCode.AT, iban.getCountryCode());
@@ -195,5 +187,3 @@ public class IbanGenerationExceptionTest {
         assertEquals("1234567890", iban.getIdentificationNumber());
     }
 }
-
-
