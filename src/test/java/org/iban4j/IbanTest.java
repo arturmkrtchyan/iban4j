@@ -268,7 +268,7 @@ public class IbanTest {
         public void ibanConstructionRandom() {
             for (int i = 0; i < 100; i++) {
                 new Iban.Builder().buildRandom();
-                Iban.random();
+                assertNotNull(Iban.random());
             }
         }
 
