@@ -91,6 +91,21 @@ public final class IbanUtil {
      * Validates iban.
      *
      * @param iban to be validated.
+     * @return true if the iban is valid
+     */
+    public static boolean isValid(final String iban) {
+        try {
+            validate(iban);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Validates iban.
+     *
+     * @param iban to be validated.
      * @param format to be used in validation.
      * @throws IbanFormatException if iban is invalid.
      *         UnsupportedCountryException if iban's country is not supported.
@@ -112,6 +127,22 @@ public final class IbanUtil {
                 validate(iban);
                 break;
         }
+    }
+
+    /**
+     * Validates iban.
+     *
+     * @param iban to be validated.
+     * @param format to be used in validation.
+     * @return true if iban is valid
+     */
+    public static boolean isValid(final String iban, final IbanFormat format) {
+        try{
+            validate(iban, format);
+        }catch (Exception e){
+            return false;
+        }
+        return true;
     }
 
     /**

@@ -7,6 +7,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class ValidIbanValidationTest {
     public static Collection<Object[]> ibanParameters() {
         final Collection<Object[]> data = new ArrayList<>(TestDataHelper.getIbanData());
@@ -40,6 +42,12 @@ public class ValidIbanValidationTest {
     @MethodSource("ibanParameters")
     public void ibanValidationWithValidIbanShouldNotThrowException(Iban iban, String ibanString) {
         IbanUtil.validate(ibanString);
+    }
+    @DisplayName("ibanValidationWithValidIbanShouldNotThrowException")
+    @ParameterizedTest(name = "{index} ==> the iban ''{0}'' and expected String is {1}")
+    @MethodSource("ibanParameters")
+    public void ibanIsValidWithValidIbanShouldNotThrowException(Iban iban, String ibanString) {
+        assertTrue(IbanUtil.isValid(ibanString));
     }
 
 }
