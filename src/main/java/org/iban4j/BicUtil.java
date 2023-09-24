@@ -135,23 +135,23 @@ public class BicUtil {
         }
     }
 
-    static String getBankCode(final String bic) {
+    public static String getBankCode(final String bic) {
         return bic.substring(BANK_CODE_INDEX, BANK_CODE_INDEX + BANK_CODE_LENGTH);
     }
 
-    static String getCountryCode(final String bic) {
+    public static String getCountryCode(final String bic) {
         return bic.substring(COUNTRY_CODE_INDEX, COUNTRY_CODE_INDEX + COUNTRY_CODE_LENGTH);
     }
 
-    static String getLocationCode(final String bic) {
+    public static String getLocationCode(final String bic) {
         return bic.substring(LOCATION_CODE_INDEX, LOCATION_CODE_INDEX + LOCATION_CODE_LENGTH);
     }
 
-    static String getBranchCode(final String bic) {
+    public static String getBranchCode(final String bic) {
         return bic.substring(BRANCH_CODE_INDEX, BRANCH_CODE_INDEX + BRANCH_CODE_LENGTH);
     }
 
-    static boolean hasBranchCode(final String bic) {
+    public static boolean hasBranchCode(final String bic) {
         return bic.length() == BIC11_LENGTH;
     }
 }
