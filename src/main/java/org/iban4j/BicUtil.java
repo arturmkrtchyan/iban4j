@@ -91,9 +91,9 @@ public class BicUtil {
     private static void validateBankCode(final String bic) {
         String bankCode = getBankCode(bic);
         for(final char ch : bankCode.toCharArray()) {
-            if(!Character.isLetter(ch)) {
-                throw new BicFormatException(BANK_CODE_ONLY_LETTERS, ch,
-                        "Bank code must contain only letters.");
+            if(!Character.isLetterOrDigit(ch)) {
+                throw new BicFormatException(BANK_CODE_ONLY_ALPHANUMERIC, ch,
+                        "Bank code must contain only alphanumeric.");
             }
         }
     }
