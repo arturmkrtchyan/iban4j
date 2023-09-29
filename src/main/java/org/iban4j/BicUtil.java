@@ -54,7 +54,7 @@ public class BicUtil {
             if(hasBranchCode(bic)) {
                 validateBranchCode(bic);
             }
-        } catch (UnsupportedCountryException e) {
+        } catch (Iban4jException e) {
             throw e;
         } catch (RuntimeException e) {
             throw new BicFormatException(UNKNOWN, e.getMessage());
