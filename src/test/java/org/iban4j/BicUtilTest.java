@@ -80,9 +80,9 @@ public class BicUtilTest {
         public void bicValidationWithInvalidBankCodeShouldThrowException() {
             BicFormatException thrown = assertThrows(
                     BicFormatException.class,
-                    () ->             BicUtil.validate("DEU1DEFF"),
+                    () ->             BicUtil.validate("DEU_DEFF"),
                     defaultExceptionMessage);
-            assertThat(thrown.getMessage(), containsString("Bank code must contain only letters"));
+            assertThat(thrown.getMessage(), containsString("Bank code must contain only alphanumeric"));
         }
 
         @Test
@@ -119,6 +119,10 @@ public class BicUtilTest {
                     () ->             BicUtil.validate("DEUTDEFF50_"),
                     defaultExceptionMessage);
             assertThat(thrown.getMessage(), containsString("Branch code must contain only letters or digits"));
+        }
+        @Test
+        public void bicValidationWithAlphanumericBankCode() {
+            BicUtil.validate("1234DEFFXXX");
         }
     }
 

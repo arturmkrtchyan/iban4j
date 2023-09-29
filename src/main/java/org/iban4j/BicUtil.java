@@ -54,7 +54,7 @@ public class BicUtil {
             if(hasBranchCode(bic)) {
                 validateBranchCode(bic);
             }
-        } catch (UnsupportedCountryException e) {
+        } catch (Iban4jException e) {
             throw e;
         } catch (RuntimeException e) {
             throw new BicFormatException(UNKNOWN, e.getMessage());
@@ -91,9 +91,9 @@ public class BicUtil {
     private static void validateBankCode(final String bic) {
         String bankCode = getBankCode(bic);
         for(final char ch : bankCode.toCharArray()) {
-            if(!Character.isLetter(ch)) {
-                throw new BicFormatException(BANK_CODE_ONLY_LETTERS, ch,
-                        "Bank code must contain only letters.");
+            if(!Character.isLetterOrDigit(ch)) {
+                throw new BicFormatException(BANK_CODE_ONLY_ALPHANUMERIC, ch,
+                        "Bank code must contain only alphanumeric.");
             }
         }
     }
@@ -135,23 +135,23 @@ public class BicUtil {
         }
     }
 
-    static String getBankCode(final String bic) {
+    public static String getBankCode(final String bic) {
         return bic.substring(BANK_CODE_INDEX, BANK_CODE_INDEX + BANK_CODE_LENGTH);
     }
 
-    static String getCountryCode(final String bic) {
+    public static String getCountryCode(final String bic) {
         return bic.substring(COUNTRY_CODE_INDEX, COUNTRY_CODE_INDEX + COUNTRY_CODE_LENGTH);
     }
 
-    static String getLocationCode(final String bic) {
+    public static String getLocationCode(final String bic) {
         return bic.substring(LOCATION_CODE_INDEX, LOCATION_CODE_INDEX + LOCATION_CODE_LENGTH);
     }
 
-    static String getBranchCode(final String bic) {
+    public static String getBranchCode(final String bic) {
         return bic.substring(BRANCH_CODE_INDEX, BRANCH_CODE_INDEX + BRANCH_CODE_LENGTH);
     }
 
-    static boolean hasBranchCode(final String bic) {
+    public static boolean hasBranchCode(final String bic) {
         return bic.length() == BIC11_LENGTH;
     }
 }

@@ -133,7 +133,7 @@ public class BicFormatException extends Iban4jException {
 
         BRANCH_CODE_ONLY_LETTERS_OR_DIGITS,
         LOCATION_CODE_ONLY_LETTERS_OR_DIGITS,
-        BANK_CODE_ONLY_LETTERS,
+        BANK_CODE_ONLY_ALPHANUMERIC,
         COUNTRY_CODE_ONLY_UPPER_CASE_LETTERS
     }
 }
