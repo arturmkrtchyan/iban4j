@@ -281,7 +281,7 @@
                             <signature>
                                 <groupId>org.codehaus.mojo.signature
                                 </groupId>
-                                <artifactId>${jdk7Signature}</artifactId>
+                                <artifactId>${jdk8Signature}</artifactId>
                                 <version>1.0</version>
                             </signature>
                         </configuration>
