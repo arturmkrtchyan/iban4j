@@ -22,6 +22,7 @@ import java.util.Random;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
+import static org.iban4j.TestDataHelper.defaultExceptionMessage;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Iban general test")
@@ -417,13 +418,17 @@ public class IbanTest {
             assertThat(iban.getIdentificationNumber(), is(equalTo("1234567890")));
         }
 
-        @Test(expected = IbanFormatException.class)
+        @Test
         public void ibanConstructionWithLackingNationalCheckDigitShouldThrowExceptionIfValidationRequested() {
-            new Iban.Builder()
-                    .countryCode(CountryCode.NO)
-                    .bankCode("4435")
-                    .accountNumber("0343730")
-                    .build(true);
+            IbanFormatException thrown = assertThrows(
+                    IbanFormatException.class,
+                    () ->                         new Iban.Builder()
+                            .countryCode(CountryCode.NO)
+                            .bankCode("4435")
+                            .accountNumber("0343730")
+                            .build(true),
+                    defaultExceptionMessage);
+            assertThat(thrown.getMessage(), containsString("nationalCheckDigit is required; it cannot be null"));
         }
     }
 }
