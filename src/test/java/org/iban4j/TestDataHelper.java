@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 final class TestDataHelper {
+    public static final String defaultExceptionMessage ="Expected doThing() to throw, but it didn't";
 
     private TestDataHelper() {
     }
