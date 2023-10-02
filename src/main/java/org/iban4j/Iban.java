@@ -197,6 +197,10 @@ public final class Iban {
         return new Iban.Builder().buildRandom();
     }
 
+    public static Iban random(Random random) {
+        return new Iban.Builder(random).buildRandom();
+    }
+
     public static Iban random(CountryCode cc) {
         return new Iban.Builder().countryCode(cc).buildRandom();
     }
@@ -230,12 +234,20 @@ public final class Iban {
         private boolean enableLeftPadding;
         private char padChar = '0';
 
-        private final Random random = new Random();
+        private final Random random;
+
+        /**
+         * Creates an Iban Builder instance.
+         */
+        public Builder(Random random) {
+            this.random = random;
+        }
 
         /**
          * Creates an Iban Builder instance.
          */
         public Builder() {
+            this(new Random());
         }
 
         /**
@@ -504,37 +516,37 @@ public final class Iban {
                 switch (entry.getEntryType()) {
                     case bank_code:
                         if (bankCode == null) {
-                            bankCode = entry.getRandom();
+                            bankCode = entry.getRandom(random);
                         }
                         break;
                     case branch_code:
                         if (branchCode == null) {
-                            branchCode = entry.getRandom();
+                            branchCode = entry.getRandom(random);
                         }
                         break;
                     case account_number:
                         if (accountNumber == null) {
-                            accountNumber = entry.getRandom();
+                            accountNumber = entry.getRandom(random);
                         }
                         break;
                     case national_check_digit:
                         if (nationalCheckDigit == null) {
-                            nationalCheckDigit = entry.getRandom();
+                            nationalCheckDigit = entry.getRandom(random);
                         }
                         break;
                     case account_type:
                         if (accountType == null) {
-                            accountType = entry.getRandom();
+                            accountType = entry.getRandom(random);
                         }
                         break;
                     case owner_account_number:
                         if (ownerAccountType == null) {
-                            ownerAccountType = entry.getRandom();
+                            ownerAccountType = entry.getRandom(random);
                         }
                         break;
                     case identification_number:
                         if (identificationNumber == null) {
-                            identificationNumber = entry.getRandom();
+                            identificationNumber = entry.getRandom(random);
                         }
                         break;
                 }

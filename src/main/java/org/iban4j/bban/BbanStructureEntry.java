@@ -28,11 +28,10 @@ public class BbanStructureEntry {
     private final EntryCharacterType characterType;
     private final int length;
 
-    private static Map<EntryCharacterType, char[]> charByCharacterType;
-    private final Random random = new Random();
+    private static final Map<EntryCharacterType, char[]> charByCharacterType;
 
     static {
-        charByCharacterType = new HashMap<EntryCharacterType, char[]>();
+        charByCharacterType = new HashMap<>();
         StringBuilder charTypeN = new StringBuilder();
         for (char ch = '0'; ch <= '9'; ch++) {
             charTypeN.append(ch);
@@ -104,13 +103,26 @@ public class BbanStructureEntry {
     }
 
     public enum EntryCharacterType {
-        n,  // Digits (numeric characters 0 to 9 only)
-        a,  // Upper case letters (alphabetic characters A-Z only)
-        c  // upper and lower case alphanumeric characters (A-Z, a-z and 0-9)
+        /**
+         * Numerical digits (0-9 only)
+         */
+        n,
+        /**
+         * Alphabetical characters (A-Z only)
+         */
+        a,
+        /**
+         * Combined alphabetical (uppercase) and numeric characters (A-Z and 0-9)
+         */
+        c
     }
 
     public String getRandom() {
-        StringBuilder s = new StringBuilder("");
+        return getRandom(new Random());
+    }
+
+    public String getRandom(Random random) {
+        StringBuilder s = new StringBuilder();
         char[] charChoices = charByCharacterType.get(characterType);
         if (charChoices == null) {
             throw new RuntimeException(String.format("programmer has not implemented choices for character type %s",
@@ -121,5 +133,13 @@ public class BbanStructureEntry {
         }
         return s.toString();
     }
-}
 
+    @Override
+    public String toString() {
+        return "BbanStructureEntry{" +
+            "entryType=" + entryType +
+            ", characterType=" + characterType +
+            ", length=" + length +
+            '}';
+    }
+}
