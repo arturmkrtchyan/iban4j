@@ -198,6 +198,12 @@ public class BbanStructure {
                         BbanStructureEntry.branchCode(5, 'n'),
                         BbanStructureEntry.accountNumber(13, 'c')));
 
+        structures.put(CountryCode.GA,
+                new BbanStructure(
+                        BbanStructureEntry.bankCode(5, 'n'),
+                        BbanStructureEntry.branchCode(5, 'n'),
+                        BbanStructureEntry.accountNumber(13, 'c')));
+
         structures.put(CountryCode.GE,
                 new BbanStructure(
                         BbanStructureEntry.bankCode(2, 'a'),
@@ -532,6 +538,20 @@ public class BbanStructure {
      */
     public static BbanStructure forCountry(final CountryCode countryCode) {
         return structures.get(countryCode);
+    }
+
+    /**
+     * Checks whether national Check digit is mandatory for specific country
+     *
+     * @param countryCode the country code
+     * @return true/false
+     */
+    public static boolean hasNationalCheckDigit(final CountryCode countryCode) {
+        Optional<BbanStructure> bbanStructure = Optional.ofNullable(forCountry(countryCode));
+        return bbanStructure.map(structure -> structure.getEntries()
+                .stream()
+                .anyMatch(e -> BbanEntryType.national_check_digit.equals(e.getEntryType())))
+                .orElse(false);
     }
 
     public List<BbanStructureEntry> getEntries() {

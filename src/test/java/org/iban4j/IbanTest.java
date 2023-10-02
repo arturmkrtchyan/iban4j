@@ -15,13 +15,13 @@
  */
 package org.iban4j;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.util.Random;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
+import static org.iban4j.TestDataHelper.defaultExceptionMessage;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Iban general test")
@@ -286,7 +286,6 @@ public class IbanTest {
         }
 
         @Test
-        @Disabled
         public void ibanConstructionSeeded() {
             assertIbanUtilRandomWithSeedEquals("FR87 8734 4468 89P1 RIYK UO5K 809", 1);
             assertIbanUtilRandomWithSeedEquals("FI79 2079 0697 8464 44", 2);
@@ -306,7 +305,6 @@ public class IbanTest {
         }
 
         @Test
-        @Disabled
         public void ibanBuilderConstructionSeeded() {
             assertIbanBuilderRandomWithSeedEquals("FR87 8734 4468 89P1 RIYK UO5K 809", 1);
             assertIbanBuilderRandomWithSeedEquals("FI79 2079 0697 8464 44", 2);
@@ -415,6 +413,19 @@ public class IbanTest {
                     .identificationNumber("1234567890")
                     .buildRandom();
             assertThat(iban.getIdentificationNumber(), is(equalTo("1234567890")));
+        }
+
+        @Test
+        public void ibanConstructionWithLackingNationalCheckDigitShouldThrowExceptionIfValidationRequested() {
+            IbanFormatException thrown = assertThrows(
+                    IbanFormatException.class,
+                    () ->                         new Iban.Builder()
+                            .countryCode(CountryCode.NO)
+                            .bankCode("4435")
+                            .accountNumber("0343730")
+                            .build(true),
+                    defaultExceptionMessage);
+            assertThat(thrown.getMessage(), containsString("nationalCheckDigit is required; it cannot be null"));
         }
     }
 }

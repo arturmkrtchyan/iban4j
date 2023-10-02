@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.iban4j.TestDataHelper.defaultExceptionMessage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -29,7 +30,6 @@ public class BicUtilTest {
 
     public static class InvalidBicValidationTest {
 
-        String defaultExceptionMessage ="Expected doThing() to throw, but it didn't";
 
         @Test
         public void bicValidationWithNullShouldThrowException() {
