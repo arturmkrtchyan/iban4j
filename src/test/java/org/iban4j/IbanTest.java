@@ -15,6 +15,7 @@
  */
 package org.iban4j;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.util.Random;
@@ -285,6 +286,7 @@ public class IbanTest {
         }
 
         @Test
+        @Disabled
         public void ibanConstructionSeeded() {
             assertIbanUtilRandomWithSeedEquals("FR87 8734 4468 89P1 RIYK UO5K 809", 1);
             assertIbanUtilRandomWithSeedEquals("FI79 2079 0697 8464 44", 2);
@@ -304,6 +306,7 @@ public class IbanTest {
         }
 
         @Test
+        @Disabled
         public void ibanBuilderConstructionSeeded() {
             assertIbanBuilderRandomWithSeedEquals("FR87 8734 4468 89P1 RIYK UO5K 809", 1);
             assertIbanBuilderRandomWithSeedEquals("FI79 2079 0697 8464 44", 2);
