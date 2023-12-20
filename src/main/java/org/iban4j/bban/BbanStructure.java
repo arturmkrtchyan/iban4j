@@ -433,6 +433,12 @@ public class BbanStructure {
                         BbanStructureEntry.accountNumber(13, 'n'),
                         BbanStructureEntry.nationalCheckDigit(2, 'n')));
 
+        structures.put(CountryCode.RU,
+                new BbanStructure(
+                        BbanStructureEntry.bankCode(9, 'n'),
+                        BbanStructureEntry.branchCode(5,'n'),
+                        BbanStructureEntry.accountNumber(15, 'c')));
+
         structures.put(CountryCode.SK,
                 new BbanStructure(
                         BbanStructureEntry.bankCode(4, 'n'),

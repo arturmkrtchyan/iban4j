@@ -440,6 +440,12 @@ final class TestDataHelper {
                         .nationalCheckDigit("79")
                         .build(), "RS35260005601001611379"},
                 {new Iban.Builder()
+                        .countryCode(CountryCode.RU)
+                        .bankCode("044525600")
+                        .branchCode("40702")
+                        .accountNumber("810412345678901")
+                        .build(), "RU0204452560040702810412345678901"},
+                {new Iban.Builder()
                         .countryCode(CountryCode.SK)
                         .bankCode("1200")
                         .accountNumber("0000198742637541")
