@@ -413,11 +413,17 @@ public final class Iban {
          */
         public Iban buildRandom() throws IbanFormatException,
                 IllegalArgumentException, UnsupportedCountryException {
+
+            // Create a new seeded Random, so it doesn't matter how this Random is used, it won't affect subsequent usages
+            // of the original Random. (which can impact seeded behaviour when many IBANs are generated or the number of
+            // IBAN entries change).
+            final Random random = new Random(this.random.nextInt());
+
             if (countryCode == null) {
                 List<CountryCode> countryCodes = BbanStructure.supportedCountries();
                 this.countryCode(countryCodes.get(random.nextInt(countryCodes.size())));
             }
-            fillMissingFieldsRandomly();
+            fillMissingFieldsRandomly(random);
             return build();
         }
 
@@ -511,7 +517,7 @@ public final class Iban {
             }
         }
 
-        private void fillMissingFieldsRandomly() {
+        private void fillMissingFieldsRandomly(final Random random) {
             final BbanStructure structure = BbanStructure.forCountry(countryCode);
 
             if (structure == null) {

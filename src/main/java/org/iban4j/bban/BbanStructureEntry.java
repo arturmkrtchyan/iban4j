@@ -122,6 +122,12 @@ public class BbanStructureEntry {
     }
 
     public String getRandom(Random random) {
+
+        // Create a new seeded Random, so it doesn't matter how this Random is used, it won't affect subsequent usages
+        // of the original Random. (which can impact seeded behaviour when many IBANs are generated or the number of
+        // IBAN entries change).
+        random = new Random(random.nextInt());
+
         StringBuilder s = new StringBuilder();
         char[] charChoices = charByCharacterType.get(characterType);
         if (charChoices == null) {
