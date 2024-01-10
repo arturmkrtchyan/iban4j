@@ -15,22 +15,26 @@
  */
 package org.iban4j;
 
-import org.junit.jupiter.api.Disabled;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.iban4j.TestDataHelper.defaultExceptionMessage;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.Random;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import java.util.Random;
-
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.*;
-import static org.iban4j.TestDataHelper.defaultExceptionMessage;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Iban general test")
 public class IbanTest {
 
-    public static class IbanGenerationTest {
-
-        @DisplayName("IBANs With Same Data Should Be Equal")
+  @DisplayName("IBANs With Same Data Should Be Equal")
         @Test
         public void ibansWithSameDataShouldBeEqual() {
             Iban iban1 = new Iban.Builder()
@@ -287,14 +291,15 @@ public class IbanTest {
         }
 
         @Test
-        @Disabled
         public void ibanConstructionSeeded() {
-            assertIbanUtilRandomWithSeedEquals("FR87 8734 4468 89P1 RIYK UO5K 809", 1);
-            assertIbanUtilRandomWithSeedEquals("FI79 2079 0697 8464 44", 2);
-            assertIbanUtilRandomWithSeedEquals("FO71 0018 2949 1527 41", 3);
+            assertAll(
+                () -> assertIbanUtilRandomWithSeedEquals("GL41 1918 0836 9682 13", 1),
+                () -> assertIbanUtilRandomWithSeedEquals("FR17 0679 7098 8804 5NYW S75F D50", 2),
+                () -> assertIbanUtilRandomWithSeedEquals("EG45 0882 2804 0304 6660 9507 6091 3", 3)
+            );
         }
 
-        private static void assertIbanUtilRandomWithSeedEquals(
+  private void assertIbanUtilRandomWithSeedEquals(
             String expected,
             int seed
         ) {
@@ -307,11 +312,12 @@ public class IbanTest {
         }
 
         @Test
-        @Disabled
         public void ibanBuilderConstructionSeeded() {
-            assertIbanBuilderRandomWithSeedEquals("FR87 8734 4468 89P1 RIYK UO5K 809", 1);
-            assertIbanBuilderRandomWithSeedEquals("FI79 2079 0697 8464 44", 2);
-            assertIbanBuilderRandomWithSeedEquals("FO71 0018 2949 1527 41", 3);
+            assertAll(
+                () -> assertIbanBuilderRandomWithSeedEquals("GL41 1918 0836 9682 13", 1),
+                () -> assertIbanBuilderRandomWithSeedEquals("FR17 0679 7098 8804 5NYW S75F D50", 2),
+                () -> assertIbanBuilderRandomWithSeedEquals("EG45 0882 2804 0304 6660 9507 6091 3", 3)
+            );
         }
 
         private static void assertIbanBuilderRandomWithSeedEquals(
@@ -430,5 +436,4 @@ public class IbanTest {
                     defaultExceptionMessage);
             assertThat(thrown.getMessage(), containsString("nationalCheckDigit is required; it cannot be null"));
         }
-    }
 }

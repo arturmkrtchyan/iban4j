@@ -1,11 +1,12 @@
 package org.iban4j.bban;
 
+import org.junit.jupiter.api.Test;
+
 import java.nio.CharBuffer;
 import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,27 +16,33 @@ public class BbanStructureEntryTest {
     public void expectRandomAccountNumberIsDeterministicWhenSeeded() {
         BbanStructureEntry entry = BbanStructureEntry.accountNumber(10, 'a');
 
-        assertSeededRandomBbanStructureEntryEquals(entry, "RAHJMYUWWK", 1);
-        assertSeededRandomBbanStructureEntryEquals(entry, "SGAVREIZNE", 2);
-        assertSeededRandomBbanStructureEntryEquals(entry, "SMMHQUVGJX", 3);
+        assertAll(
+            () -> assertSeededRandomBbanStructureEntryEquals(entry, "GYNPNTQMPP", 1),
+            () -> assertSeededRandomBbanStructureEntryEquals(entry, "ZBFUFVOHNJ", 2),
+            () -> assertSeededRandomBbanStructureEntryEquals(entry, "FHTOSEFCAR", 3)
+        );
     }
 
     @Test
     public void expectRandomOwnerAccountNumberIsDeterministicWhenSeeded() {
         BbanStructureEntry entry = BbanStructureEntry.ownerAccountNumber(11, 'n');
 
-        assertSeededRandomBbanStructureEntryEquals(entry, "58734446889", 1);
-        assertSeededRandomBbanStructureEntryEquals(entry, "82079069784", 2);
-        assertSeededRandomBbanStructureEntryEquals(entry, "40018294915", 3);
+        assertAll(
+            () -> assertSeededRandomBbanStructureEntryEquals(entry, "88511786533", 1),
+            () -> assertSeededRandomBbanStructureEntryEquals(entry, "33705581952", 2),
+            () -> assertSeededRandomBbanStructureEntryEquals(entry, "13164650831", 3)
+        );
     }
 
     @Test
     public void expectRandomBankCodeIsDeterministicWhenSeeded() {
         BbanStructureEntry entry = BbanStructureEntry.bankCode(12, 'c');
 
-        assertSeededRandomBbanStructureEntryEquals(entry, "XSJXQ4EAASPP", 1);
-        assertSeededRandomBbanStructureEntryEquals(entry, "4OKJX66R7O22", 2);
-        assertSeededRandomBbanStructureEntryEquals(entry, "EK6POILGJDLA", 3);
+        assertAll(
+            () -> assertSeededRandomBbanStructureEntryEquals(entry, "88FV9Z62HZ1T", 1),
+            () -> assertSeededRandomBbanStructureEntryEquals(entry, "T7F8TRELZ3I9", 2),
+            () -> assertSeededRandomBbanStructureEntryEquals(entry, "TXTOAA7SCPXB", 3)
+        );
     }
 
     private static void assertSeededRandomBbanStructureEntryEquals(
@@ -119,7 +126,7 @@ public class BbanStructureEntryTest {
         String distinctChars = getDistinctSortedChars(generated);
 
         assertEquals(
-                    "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
             distinctChars
         );
     }
