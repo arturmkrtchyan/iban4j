@@ -15,22 +15,26 @@
  */
 package org.iban4j;
 
-import org.junit.jupiter.api.Disabled;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.iban4j.TestDataHelper.defaultExceptionMessage;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.Random;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import java.util.Random;
-
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.*;
-import static org.iban4j.TestDataHelper.defaultExceptionMessage;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Iban general test")
 public class IbanTest {
 
-    public static class IbanGenerationTest {
-
-        @DisplayName("IBANs With Same Data Should Be Equal")
+  @DisplayName("IBANs With Same Data Should Be Equal")
         @Test
         public void ibansWithSameDataShouldBeEqual() {
             Iban iban1 = new Iban.Builder()
@@ -295,7 +299,7 @@ public class IbanTest {
             );
         }
 
-        private static void assertIbanUtilRandomWithSeedEquals(
+  private void assertIbanUtilRandomWithSeedEquals(
             String expected,
             int seed
         ) {
@@ -432,5 +436,4 @@ public class IbanTest {
                     defaultExceptionMessage);
             assertThat(thrown.getMessage(), containsString("nationalCheckDigit is required; it cannot be null"));
         }
-    }
 }
