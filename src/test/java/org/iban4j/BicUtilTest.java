@@ -15,23 +15,21 @@
  */
 package org.iban4j;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.iban4j.TestDataHelper.defaultExceptionMessage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
 
 @DisplayName("BIC Util Test class")
 public class BicUtilTest {
 
-    public static class InvalidBicValidationTest {
-
-
         @Test
+        @DisplayName("validate BIC with null value")
         public void bicValidationWithNullShouldThrowException() {
             BicFormatException thrown = assertThrows(
                     BicFormatException.class,
@@ -41,6 +39,7 @@ public class BicUtilTest {
         }
 
         @Test
+        @DisplayName("validate BIC with empty value")
         public void bicValidationWithEmptyStringShouldThrowException() {
             BicFormatException thrown = assertThrows(
                     BicFormatException.class,
@@ -50,6 +49,7 @@ public class BicUtilTest {
         }
 
         @Test
+        @DisplayName("validate BIC with  less characters")
         public void bicValidationWithLessCharactersShouldThrowException() {
             BicFormatException thrown = assertThrows(
                     BicFormatException.class,
@@ -59,6 +59,7 @@ public class BicUtilTest {
         }
 
         @Test
+        @DisplayName("validate BIC with more characters")
         public void bicValidationWithMoreCharactersShouldThrowException() {
             BicFormatException thrown = assertThrows(
                     BicFormatException.class,
@@ -68,6 +69,7 @@ public class BicUtilTest {
         }
 
         @Test
+        @DisplayName("validate BIC with lowercase")
         public void bicValidationWithLowercaseShouldThrowException() {
             BicFormatException thrown = assertThrows(
                     BicFormatException.class,
@@ -77,6 +79,7 @@ public class BicUtilTest {
         }
 
         @Test
+        @DisplayName("validate BIC with invalid bank code")
         public void bicValidationWithInvalidBankCodeShouldThrowException() {
             BicFormatException thrown = assertThrows(
                     BicFormatException.class,
@@ -86,6 +89,7 @@ public class BicUtilTest {
         }
 
         @Test
+        @DisplayName("validate BIC with non existing country code")
         public void bicValidationWithNonExistingCountryCodeShouldThrowException() {
             UnsupportedCountryException thrown = assertThrows(
                     UnsupportedCountryException.class,
@@ -95,6 +99,7 @@ public class BicUtilTest {
         }
 
         @Test
+        @DisplayName("validate BIC with invalid country code")
         public void bicValidationWithInvalidCountryCodeShouldThrowException() {
             BicFormatException thrown = assertThrows(
                     BicFormatException.class,
@@ -104,6 +109,7 @@ public class BicUtilTest {
         }
 
         @Test
+        @DisplayName("validate BIC with invalid location code")
         public void bicValidationWithInvalidLocationCodeShouldThrowException() {
             BicFormatException thrown = assertThrows(
                     BicFormatException.class,
@@ -113,6 +119,7 @@ public class BicUtilTest {
         }
 
         @Test
+        @DisplayName("validate BIC with invalid branch code")
         public void bicValidationWithInvalidBranchCodeShouldThrowException() {
             BicFormatException thrown = assertThrows(
                     BicFormatException.class,
@@ -121,9 +128,9 @@ public class BicUtilTest {
             assertThat(thrown.getMessage(), containsString("Branch code must contain only letters or digits"));
         }
         @Test
+        @DisplayName("validate BIC with alphanumeric bank code")
         public void bicValidationWithAlphanumericBankCode() {
             BicUtil.validate("1234DEFFXXX");
         }
-    }
 
 }
