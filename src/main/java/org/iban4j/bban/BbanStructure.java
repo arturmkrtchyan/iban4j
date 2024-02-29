@@ -15,13 +15,16 @@
  */
 package org.iban4j.bban;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Optional;
 import org.iban4j.CountryCode;
 
-import java.util.*;
-
-
 /**
- * Class which represents bban structure
+ * Class that represents BBAN structure
  */
 public class BbanStructure {
 
@@ -34,25 +37,28 @@ public class BbanStructure {
 
     private static final EnumMap<CountryCode, BbanStructure> structures;
 
-    /* French sub-territories may use their own country code (BL,RE,NC,...) or FR for their IBAN. Structure is the same, only the IBAN checksum differ. */
-    private final static BbanStructure FRENCH_STRUCTURE = new BbanStructure(
-        BbanStructureEntry.bankCode(5, 'n'),
-        BbanStructureEntry.branchCode(5, 'n'),
-        BbanStructureEntry.accountNumber(11, 'c'),
-        BbanStructureEntry.nationalCheckDigit(2, 'n'));
+    /**
+     * French sub-territories may use their own country code (BL,RE,NC,...) or FR for their IBAN. Structure is the
+     * same, only the IBAN checksum differs.
+     */
+    private static final BbanStructure FRENCH_STRUCTURE = new BbanStructure(
+            BbanStructureEntry.bankCode(5, 'n'),
+            BbanStructureEntry.branchCode(5, 'n'),
+            BbanStructureEntry.accountNumber(11, 'c'),
+            BbanStructureEntry.nationalCheckDigit(2, 'n'));
 
-    private final static BbanStructure UNITED_KINGDOM_STRUCTURE = new BbanStructure(
-        BbanStructureEntry.bankCode(4, 'a'),
-        BbanStructureEntry.branchCode(6, 'n'),
-        BbanStructureEntry.accountNumber(8, 'n'));
+    private static final BbanStructure UNITED_KINGDOM_STRUCTURE = new BbanStructure(
+            BbanStructureEntry.bankCode(4, 'a'),
+            BbanStructureEntry.branchCode(6, 'n'),
+            BbanStructureEntry.accountNumber(8, 'n'));
 
-    private final static BbanStructure FINLAND_STRUCTURE = new BbanStructure(
-        BbanStructureEntry.bankCode(6, 'n'),
-        BbanStructureEntry.accountNumber(7, 'n'),
-        BbanStructureEntry.nationalCheckDigit(1, 'n'));
+    private static final BbanStructure FINLAND_STRUCTURE = new BbanStructure(
+            BbanStructureEntry.bankCode(6, 'n'),
+            BbanStructureEntry.accountNumber(7, 'n'),
+            BbanStructureEntry.nationalCheckDigit(1, 'n'));
 
     static {
-        structures = new EnumMap<CountryCode, BbanStructure>(CountryCode.class);
+        structures = new EnumMap<>(CountryCode.class);
 
         structures.put(CountryCode.AL,
                 new BbanStructure(
@@ -198,12 +204,6 @@ public class BbanStructure {
                         BbanStructureEntry.branchCode(5, 'n'),
                         BbanStructureEntry.accountNumber(13, 'c')));
 
-        structures.put(CountryCode.GA,
-                new BbanStructure(
-                        BbanStructureEntry.bankCode(5, 'n'),
-                        BbanStructureEntry.branchCode(5, 'n'),
-                        BbanStructureEntry.accountNumber(13, 'c')));
-
         structures.put(CountryCode.GE,
                 new BbanStructure(
                         BbanStructureEntry.bankCode(2, 'a'),
@@ -239,8 +239,9 @@ public class BbanStructure {
 
         structures.put(CountryCode.IS,
                 new BbanStructure(
-                        BbanStructureEntry.bankCode(4, 'n'),
+                        BbanStructureEntry.bankCode(2, 'n'),
                         BbanStructureEntry.branchCode(2, 'n'),
+                        BbanStructureEntry.accountType(2, 'n'),
                         BbanStructureEntry.accountNumber(6, 'n'),
                         BbanStructureEntry.identificationNumber(10, 'n')));
 
@@ -436,7 +437,7 @@ public class BbanStructure {
         structures.put(CountryCode.RU,
                 new BbanStructure(
                         BbanStructureEntry.bankCode(9, 'n'),
-                        BbanStructureEntry.branchCode(5,'n'),
+                        BbanStructureEntry.branchCode(5, 'n'),
                         BbanStructureEntry.accountNumber(15, 'c')));
 
         structures.put(CountryCode.SK,
@@ -530,12 +531,12 @@ public class BbanStructure {
                         BbanStructureEntry.bankCode(4, 'a'),
                         BbanStructureEntry.branchCode(3, 'n'),
                         BbanStructureEntry.accountNumber(12, 'n')));
-        
-        structures.put(CountryCode.CV, 
-               new BbanStructure(
-                   new BbanStructureEntry[]{BbanStructureEntry.bankCode(4, 'n'), 
-                                            BbanStructureEntry.branchCode(4, 'n'), 
-                                            BbanStructureEntry.accountNumber(13, 'c')}));
+
+        structures.put(CountryCode.CV,
+                new BbanStructure(
+                        BbanStructureEntry.bankCode(4, 'n'),
+                        BbanStructureEntry.branchCode(4, 'n'),
+                        BbanStructureEntry.accountNumber(13, 'c')));
     }
 
     /**
@@ -553,10 +554,10 @@ public class BbanStructure {
      * @return true/false
      */
     public static boolean hasNationalCheckDigit(final CountryCode countryCode) {
-        Optional<BbanStructure> bbanStructure = Optional.ofNullable(forCountry(countryCode));
+        final Optional<BbanStructure> bbanStructure = Optional.ofNullable(forCountry(countryCode));
         return bbanStructure.map(structure -> structure.getEntries()
-                .stream()
-                .anyMatch(e -> BbanEntryType.national_check_digit.equals(e.getEntryType())))
+                        .stream()
+                        .anyMatch(e -> BbanEntryType.national_check_digit.equals(e.getEntryType())))
                 .orElse(false);
     }
 
@@ -578,7 +579,7 @@ public class BbanStructure {
     public int getBbanLength() {
         int length = 0;
 
-        for (BbanStructureEntry entry : entries) {
+        for (final BbanStructureEntry entry : entries) {
             length += entry.getLength();
         }
 
