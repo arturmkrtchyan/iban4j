@@ -26,7 +26,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.Random;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -292,10 +294,9 @@ final class IbanTest {
 
     @Test
     public void ibanConstructionSeeded() {
-        assertAll(
-                () -> assertIbanUtilRandomWithSeedEquals("GL41 1918 0836 9682 13", 1),
-                () -> assertIbanUtilRandomWithSeedEquals("FR17 0679 7098 8804 5NYW S75F D50", 2),
-                () -> assertIbanUtilRandomWithSeedEquals("EG45 0882 2804 0304 6660 9507 6091 3", 3)
+        assertAll(() -> assertIbanUtilRandomWithSeedEquals("TN58 1908 31HJ ENIS JS33 9QZG", 1),
+            () -> assertIbanUtilRandomWithSeedEquals("LV92 QKBB C1OY WHST MPQA 7", 2),
+            () -> assertIbanUtilRandomWithSeedEquals("JO53 WQSM 2804 ERG8 WOUQ NLYT EEL7 3J", 3)
         );
     }
 
@@ -313,10 +314,9 @@ final class IbanTest {
 
     @Test
     public void ibanBuilderConstructionSeeded() {
-        assertAll(
-                () -> assertIbanBuilderRandomWithSeedEquals("GL41 1918 0836 9682 13", 1),
-                () -> assertIbanBuilderRandomWithSeedEquals("FR17 0679 7098 8804 5NYW S75F D50", 2),
-                () -> assertIbanBuilderRandomWithSeedEquals("EG45 0882 2804 0304 6660 9507 6091 3", 3)
+        assertAll(() -> assertIbanBuilderRandomWithSeedEquals("TN58 1908 31HJ ENIS JS33 9QZG", 1),
+            () -> assertIbanBuilderRandomWithSeedEquals("LV92 QKBB C1OY WHST MPQA 7", 2),
+            () -> assertIbanBuilderRandomWithSeedEquals("JO53 WQSM 2804 ERG8 WOUQ NLYT EEL7 3J", 3)
         );
     }
 

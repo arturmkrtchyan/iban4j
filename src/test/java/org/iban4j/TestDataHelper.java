@@ -602,8 +602,10 @@ final class TestDataHelper {
                         .countryCode(CountryCode.CV)
                         .bankCode("0002")
                         .branchCode("0000")
-                        .accountNumber("0311180710148")
-                        .build(), "CV64000200000311180710148"}
+                        .accountNumber("0311180710148").build(), "CV64000200000311180710148" }, { new Iban.Builder().countryCode(CountryCode.OM)
+            .bankCode("028")
+            .accountNumber("12345678901")
+            .leftPadding(true).build(), "OM040280000012345678901" }
         });
     }
 

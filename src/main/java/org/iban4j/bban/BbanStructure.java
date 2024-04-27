@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Optional;
+
 import org.iban4j.CountryCode;
 
 /**
@@ -537,6 +538,8 @@ public class BbanStructure {
                         BbanStructureEntry.bankCode(4, 'n'),
                         BbanStructureEntry.branchCode(4, 'n'),
                         BbanStructureEntry.accountNumber(13, 'c')));
+
+        structures.put(CountryCode.OM, new BbanStructure(BbanStructureEntry.bankCode(3, 'n'), BbanStructureEntry.accountNumber(16, 'c')));
     }
 
     /**
