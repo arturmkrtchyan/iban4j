@@ -119,6 +119,19 @@
                 </configuration>
             </plugin>
 
+            <!-- Java 9+ Module Name -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Automatic-Module-Name>org.iban4j</Automatic-Module-Name>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+
 
             <!-- SureFire testing -->
             <plugin>
