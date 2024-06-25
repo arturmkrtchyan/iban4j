@@ -19,12 +19,11 @@ import java.util.Arrays;
 import java.util.Collection;
 
 final class TestDataHelper {
-    public static final String defaultExceptionMessage = "Expected doThing() to throw, but it didn't";
+  public static final String defaultExceptionMessage = "Expected doThing() to throw, but it didn't";
 
-    private TestDataHelper() {
-    }
+  private TestDataHelper() {}
 
-    public static Collection<Object[]> getIbanData() {
+  public static Collection<Object[]> getIbanData() {
     return Arrays.asList(
         new Object[][] {
           {
@@ -925,18 +924,18 @@ final class TestDataHelper {
             "BI4210000100010000332045181"
           }
         });
-    }
+  }
 
-    public static Collection<Object[]> getBicData() {
-        return Arrays.asList(new Object[][]{
-                {"DEUTDEFF"},
-                {"DEUTDEFF500"},
-                {"NEDSZAJJXXX"},
-                {"DABADKKK"},
-                {"UNCRIT2B912"},
-                {"DSBACNBXSHA"},
-                {"BNORPHMM"}
+  public static Collection<Object[]> getBicData() {
+    return Arrays.asList(
+        new Object[][] {
+          {"DEUTDEFF"},
+          {"DEUTDEFF500"},
+          {"NEDSZAJJXXX"},
+          {"DABADKKK"},
+          {"UNCRIT2B912"},
+          {"DSBACNBXSHA"},
+          {"BNORPHMM"}
         });
-    }
-
+  }
 }
