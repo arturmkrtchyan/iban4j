@@ -28,12 +28,18 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Random;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 @DisplayName("Iban general test")
 final class IbanTest {
+
+  private static void assertIbanBuilderRandomWithSeedEquals(final String expected, final int seed) {
+    final Iban generated = new Iban.Builder(new Random(seed)).buildRandom();
+    final String actual = generated.toFormattedString();
+    assertEquals(
+        expected, actual, "expect that creating an IBAN with seed '" + seed + "' is deterministic");
+  }
 
     @Test
     @DisplayName("IBANs With Same Data Should Be Equal")
@@ -294,10 +300,10 @@ final class IbanTest {
 
     @Test
     public void ibanConstructionSeeded() {
-        assertAll(() -> assertIbanUtilRandomWithSeedEquals("TN58 1908 31HJ ENIS JS33 9QZG", 1),
-            () -> assertIbanUtilRandomWithSeedEquals("LV92 QKBB C1OY WHST MPQA 7", 2),
-            () -> assertIbanUtilRandomWithSeedEquals("JO53 WQSM 2804 ERG8 WOUQ NLYT EEL7 3J", 3)
-        );
+    assertAll(
+        () -> assertIbanUtilRandomWithSeedEquals("FR46 1918 2083 691H JENI SJS3 364", 1),
+        () -> assertIbanUtilRandomWithSeedEquals("LC94 QKBB C1OY WHST MPQA 7GVB 4WBX VTP0", 2),
+        () -> assertIbanUtilRandomWithSeedEquals("DK23 0882 2804 1804 23", 3));
     }
 
     private void assertIbanUtilRandomWithSeedEquals(
@@ -314,23 +320,10 @@ final class IbanTest {
 
     @Test
     public void ibanBuilderConstructionSeeded() {
-        assertAll(() -> assertIbanBuilderRandomWithSeedEquals("TN58 1908 31HJ ENIS JS33 9QZG", 1),
-            () -> assertIbanBuilderRandomWithSeedEquals("LV92 QKBB C1OY WHST MPQA 7", 2),
-            () -> assertIbanBuilderRandomWithSeedEquals("JO53 WQSM 2804 ERG8 WOUQ NLYT EEL7 3J", 3)
-        );
-    }
-
-    private static void assertIbanBuilderRandomWithSeedEquals(
-            final String expected,
-            final int seed
-    ) {
-        final Iban generated = new Iban.Builder(new Random(seed)).buildRandom();
-        final String actual = generated.toFormattedString();
-        assertEquals(
-                expected,
-                actual,
-                "expect that creating an IBAN with seed '" + seed + "' is deterministic"
-        );
+    assertAll(
+        () -> assertIbanBuilderRandomWithSeedEquals("FR46 1918 2083 691H JENI SJS3 364", 1),
+        () -> assertIbanBuilderRandomWithSeedEquals("LC94 QKBB C1OY WHST MPQA 7GVB 4WBX VTP0", 2),
+        () -> assertIbanBuilderRandomWithSeedEquals("DK23 0882 2804 1804 23", 3));
     }
 
     @Test

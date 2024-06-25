@@ -581,6 +581,13 @@ public class BbanStructure {
         CountryCode.OM,
         new BbanStructure(
             BbanStructureEntry.bankCode(3, 'n'), BbanStructureEntry.accountNumber(16, 'c')));
+
+    structures.put(
+        CountryCode.BI,
+        new BbanStructure(
+            BbanStructureEntry.bankCode(5, 'n'),
+            BbanStructureEntry.branchCode(5, 'n'),
+            BbanStructureEntry.accountNumber(13, 'n')));
   }
 
   private final BbanStructureEntry[] entries;
