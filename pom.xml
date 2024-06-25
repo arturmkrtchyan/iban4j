@@ -21,7 +21,7 @@
 
     <groupId>org.iban4j</groupId>
     <artifactId>iban4j</artifactId>
-    <version>3.2.8-RELEASE</version>
+    <version>3.2.9-RELEASE</version>
     <packaging>jar</packaging>
 
     <name>iban4j</name>
