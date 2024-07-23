@@ -419,6 +419,15 @@ final class TestDataHelper {
           },
           {
             new Iban.Builder()
+                .countryCode(CountryCode.MA)
+                .bankCode("011")
+                .branchCode("51900")
+                .accountNumber("0001205000534921")
+                .build(),
+            "MA64011519000001205000534921"
+          },
+          {
+            new Iban.Builder()
                 .countryCode(CountryCode.MF)
                 .bankCode("12345")
                 .branchCode("12345")
