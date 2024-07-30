@@ -388,7 +388,13 @@ public class BbanStructure {
             BbanStructureEntry.bankCode(6, 'c'),
             BbanStructureEntry.branchCode(2, 'n'),
             BbanStructureEntry.accountNumber(18, 'c')));
-
+    structures.put(
+            CountryCode.MZ,
+            new BbanStructure(
+                    BbanStructureEntry.bankCode(4, 'n'),
+                    BbanStructureEntry.branchCode(4, 'n'),
+                    BbanStructureEntry.accountNumber(11, 'n'),
+                    BbanStructureEntry.nationalCheckDigit(2, 'n')));
     structures.put(
         CountryCode.NL,
         new BbanStructure(
