@@ -281,6 +281,18 @@
                 </configuration>
             </plugin>
 
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Automatic-Module-Name>org.iban4j</Automatic-Module-Name>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+            </plugin>
+
         </plugins>
     </build>
 
