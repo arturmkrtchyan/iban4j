@@ -119,6 +119,18 @@
                 </configuration>
             </plugin>
 
+            <!-- generate a jar with the module name -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Automatic-Module-Name>org.iban4j</Automatic-Module-Name>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
 
             <!-- SureFire testing -->
             <plugin>
