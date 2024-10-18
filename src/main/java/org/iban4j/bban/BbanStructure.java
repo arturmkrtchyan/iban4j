@@ -447,7 +447,8 @@ public class BbanStructure {
         CountryCode.SC,
         new BbanStructure(
             BbanStructureEntry.bankCode(4, 'a'),
-            BbanStructureEntry.branchCode(4, 'n'),
+            BbanStructureEntry.bankCodeExt(2, 'n'),
+            BbanStructureEntry.branchCode(2, 'n'),
             BbanStructureEntry.accountNumber(16, 'n'),
             BbanStructureEntry.accountType(3, 'a')));
 

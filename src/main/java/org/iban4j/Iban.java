@@ -225,6 +225,7 @@ public final class Iban {
 
         private CountryCode countryCode;
         private String bankCode;
+    private String bankCodeExt;
         private String branchCode;
         private String nationalCheckDigit;
         private String accountType;
@@ -271,6 +272,17 @@ public final class Iban {
             this.bankCode = bankCode;
             return this;
         }
+
+    /**
+     * Sets iban's bank code extension.
+     *
+     * @param bankCodeExt String
+     * @return builder Builder
+     */
+    public Builder bankCodeExt(final String bankCodeExt) {
+      this.bankCodeExt = bankCodeExt;
+      return this;
+    }
 
         /**
          * Sets iban's branch code.
@@ -444,6 +456,9 @@ public final class Iban {
                     case bank_code:
                         sb.append(getPaddedString(bankCode, entry.getLength()));
                         break;
+          case bank_code_ext:
+            sb.append(getPaddedString(bankCodeExt, entry.getLength()));
+            break;
                     case branch_code:
                         sb.append(getPaddedString(branchCode, entry.getLength()));
                         break;
@@ -532,6 +547,11 @@ public final class Iban {
                             bankCode = entry.getRandom(random);
                         }
                         break;
+          case bank_code_ext:
+            if (bankCodeExt == null) {
+              bankCodeExt = entry.getRandom(random);
+            }
+            break;
                     case branch_code:
                         if (branchCode == null) {
                             branchCode = entry.getRandom(random);

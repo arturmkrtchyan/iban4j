@@ -20,6 +20,7 @@ package org.iban4j.bban;
  */
 public enum BbanEntryType {
         bank_code,
+  bank_code_ext,
         branch_code,
         account_number,
         national_check_digit,
