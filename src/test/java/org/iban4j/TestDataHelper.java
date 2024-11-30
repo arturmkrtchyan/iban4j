@@ -941,6 +941,16 @@ final class TestDataHelper {
                 .accountNumber("0000332045181")
                 .build(),
             "BI4210000100010000332045181"
+          },
+            {
+            new Iban.Builder()
+                .countryCode(CountryCode.MG)
+                .bankCode("00100")
+                .branchCode("00100")
+                .accountNumber("01003320451")
+                .nationalCheckDigit("81")
+                .build(),
+            "MG46000100001000100332045181"
           }
         });
   }

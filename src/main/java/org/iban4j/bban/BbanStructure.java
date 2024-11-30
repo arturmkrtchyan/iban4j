@@ -601,6 +601,14 @@ public class BbanStructure {
             BbanStructureEntry.bankCode(5, 'n'),
             BbanStructureEntry.branchCode(5, 'n'),
             BbanStructureEntry.accountNumber(13, 'n')));
+
+    structures.put(
+        CountryCode.MG,
+        new BbanStructure(
+            BbanStructureEntry.bankCode(5, 'c'),
+            BbanStructureEntry.branchCode(5, 'c'),
+            BbanStructureEntry.accountNumber(11, 'c'),
+            BbanStructureEntry.nationalCheckDigit(2, 'c')));
   }
 
   private final BbanStructureEntry[] entries;
