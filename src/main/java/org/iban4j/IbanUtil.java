@@ -34,10 +34,6 @@ public final class IbanUtil {
     private static final int CHECK_DIGIT_LENGTH = 2;
     private static final int BBAN_INDEX = CHECK_DIGIT_INDEX + CHECK_DIGIT_LENGTH;
 
-    private static final String ASSERT_UPPER_LETTERS = "[%s] must contain only upper case letters.";
-    private static final String ASSERT_DIGITS_AND_LETTERS = "[%s] must contain only digits or letters.";
-    private static final String ASSERT_DIGITS = "[%s] must contain only digits.";
-
     private IbanUtil() {
     }
 
@@ -398,49 +394,17 @@ public final class IbanUtil {
     private static void validateBbanEntries(final String iban,
                                             final BbanStructure structure) {
         final String bban = getBban(iban);
+        final CountryCode countryCode = CountryCode.getByCode(getCountryCode(iban));
         int bbanEntryOffset = 0;
-        for(final BbanStructureEntry entry : structure.getEntries()) {
+
+        for (final BbanStructureEntry entry : structure.getEntries()) {
             final int entryLength = entry.getLength();
             final String entryValue = bban.substring(bbanEntryOffset,
                     bbanEntryOffset + entryLength);
 
-            bbanEntryOffset = bbanEntryOffset + entryLength;
+            bbanEntryOffset += entryLength;
 
-            // validate character type
-            validateBbanEntryCharacterType(entry, entryValue);
-        }
-    }
-
-    private static void validateBbanEntryCharacterType(final BbanStructureEntry entry,
-                                                       final String entryValue) {
-        switch (entry.getCharacterType()) {
-            case a:
-                for(char ch: entryValue.toCharArray()) {
-                    if(!Character.isUpperCase(ch)) {
-                        throw new IbanFormatException(BBAN_ONLY_UPPER_CASE_LETTERS,
-                                entry.getEntryType(), entryValue, ch,
-                                String.format(ASSERT_UPPER_LETTERS, entryValue));
-                    }
-                }
-                break;
-            case c:
-                for(char ch: entryValue.toCharArray()) {
-                    if(!Character.isLetterOrDigit(ch)) {
-                        throw new IbanFormatException(BBAN_ONLY_DIGITS_OR_LETTERS,
-                                entry.getEntryType(), entryValue, ch,
-                                String.format(ASSERT_DIGITS_AND_LETTERS, entryValue));
-                    }
-                }
-                break;
-            case n:
-                for(char ch: entryValue.toCharArray()) {
-                    if(!Character.isDigit(ch)) {
-                        throw new IbanFormatException(BBAN_ONLY_DIGITS,
-                                entry.getEntryType(), entryValue, ch,
-                                String.format(ASSERT_DIGITS, entryValue));
-                    }
-                }
-                break;
+            BbanStructure.validateBbanEntry(countryCode, entry.getEntryType(), entryValue);
         }
     }
 
