@@ -15,11 +15,12 @@
  */
 package org.iban4j;
 
+import static org.iban4j.IbanFormatException.IbanFormatViolation.*;
+
 import org.iban4j.bban.BbanEntryType;
 import org.iban4j.bban.BbanStructure;
 import org.iban4j.bban.BbanStructureEntry;
 
-import static org.iban4j.IbanFormatException.IbanFormatViolation.*;
 /**
  * Iban Utility Class
  */
@@ -224,6 +225,16 @@ public final class IbanUtil {
     public static String getBankCode(final String iban) {
         return extractBbanEntry(iban, BbanEntryType.bank_code);
     }
+
+  /**
+   * Returns iban's bank code extension.
+   *
+   * @param iban String
+   * @return bankCodeExt String
+   */
+  public static String getBankCodeExt(final String iban) {
+    return extractBbanEntry(iban, BbanEntryType.bank_code_ext);
+  }
 
     /**
      * Returns iban's branch code.
