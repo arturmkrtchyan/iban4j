@@ -22,9 +22,18 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Optional;
 import org.iban4j.CountryCode;
+import org.iban4j.IbanFormatException;
+import org.iban4j.UnsupportedCountryException;
+
+import static org.iban4j.IbanFormatException.IbanFormatViolation.*;
 
 /** Class that represents BBAN structure */
 public class BbanStructure {
+
+  private static final String INVALID_ENTRY_TYPE = "Entry type [%s] does not exist for country [%s]";
+  private static final String ASSERT_UPPER_LETTERS = "[%s] must contain only upper case letters.";
+  private static final String ASSERT_DIGITS_AND_LETTERS = "[%s] must contain only digits or letters.";
+  private static final String ASSERT_DIGITS = "[%s] must contain only digits.";
 
   private static final EnumMap<CountryCode, BbanStructure> structures;
 
@@ -656,5 +665,91 @@ public class BbanStructure {
     }
 
     return length;
+  }
+
+  /**
+   * Validates a specific BBAN entry based on the country code, entry type, and value.
+   *
+   * @param countryCode the country code for which the validation should be performed.
+   * @param entryType the type of the BBAN entry (e.g., bank code, branch code).
+   * @param entryValue the value of the BBAN entry to validate.
+   * @throws UnsupportedCountryException if country is not supported.
+   * @throws IbanFormatException if the entry type does not exist for the given country or if the entry value is invalid.
+   */
+  public static void validateBbanEntry(final CountryCode countryCode,
+                                       final BbanEntryType entryType,
+                                       final String entryValue) {
+    final BbanStructure bbanStructure = forCountry(countryCode);
+
+    if (bbanStructure == null) {
+      throw new UnsupportedCountryException(countryCode.toString(),
+              String.format("Country code [%s] is not supported.", countryCode));
+    }
+
+    final BbanStructureEntry entry = bbanStructure.getEntries().stream()
+            .filter(e -> e.getEntryType().equals(entryType))
+            .findFirst()
+            .orElseThrow(() -> new IbanFormatException(BBAN_INVALID_ENTRY_TYPE,
+                    String.format(INVALID_ENTRY_TYPE,
+                            entryType.name(), countryCode)));
+
+    validateBbanEntryLength(entry, entryValue);
+    validateBbanEntryCharacterType(entry, entryValue);
+  }
+
+  /**
+   * Validates the length of a BBAN entry value.
+   *
+   * @param entry the BBAN structure entry defining the expected length.
+   * @param entryValue the value of the BBAN entry to validate.
+   * @throws IbanFormatException if the entry value length is incorrect.
+   */
+  private static void validateBbanEntryLength(final BbanStructureEntry entry,
+                                              final String entryValue) {
+    if (entryValue.length() != entry.getLength()) {
+      throw new IbanFormatException(BBAN_LENGTH,
+              String.format("Entry value [%s] must be exactly %d characters long.",
+                      entryValue, entry.getLength()));
+    }
+  }
+
+  /**
+   * Validates the character type of BBAN entry value.
+   *
+   * @param entry the BBAN structure entry defining the expected character type.
+   * @param entryValue the value of the BBAN entry to validate.
+   * @throws IbanFormatException if the entry value contains invalid characters.
+   */
+  private static void validateBbanEntryCharacterType(final BbanStructureEntry entry,
+                                                     final String entryValue) {
+    switch (entry.getCharacterType()) {
+      case a:
+        for (char ch: entryValue.toCharArray()) {
+          if (!Character.isUpperCase(ch)) {
+            throw new IbanFormatException(BBAN_ONLY_UPPER_CASE_LETTERS,
+                    entry.getEntryType(), entryValue, ch,
+                    String.format(ASSERT_UPPER_LETTERS, entryValue));
+          }
+        }
+        break;
+      case c:
+        for (char ch: entryValue.toCharArray()) {
+          if (!Character.isLetterOrDigit(ch)) {
+            throw new IbanFormatException(BBAN_ONLY_DIGITS_OR_LETTERS,
+                    entry.getEntryType(), entryValue, ch,
+                    String.format(ASSERT_DIGITS_AND_LETTERS, entryValue));
+          }
+        }
+        break;
+      case n:
+        for (char ch: entryValue.toCharArray()) {
+          if (!Character.isDigit(ch)) {
+            throw new IbanFormatException(BBAN_ONLY_DIGITS,
+                    entry.getEntryType(), entryValue, ch,
+                    String.format(ASSERT_DIGITS, entryValue));
+          }
+        }
+        break;
+    }
   }
 }

@@ -178,6 +178,7 @@ public class IbanFormatException extends Iban4jException {
         COUNTRY_CODE_NOT_NULL,
 
         BBAN_LENGTH,
+        BBAN_INVALID_ENTRY_TYPE,
         BBAN_ONLY_DIGITS,
         BBAN_ONLY_UPPER_CASE_LETTERS,
         BBAN_ONLY_DIGITS_OR_LETTERS,
