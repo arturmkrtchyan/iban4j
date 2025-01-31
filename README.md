@@ -90,7 +90,7 @@ Codes (<a href="http://en.wikipedia.org/wiki/ISO_9362" target="_blank">BIC ISO_9
 <dependency>
     <groupId>org.iban4j</groupId>
     <artifactId>iban4j</artifactId>
-  <version>3.2.10-RELEASE</version>
+  <version>3.2.11-RELEASE</version>
 </dependency>
 ```
 
