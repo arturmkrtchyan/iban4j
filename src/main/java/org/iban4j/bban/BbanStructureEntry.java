@@ -60,6 +60,13 @@ public class BbanStructureEntry {
                 EntryCharacterType.valueOf(String.valueOf(characterType)), length);
     }
 
+  public static BbanStructureEntry bankCodeExt(final int length, final char characterType) {
+    return new BbanStructureEntry(
+        BbanEntryType.bank_code_ext,
+        EntryCharacterType.valueOf(String.valueOf(characterType)),
+        length);
+  }
+
     public static BbanStructureEntry branchCode(final int length, final char characterType) {
         return new BbanStructureEntry(BbanEntryType.branch_code,
                 EntryCharacterType.valueOf(String.valueOf(characterType)), length);
