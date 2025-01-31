@@ -15,16 +15,14 @@
  */
 package org.iban4j.bban;
 
-/**
- * Basic Bank Account Number Entry Types.
- */
+/** Basic Bank Account Number Entry Types. */
 public enum BbanEntryType {
-        bank_code,
+  bank_code,
   bank_code_ext,
-        branch_code,
-        account_number,
-        national_check_digit,
-        account_type,
-        owner_account_number,
-        identification_number
+  branch_code,
+  account_number,
+  national_check_digit,
+  account_type,
+  owner_account_number,
+  identification_number
 }
