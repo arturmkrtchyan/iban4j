@@ -3,6 +3,7 @@ iban4j
 
 [![Build Status](https://github.com/arturmkrtchyan/iban4j/actions/workflows/java-ci.yml/badge.svg)](https://github.com/arturmkrtchyan/iban4j/actions/workflows/java-ci.yml) [![Coverage Status](https://img.shields.io/coveralls/arturmkrtchyan/iban4j.svg)](https://coveralls.io/r/arturmkrtchyan/iban4j) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.iban4j/iban4j/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.iban4j/iban4j)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://raw.githubusercontent.com/arturmkrtchyan/iban4j/master/LICENSE.txt)
+[![libs.tech recommends](https://libs.tech/project/12573454/badge.svg)](https://libs.tech/project/12573454/iban4j)
 
 A Java library for generation and validation of the International Bank Account
 Numbers (<a href="http://en.wikipedia.org/wiki/ISO_13616" target="_blank">IBAN ISO_13616</a>) and Business Identifier
