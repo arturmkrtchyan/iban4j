@@ -15,6 +15,8 @@
  */
 package org.iban4j.bban;
 
+import static org.iban4j.IbanFormatException.IbanFormatViolation.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,8 +26,6 @@ import java.util.Optional;
 import org.iban4j.CountryCode;
 import org.iban4j.IbanFormatException;
 import org.iban4j.UnsupportedCountryException;
-
-import static org.iban4j.IbanFormatException.IbanFormatViolation.*;
 
 /** Class that represents BBAN structure */
 public class BbanStructure {
@@ -536,7 +536,8 @@ public class BbanStructure {
         new BbanStructure(
             BbanStructureEntry.bankCode(2, 'n'),
             BbanStructureEntry.branchCode(3, 'n'),
-            BbanStructureEntry.accountNumber(15, 'c')));
+            BbanStructureEntry.accountNumber(13, 'n'),
+            BbanStructureEntry.nationalCheckDigit(2, 'n')));
 
     structures.put(
         CountryCode.TR,
