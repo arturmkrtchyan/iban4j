@@ -753,7 +753,8 @@ final class TestDataHelper {
                 .countryCode(CountryCode.TN)
                 .bankCode("10")
                 .branchCode("006")
-                .accountNumber("035183598478831")
+                .accountNumber("0351835984788")
+                .nationalCheckDigit("31")
                 .build(),
             "TN5910006035183598478831"
           },
