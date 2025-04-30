@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.iban4j.bban;
 
 /** Basic Bank Account Number Entry Types. */
