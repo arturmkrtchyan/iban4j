@@ -17,6 +17,7 @@ package org.iban4j;
 
 /**
  * Base Runtime Exception Class for the library exceptions.
+ *
  * @see org.iban4j.IbanFormatException
  * @see org.iban4j.InvalidCheckDigitException
  * @see org.iban4j.UnsupportedCountryException
@@ -24,19 +25,19 @@ package org.iban4j;
  */
 public abstract class Iban4jException extends RuntimeException {
 
-    public Iban4jException() {
-        super();
-    }
+  public Iban4jException() {
+    super();
+  }
 
-    public Iban4jException(final String message) {
-        super(message);
-    }
+  public Iban4jException(final String message) {
+    super(message);
+  }
 
-    public Iban4jException(final String message, final Throwable cause) {
-        super(message, cause);
-    }
+  public Iban4jException(final String message, final Throwable cause) {
+    super(message, cause);
+  }
 
-    public Iban4jException(final Throwable cause) {
-        super(cause);
-    }
+  public Iban4jException(final Throwable cause) {
+    super(cause);
+  }
 }
