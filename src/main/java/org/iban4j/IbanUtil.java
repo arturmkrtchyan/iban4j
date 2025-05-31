@@ -32,8 +32,8 @@ public final class IbanUtil {
     private static final int COUNTRY_CODE_INDEX = 0;
     private static final int COUNTRY_CODE_LENGTH = 2;
     private static final int CHECK_DIGIT_INDEX = COUNTRY_CODE_LENGTH;
-    private static final int CHECK_DIGIT_LENGTH = 2;
-    private static final int BBAN_INDEX = CHECK_DIGIT_INDEX + CHECK_DIGIT_LENGTH;
+  private static final int CHECK_DIGIT_LENGTH = 2;
+  private static final int BBAN_INDEX = CHECK_DIGIT_INDEX + CHECK_DIGIT_LENGTH;
 
     private IbanUtil() {
     }

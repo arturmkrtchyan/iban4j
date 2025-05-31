@@ -1,16 +1,29 @@
 package org.iban4j.bban;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.CharBuffer;
 import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 public class BbanStructureEntryTest {
+
+  private static void assertSeededRandomBbanStructureEntryEquals(
+      BbanStructureEntry entry, String expected, int seed) {
+    String generated = entry.getRandom(new Random(seed));
+    assertEquals(
+        expected,
+        generated,
+        "expect that creating " + entry + " with seed '" + seed + "' is deterministic");
+  }
+
+  private static String getDistinctSortedChars(String s) {
+    Stream<Character> chars = CharBuffer.wrap(s.toCharArray()).chars().mapToObj(ch -> (char) ch);
+    return chars.distinct().sorted().map(Objects::toString).collect(Collectors.joining(""));
+  }
 
     @Test
     public void expectRandomAccountNumberIsDeterministicWhenSeeded() {
@@ -42,19 +55,6 @@ public class BbanStructureEntryTest {
             () -> assertSeededRandomBbanStructureEntryEquals(entry, "88FV9Z62HZ1T", 1),
             () -> assertSeededRandomBbanStructureEntryEquals(entry, "T7F8TRELZ3I9", 2),
             () -> assertSeededRandomBbanStructureEntryEquals(entry, "TXTOAA7SCPXB", 3)
-        );
-    }
-
-    private static void assertSeededRandomBbanStructureEntryEquals(
-        BbanStructureEntry entry,
-        String expected,
-        int seed
-    ) {
-        String generated = entry.getRandom(new Random(seed));
-        assertEquals(
-            expected,
-            generated,
-            "expect that creating " + entry + " with seed '" + seed + "' is deterministic"
         );
     }
 
@@ -159,14 +159,5 @@ public class BbanStructureEntryTest {
                 + "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
             distinctChars
         );
-    }
-
-    private static String getDistinctSortedChars(String s) {
-        Stream<Character> chars = CharBuffer.wrap(s.toCharArray()).chars()
-            .mapToObj(ch -> (char) ch);
-        return chars.distinct()
-            .sorted()
-            .map(Objects::toString)
-            .collect(Collectors.joining(""));
     }
 }

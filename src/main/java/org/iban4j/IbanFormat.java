@@ -15,18 +15,11 @@
  */
 package org.iban4j;
 
-/**
- * Iban Format Enum
- */
+/** Iban Format Enum */
 public enum IbanFormat {
-    /**
-     * Default Iban Format.
-     * Groups of four characters separated by a single space.
-     */
-    Default,
+  /** Default Iban Format. Groups of four characters separated by a single space. */
+  Default,
 
-    /**
-     * No Format.
-     */
-    None
+  /** No Format. */
+  None
 }

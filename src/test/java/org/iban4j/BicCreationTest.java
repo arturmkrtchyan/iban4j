@@ -1,11 +1,10 @@
 package org.iban4j;
 
+import java.util.Collection;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-
-import java.util.Collection;
 
 public class BicCreationTest {
 

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.iban4j.bban;
 
 import static org.iban4j.IbanFormatException.IbanFormatViolation.*;
@@ -650,25 +651,6 @@ public class BbanStructure {
     return Collections.unmodifiableList(countryCodes);
   }
 
-  public List<BbanStructureEntry> getEntries() {
-    return Collections.unmodifiableList(Arrays.asList(entries));
-  }
-
-  /**
-   * Returns the length of bban.
-   *
-   * @return int length
-   */
-  public int getBbanLength() {
-    int length = 0;
-
-    for (final BbanStructureEntry entry : entries) {
-      length += entry.getLength();
-    }
-
-    return length;
-  }
-
   /**
    * Validates a specific BBAN entry based on the country code, entry type, and value.
    *
@@ -753,5 +735,24 @@ public class BbanStructure {
         }
         break;
     }
+  }
+
+  public List<BbanStructureEntry> getEntries() {
+    return Collections.unmodifiableList(Arrays.asList(entries));
+  }
+
+  /**
+   * Returns the length of bban.
+   *
+   * @return int length
+   */
+  public int getBbanLength() {
+    int length = 0;
+
+    for (final BbanStructureEntry entry : entries) {
+      length += entry.getLength();
+    }
+
+    return length;
   }
 }
