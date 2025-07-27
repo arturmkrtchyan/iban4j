@@ -61,7 +61,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.1</version>
+                <version>${dep.plugin.compiler.version}</version>
                 <configuration>
                     <encoding>${project.build.sourceEncoding}</encoding>
                     <compilerArgs>
@@ -76,7 +76,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.4.2</version>
+                <version>${dep.plugin.jar.version}</version>
                 <configuration>
                     <archive>
                         <manifestEntries>
@@ -90,7 +90,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.2</version>
+                <version>${dep.plugin.surefire.version}</version>
                 <configuration>
                     <!-- Sets the VM argument line used when unit tests are run. -->
                     <argLine>${surefireArgLine}</argLine>
@@ -114,7 +114,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.8</version>
+                <version>${dep.plugin.jacoco.version}</version>
                 <executions>
                     <!--
                        Prepares the property pointing to the JaCoCo runtime agent which
@@ -172,7 +172,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>2.2.1</version>
+                <version>${dep.plugin.source.version}</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -194,7 +194,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.4.1</version>
+                <version>${dep.plugin.javadoc.version}</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -213,7 +213,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.4</version>
+                <version>${dep.plugin.gpg.version}</version>
                 <executions>
                     <execution>
                         <id>sign-artifacts</id>
@@ -232,13 +232,13 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.3</version>
+                <version>${dep.plugin.release.version}</version>
             </plugin>
 
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.13</version>
+                <version>${dep.plugin.nexus-staging.version}</version>
                 <extensions>true</extensions>
                 <configuration>
                     <serverId>ossrh</serverId>
@@ -250,30 +250,40 @@
         </plugins>
     </build>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${dep.junit.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>${junit-jupiter.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <artifactId>junit-jupiter-params</artifactId>
             <groupId>org.junit.jupiter</groupId>
             <scope>test</scope>
-            <version>${junit-jupiter.version}</version>
         </dependency>
         <dependency>
             <groupId>com.carrotsearch</groupId>
             <artifactId>junit-benchmarks</artifactId>
-            <version>0.7.2</version>
+            <version>${dep.junit-benchmarks.version}</version>
             <scope>test</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.hamcrest/hamcrest -->
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest</artifactId>
-            <version>2.2</version>
+            <version>${dep.hamcrest.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -296,7 +306,24 @@
         <maven.compiler.target>11</maven.compiler.target>
         <jdk7Signature>java17</jdk7Signature>
         <skipSigning>true</skipSigning>
-        <junit-jupiter.version>5.9.2</junit-jupiter.version>
+
+        <dep.plugin.compiler.version>3.13.0</dep.plugin.compiler.version>
+        <dep.plugin.jar.version>3.4.2</dep.plugin.jar.version>
+        <dep.plugin.surefire.version>3.2.5</dep.plugin.surefire.version>
+        <dep.plugin.jacoco.version>0.8.12</dep.plugin.jacoco.version>
+        <dep.plugin.coveralls.version>4.3.0</dep.plugin.coveralls.version>
+        <dep.plugin.source.version>3.3.0</dep.plugin.source.version>
+        <dep.plugin.javadoc.version>3.6.3</dep.plugin.javadoc.version>
+        <dep.plugin.gpg.version>3.1.0</dep.plugin.gpg.version>
+        <dep.plugin.release.version>3.0.1</dep.plugin.release.version>
+        <dep.plugin.nexus-staging.version>1.6.13</dep.plugin.nexus-staging.version>
+        <dep.plugin.findbugs.version>2.5.2</dep.plugin.findbugs.version>
+        <dep.plugin.jdepend.version>2.0-beta-2</dep.plugin.jdepend.version>
+
+        <!-- test dependencies -->
+        <dep.junit.version>5.9.2</dep.junit.version>
+        <dep.junit-benchmarks.version>0.7.2</dep.junit-benchmarks.version>
+        <dep.hamcrest.version>2.2</dep.hamcrest.version>
     </properties>
 
     <reporting>
@@ -305,13 +332,13 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
-                <version>2.5.2</version>
+                <version>${dep.plugin.findbugs.version}</version>
             </plugin>
 
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jdepend-maven-plugin</artifactId>
-                <version>2.0-beta-2</version>
+                <version>${dep.plugin.jdepend.version}</version>
             </plugin>
 
         </plugins>
