@@ -247,6 +247,22 @@
                 </configuration>
             </plugin>
 
+            <plugin>
+                <groupId>com.github.ekryd.sortpom</groupId>
+                <artifactId>sortpom-maven-plugin</artifactId>
+                <version>${dep.plugin.sortpom.version}</version>
+                <configuration>
+                    <createBackupFile>false</createBackupFile>
+                    <expandEmptyElements>false</expandEmptyElements>
+                    <keepBlankLines>true</keepBlankLines>
+                    <lineSeparator>\n</lineSeparator>
+                    <nrOfIndentSpace>4</nrOfIndentSpace>
+                    <sortModules>false</sortModules>
+                    <sortDependencies>none</sortDependencies>
+                    <sortProperties>false</sortProperties>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 
@@ -319,6 +335,7 @@
         <dep.plugin.nexus-staging.version>1.7.0</dep.plugin.nexus-staging.version>
         <dep.plugin.findbugs.version>3.0.5</dep.plugin.findbugs.version>
         <dep.plugin.jdepend.version>2.1</dep.plugin.jdepend.version>
+        <dep.plugin.sortpom.version>3.4.1</dep.plugin.sortpom.version>
 
         <dep.junit.version>5.13.4</dep.junit.version>
         <dep.junit-benchmarks.version>0.7.2</dep.junit-benchmarks.version>
