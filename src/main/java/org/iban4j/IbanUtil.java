@@ -43,8 +43,7 @@ public final class IbanUtil {
      * <a href="http://en.wikipedia.org/wiki/ISO_13616#Generating_IBAN_check_digits">Check Digit</a>.
      *
      * @param iban string value
-     * @throws IbanFormatException if iban contains invalid character.
-     *
+     * @throws org.iban4j.IbanFormatException if iban contains invalid character.
      * @return check digit as String
      */
     public static String calculateCheckDigit(final String iban) throws IbanFormatException {
@@ -60,9 +59,9 @@ public final class IbanUtil {
      * Validates iban.
      *
      * @param iban to be validated.
-     * @throws IbanFormatException if iban is invalid.
-     *         UnsupportedCountryException if iban's country is not supported.
-     *         InvalidCheckDigitException if iban has invalid check digit.
+     * @throws org.iban4j.IbanFormatException if iban is invalid.
+     * @throws org.iban4j.InvalidCheckDigitException if iban has invalid check digit.
+     * @throws org.iban4j.UnsupportedCountryException if iban's country is not supported.
      */
     public static void validate(final String iban) throws IbanFormatException,
             InvalidCheckDigitException, UnsupportedCountryException {
@@ -104,9 +103,9 @@ public final class IbanUtil {
      *
      * @param iban to be validated.
      * @param format to be used in validation.
-     * @throws IbanFormatException if iban is invalid.
-     *         UnsupportedCountryException if iban's country is not supported.
-     *         InvalidCheckDigitException if iban has invalid check digit.
+     * @throws org.iban4j.IbanFormatException if iban is invalid.
+     * @throws org.iban4j.InvalidCheckDigitException if iban has invalid check digit.
+     * @throws org.iban4j.UnsupportedCountryException if iban's country is not supported.
      */
     public static void validate(final String iban, final IbanFormat format) throws IbanFormatException,
             InvalidCheckDigitException, UnsupportedCountryException {
@@ -144,8 +143,8 @@ public final class IbanUtil {
 
     /**
      * Checks whether country is supporting iban.
-     * @param countryCode {@link org.iban4j.CountryCode}
      *
+     * @param countryCode {@link org.iban4j.CountryCode}
      * @return boolean true if country supports iban, false otherwise.
      */
     public static boolean isSupportedCountry(final CountryCode countryCode) {

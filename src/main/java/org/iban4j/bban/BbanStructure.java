@@ -28,7 +28,9 @@ import org.iban4j.CountryCode;
 import org.iban4j.IbanFormatException;
 import org.iban4j.UnsupportedCountryException;
 
-/** Class that represents BBAN structure */
+/**
+ * Class that represents BBAN structure
+ */
 public class BbanStructure {
 
   private static final String INVALID_ENTRY_TYPE = "Entry type [%s] does not exist for country [%s]";
@@ -737,6 +739,11 @@ public class BbanStructure {
     }
   }
 
+  /**
+   * <p>Getter for the field <code>entries</code>.</p>
+   *
+   * @return a {@link java.util.List} object
+   */
   public List<BbanStructureEntry> getEntries() {
     return Collections.unmodifiableList(Arrays.asList(entries));
   }
