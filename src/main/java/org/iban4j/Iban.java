@@ -23,34 +23,46 @@ import org.iban4j.bban.BbanStructure;
 import org.iban4j.bban.BbanStructureEntry;
 
 /**
- * International Bank Account Number
+ * Represents an International Bank Account Number (IBAN).
  *
- * <p><a href="http://en.wikipedia.org/wiki/ISO_13616">ISO_13616</a>.
+ * <p>This class encapsulates the IBAN string and provides utility methods
+ * for parsing, validating, and extracting components of an IBAN according to
+ * the <a href="http://en.wikipedia.org/wiki/ISO_13616">ISO 13616</a> standard.
+ * It is an immutable class.</p>
  */
 public final class Iban {
 
+  /**
+   * Default check digit used for temporary IBAN construction before actual check digit calculation.
+   */
   static final String DEFAULT_CHECK_DIGIT = "00";
 
-  // Cache string value of the iban
+  /**
+   * The actual IBAN string value.
+   */
   private final String value;
 
   /**
-   * Creates iban instance.
+   * Private constructor to create an IBAN instance.
+   * Use {@link #valueOf(String)}, {@link #valueOf(String, IbanFormat)},
+   * or the {@link Iban.Builder} to create instances.
    *
-   * @param value String
+   * @param value The raw IBAN string.
    */
   private Iban(final String value) {
     this.value = value;
   }
 
   /**
-   * Returns an Iban object holding the value of the specified String.
+   * Returns an {@code Iban} object holding the value of the specified String.
+   * The provided IBAN string will be validated against ISO 13616 standard.
    *
-   * @param iban the String to be parsed.
-   * @return an Iban object holding the value represented by the string argument.
-   * @throws IbanFormatException if the String doesn't contain parsable Iban
-   *     InvalidCheckDigitException if Iban has invalid check digit UnsupportedCountryException if
-   *     Iban's Country is not supported.
+   * @param iban The String to be parsed and validated.
+   * @return An {@code Iban} object holding the value represented by the string argument.
+   * @throws org.iban4j.IbanFormatException If the String does not contain a parsable IBAN
+   * or has a format violation.
+   * @throws org.iban4j.InvalidCheckDigitException If the IBAN has an invalid check digit.
+   * @throws org.iban4j.UnsupportedCountryException If the IBAN's country is not supported.
    */
   public static Iban valueOf(final String iban)
       throws IbanFormatException, InvalidCheckDigitException, UnsupportedCountryException {
@@ -59,14 +71,16 @@ public final class Iban {
   }
 
   /**
-   * Returns an Iban object holding the value of the specified String.
+   * Returns an {@code Iban} object holding the value of the specified String,
+   * applying a specific formatting style during parsing.
    *
-   * @param iban the String to be parsed.
-   * @param format the format of the Iban.
-   * @return an Iban object holding the value represented by the string argument.
-   * @throws IbanFormatException if the String doesn't contain parsable Iban
-   *     InvalidCheckDigitException if Iban has invalid check digit UnsupportedCountryException if
-   *     Iban's Country is not supported.
+   * @param iban The String to be parsed.
+   * @param format The {@link IbanFormat} to be used during parsing and validation.
+   * @return An {@code Iban} object holding the value represented by the string argument.
+   * @throws org.iban4j.IbanFormatException If the String does not contain a parsable IBAN,
+   * has a format violation, or does not match the specified format.
+   * @throws org.iban4j.InvalidCheckDigitException If the IBAN has an invalid check digit.
+   * @throws org.iban4j.UnsupportedCountryException If the IBAN's Country is not supported.
    */
   public static Iban valueOf(final String iban, final IbanFormat format)
       throws IbanFormatException, InvalidCheckDigitException, UnsupportedCountryException {
@@ -88,122 +102,160 @@ public final class Iban {
     }
   }
 
+  /**
+   * Creates a new random IBAN instance.
+   * The country code will be randomly selected from the supported countries.
+   *
+   * @return A randomly generated {@code Iban} instance.
+   * @throws IbanFormatException If an unexpected format issue occurs during generation.
+   * @throws UnsupportedCountryException If no supported country can be found (highly unlikely).
+   */
   public static Iban random() {
     return new Iban.Builder().buildRandom();
   }
 
+  /**
+   * Creates a new random IBAN instance using a specific {@link Random} number generator.
+   * The country code will be randomly selected from the supported countries.
+   *
+   * @param random The {@link Random} instance to use for generating random components.
+   * @return A randomly generated {@code Iban} instance.
+   * @throws IbanFormatException If an unexpected format issue occurs during generation.
+   * @throws UnsupportedCountryException If no supported country can be found (highly unlikely).
+   */
   public static Iban random(Random random) {
     return new Iban.Builder(random).buildRandom();
   }
 
+  /**
+   * Creates a new random IBAN instance for a specific country.
+   * All other components (bank code, account number, etc.) will be randomly generated.
+   *
+   * @param cc The {@link CountryCode} for which the IBAN should be generated.
+   * @return A randomly generated {@code Iban} instance for the specified country.
+   * @throws IbanFormatException If an unexpected format issue occurs during generation.
+   * @throws UnsupportedCountryException If the provided country code is not supported.
+   */
   public static Iban random(CountryCode cc) {
     return new Iban.Builder().countryCode(cc).buildRandom();
   }
 
   /**
-   * Returns iban's country code.
+   * Returns the country code part of this IBAN.
    *
-   * @return countryCode CountryCode
+   * @return The {@link CountryCode} enum constant representing the IBAN's country.
    */
   public CountryCode getCountryCode() {
     return CountryCode.getByCode(IbanUtil.getCountryCode(value));
   }
 
   /**
-   * Returns iban's check digit.
+   * Returns the check digit part of this IBAN.
+   * The check digit consists of two digits.
    *
-   * @return checkDigit String
+   * @return A {@link String} representing the two-digit check digit.
    */
   public String getCheckDigit() {
     return IbanUtil.getCheckDigit(value);
   }
 
   /**
-   * Returns iban's account number.
+   * Returns the account number part of this IBAN.
+   * This is part of the BBAN (Basic Bank Account Number).
    *
-   * @return accountNumber String
+   * @return A {@link String} representing the account number.
    */
   public String getAccountNumber() {
     return IbanUtil.getAccountNumber(value);
   }
 
   /**
-   * Returns iban's bank code.
+   * Returns the bank code part of this IBAN.
+   * This is part of the BBAN (Basic Bank Account Number).
    *
-   * @return bankCode String
+   * @return A {@link String} representing the bank code.
    */
   public String getBankCode() {
     return IbanUtil.getBankCode(value);
   }
 
   /**
-   * Returns iban's branch code.
+   * Returns the branch code part of this IBAN.
+   * This is an optional part of the BBAN (Basic Bank Account Number).
    *
-   * @return branchCode String
+   * @return A {@link String} representing the branch code, or an empty string if not present.
    */
   public String getBranchCode() {
     return IbanUtil.getBranchCode(value);
   }
 
   /**
-   * Returns iban's national check digit.
+   * Returns the national check digit part of this IBAN.
+   * This is part of the BBAN (Basic Bank Account Number) for some countries.
    *
-   * @return nationalCheckDigit String
+   * @return A {@link String} representing the national check digit, or an empty string if not applicable.
    */
   public String getNationalCheckDigit() {
     return IbanUtil.getNationalCheckDigit(value);
   }
 
   /**
-   * Returns iban's account type.
+   * Returns the account type part of this IBAN.
+   * This is part of the BBAN (Basic Bank Account Number) for some countries.
    *
-   * @return accountType String
+   * @return A {@link String} representing the account type, or an empty string if not applicable.
    */
   public String getAccountType() {
     return IbanUtil.getAccountType(value);
   }
 
   /**
-   * Returns iban's owner account type.
+   * Returns the owner account type part of this IBAN.
+   * This is part of the BBAN (Basic Bank Account Number) for some countries.
    *
-   * @return ownerAccountType String
+   * @return A {@link String} representing the owner account type, or an empty string if not applicable.
    */
   public String getOwnerAccountType() {
     return IbanUtil.getOwnerAccountType(value);
   }
 
   /**
-   * Returns iban's identification number.
+   * Returns the identification number part of this IBAN.
+   * This is part of the BBAN (Basic Bank Account Number) for some countries.
    *
-   * @return identificationNumber String
+   * @return A {@link String} representing the identification number, or an empty string if not applicable.
    */
   public String getIdentificationNumber() {
     return IbanUtil.getIdentificationNumber(value);
   }
 
   /**
-   * Returns iban's bban (Basic Bank Account Number).
+   * Returns the BBAN (Basic Bank Account Number) part of this IBAN.
+   * The BBAN is the country-specific part of the IBAN that follows the check digits.
    *
-   * @return bban String
+   * @return A {@link String} representing the BBAN.
    */
   public String getBban() {
     return IbanUtil.getBban(value);
   }
 
+  /** {@inheritDoc} */
   @Override
   public String toString() {
     return value;
   }
 
   /**
-   * Returns formatted version of Iban.
+   * Returns a formatted version of the IBAN, typically grouped into four-character blocks
+   * separated by spaces, for human readability.
    *
-   * @return A string representing formatted Iban for printing.
+   * @return A {@link String} representing the formatted IBAN.
    */
   public String toFormattedString() {
     return IbanUtil.toFormattedString(value);
   }
 
+  /** {@inheritDoc} */
   @Override
   public boolean equals(final Object obj) {
     if (obj instanceof Iban) {
@@ -212,12 +264,17 @@ public final class Iban {
     return false;
   }
 
+  /** {@inheritDoc} */
   @Override
   public int hashCode() {
     return value.hashCode();
   }
 
-  /** Iban Builder Class */
+  /**
+   * Builder class for constructing {@link Iban} instances.
+   * This builder provides methods to set individual components of an IBAN
+   * and to build either a fully specified or a randomly generated IBAN.
+   */
   public static final class Builder {
 
     private final Random random;
@@ -233,21 +290,28 @@ public final class Iban {
     private boolean enableLeftPadding;
     private char padChar = '0';
 
-    /** Creates an Iban Builder instance. */
+    /**
+     * Creates an Iban Builder instance using a specific {@link Random} generator.
+     *
+     * @param random The {@link Random} instance to use for random generation.
+     */
     public Builder(Random random) {
       this.random = random;
     }
 
-    /** Creates an Iban Builder instance. */
+    /**
+     * Creates an Iban Builder instance using a default, randomly seeded {@link Random} generator.
+     */
     public Builder() {
       this(new Random());
     }
 
     /**
-     * Sets iban's country code.
+     * Sets the IBAN's country code.
+     * This is a mandatory component for building an IBAN.
      *
-     * @param countryCode CountryCode
-     * @return builder Builder
+     * @param countryCode The {@link CountryCode} for the IBAN.
+     * @return The current {@code Builder} instance for method chaining.
      */
     public Builder countryCode(final CountryCode countryCode) {
       this.countryCode = countryCode;
@@ -255,10 +319,11 @@ public final class Iban {
     }
 
     /**
-     * Sets iban's bank code.
+     * Sets the IBAN's bank code.
+     * The bank code is part of the BBAN structure.
      *
-     * @param bankCode String
-     * @return builder Builder
+     * @param bankCode The bank code {@link String}.
+     * @return The current {@code Builder} instance for method chaining.
      */
     public Builder bankCode(final String bankCode) {
       this.bankCode = bankCode;
@@ -266,10 +331,11 @@ public final class Iban {
     }
 
     /**
-     * Sets iban's bank code extension.
+     * Sets the IBAN's bank code extension.
+     * This is an optional part of the BBAN for some countries.
      *
-     * @param bankCodeExt String
-     * @return builder Builder
+     * @param bankCodeExt The bank code extension {@link String}.
+     * @return The current {@code Builder} instance for method chaining.
      */
     public Builder bankCodeExt(final String bankCodeExt) {
       this.bankCodeExt = bankCodeExt;
@@ -277,10 +343,11 @@ public final class Iban {
     }
 
     /**
-     * Sets iban's branch code.
+     * Sets the IBAN's branch code.
+     * This is an optional part of the BBAN for some countries.
      *
-     * @param branchCode String
-     * @return builder Builder
+     * @param branchCode The branch code {@link String}.
+     * @return The current {@code Builder} instance for method chaining.
      */
     public Builder branchCode(final String branchCode) {
       this.branchCode = branchCode;
@@ -288,10 +355,11 @@ public final class Iban {
     }
 
     /**
-     * Sets iban's account number.
+     * Sets the IBAN's account number.
+     * This is a mandatory component for building an IBAN.
      *
-     * @param accountNumber String
-     * @return builder Builder
+     * @param accountNumber The account number {@link String}.
+     * @return The current {@code Builder} instance for method chaining.
      */
     public Builder accountNumber(final String accountNumber) {
       this.accountNumber = accountNumber;
@@ -299,10 +367,11 @@ public final class Iban {
     }
 
     /**
-     * Sets iban's national check digit.
+     * Sets the IBAN's national check digit.
+     * This is an optional part of the BBAN for some countries.
      *
-     * @param nationalCheckDigit String
-     * @return builder Builder
+     * @param nationalCheckDigit The national check digit {@link String}.
+     * @return The current {@code Builder} instance for method chaining.
      */
     public Builder nationalCheckDigit(final String nationalCheckDigit) {
       this.nationalCheckDigit = nationalCheckDigit;
@@ -310,10 +379,11 @@ public final class Iban {
     }
 
     /**
-     * Sets iban's account type.
+     * Sets the IBAN's account type.
+     * This is an optional part of the BBAN for some countries.
      *
-     * @param accountType String
-     * @return builder Builder
+     * @param accountType The account type {@link String}.
+     * @return The current {@code Builder} instance for method chaining.
      */
     public Builder accountType(final String accountType) {
       this.accountType = accountType;
@@ -321,10 +391,11 @@ public final class Iban {
     }
 
     /**
-     * Sets iban's owner account type.
+     * Sets the IBAN's owner account type.
+     * This is an optional part of the BBAN for some countries.
      *
-     * @param ownerAccountType String
-     * @return builder Builder
+     * @param ownerAccountType The owner account type {@link String}.
+     * @return The current {@code Builder} instance for method chaining.
      */
     public Builder ownerAccountType(final String ownerAccountType) {
       this.ownerAccountType = ownerAccountType;
@@ -332,10 +403,11 @@ public final class Iban {
     }
 
     /**
-     * Sets iban's identification number.
+     * Sets the IBAN's identification number.
+     * This is an optional part of the BBAN for some countries.
      *
-     * @param identificationNumber String
-     * @return builder Builder
+     * @param identificationNumber The identification number {@link String}.
+     * @return The current {@code Builder} instance for method chaining.
      */
     public Builder identificationNumber(final String identificationNumber) {
       this.identificationNumber = identificationNumber;
@@ -343,10 +415,11 @@ public final class Iban {
     }
 
     /**
-     * Sets iban's left zero padding flag
+     * Sets whether or not the BBAN components should be left-padded with the padding character.
+     * Default padding character is '0'.
      *
-     * @param enableLeftPadding used to determine must left pad or not, default value is false
-     * @return builder Builder
+     * @param enableLeftPadding {@code true} to enable left-padding, {@code false} otherwise.
+     * @return The current {@code Builder} instance for method chaining.
      */
     public Builder leftPadding(boolean enableLeftPadding) {
       this.enableLeftPadding = enableLeftPadding;
@@ -354,8 +427,11 @@ public final class Iban {
     }
 
     /**
-     * @param paddingCharacter which is going to replace the default one which is '0'
-     * @return builder Builder
+     * Sets the character used for left-padding BBAN components if padding is enabled.
+     * The default padding character is '0'.
+     *
+     * @param paddingCharacter The character to use for padding.
+     * @return The current {@code Builder} instance for method chaining.
      */
     public Builder paddingCharacter(char paddingCharacter) {
       this.padChar = paddingCharacter;
@@ -363,12 +439,15 @@ public final class Iban {
     }
 
     /**
-     * Builds new iban instance. This method validates the generated IBAN.
+     * Builds a new {@code Iban} instance with the currently configured attributes.
+     * The generated IBAN will be validated against ISO 13616 specification.
      *
-     * @return new iban instance.
-     * @throws IbanFormatException if values are not parsable by Iban Specification <a
-     *     href="http://en.wikipedia.org/wiki/ISO_13616">ISO_13616</a>
-     * @throws UnsupportedCountryException if country is not supported
+     * @return A new {@code Iban} instance.
+     * @throws IbanFormatException If the provided values are not parsable by IBAN Specification
+     * <a href="http://en.wikipedia.org/wiki/ISO_13616">ISO 13616</a>.
+     * @throws IllegalArgumentException If required fields (e.g., country code, bank code, account number) are null
+     * when building a non-random IBAN.
+     * @throws UnsupportedCountryException If the specified country is not supported by the IBAN specification.
      */
     public Iban build()
         throws IbanFormatException, IllegalArgumentException, UnsupportedCountryException {
@@ -376,14 +455,15 @@ public final class Iban {
     }
 
     /**
-     * Builds new iban instance.
+     * Builds a new {@code Iban} instance with the currently configured attributes.
      *
-     * @param validate boolean indicates if the generated IBAN needs to be validated after
-     *     generation
-     * @return new iban instance.
-     * @exception IbanFormatException if values are not parsable by Iban Specification <a
-     *     href="http://en.wikipedia.org/wiki/ISO_13616">ISO_13616</a>
-     * @exception UnsupportedCountryException if country is not supported
+     * @param validate {@code true} to validate the generated IBAN after generation, {@code false} otherwise.
+     * @return A new {@code Iban} instance.
+     * @throws IbanFormatException If the provided values are not parsable by IBAN Specification
+     * <a href="http://en.wikipedia.org/wiki/ISO_13616">ISO 13616</a>.
+     * @throws IllegalArgumentException If required fields (e.g., country code, bank code, account number) are null
+     * when building a non-random IBAN.
+     * @throws UnsupportedCountryException If the specified country is not supported by the IBAN specification.
      */
     public Iban build(boolean validate)
         throws IbanFormatException, IllegalArgumentException, UnsupportedCountryException {
@@ -406,12 +486,14 @@ public final class Iban {
     }
 
     /**
-     * Builds random iban instance.
+     * Builds a new random {@code Iban} instance.
+     * If a country code is not set, it will be randomly selected from the supported countries.
+     * Missing BBAN fields will be randomly filled according to the BBAN structure of the selected country.
      *
-     * @return random iban instance.
-     * @exception IbanFormatException if values are not parsable by Iban Specification <a
-     *     href="http://en.wikipedia.org/wiki/ISO_13616">ISO_13616</a>
-     * @exception UnsupportedCountryException if country is not supported
+     * @return A new randomly generated {@code Iban} instance.
+     * @throws IbanFormatException If an unexpected format issue occurs during random generation.
+     * @throws IllegalArgumentException If the random generator is null or other internal configuration issues occur.
+     * @throws UnsupportedCountryException If the selected or generated country is not supported.
      */
     public Iban buildRandom()
         throws IbanFormatException, IllegalArgumentException, UnsupportedCountryException {
@@ -431,7 +513,13 @@ public final class Iban {
       return build();
     }
 
-    /** Returns formatted bban string. */
+    /**
+     * Formats the BBAN (Basic Bank Account Number) part of the IBAN based on the country's BBAN structure.
+     * Missing fields (if not set in the builder) will be padded or filled according to the structure rules.
+     *
+     * @return A {@link String} representing the formatted BBAN.
+     * @throws UnsupportedCountryException If the country code is not supported, and its BBAN structure cannot be retrieved.
+     */
     private String formatBban() {
       final StringBuilder sb = new StringBuilder();
       final BbanStructure structure = BbanStructure.forCountry(countryCode);
@@ -473,21 +561,38 @@ public final class Iban {
     }
 
     /**
-     * @param input is the bban portion to be padded
-     * @param len is the length of the bban structure
-     * @return
+     * Pads the given input string with the configured padding character to reach the specified length.
+     * Padding is applied only if {@link #leftPadding(boolean)} is enabled.
+     *
+     * @param input The string to be padded (e.g., a BBAN component).
+     * @param len The desired length of the padded string.
+     * @return The padded string, or the original string if padding is not enabled.
      */
     private String getPaddedString(String input, int len) {
       if (enableLeftPadding) return IbanUtil.padLeft(input, len, padChar);
       else return input;
     }
 
-    /** Returns formatted iban string with default check digit. */
+    /**
+     * Formats the full IBAN string with the country code and a default check digit ("00")
+     * before the actual check digit calculation.
+     *
+     * @return A {@link String} representing the preliminary formatted IBAN.
+     */
     private String formatIban() {
       String sb = countryCode.getAlpha2() + DEFAULT_CHECK_DIGIT + formatBban();
       return sb;
     }
 
+    /**
+     * Validates that mandatory IBAN components are not null for non-random IBAN construction.
+     *
+     * @param countryCode The country code.
+     * @param bankCode The bank code.
+     * @param accountNumber The account number.
+     * @param nationalCheckDigit The national check digit (if applicable for the country).
+     * @throws IbanFormatException If any required component is {@code null}.
+     */
     private void require(
         final CountryCode countryCode,
         final String bankCode,
@@ -516,6 +621,13 @@ public final class Iban {
       }
     }
 
+    /**
+     * Fills any missing BBAN fields with randomly generated values based on the
+     * BBAN structure of the selected country.
+     *
+     * @param random The {@link Random} instance to use for generating random values.
+     * @throws UnsupportedCountryException If the country code is not supported, and its BBAN structure cannot be retrieved.
+     */
     private void fillMissingFieldsRandomly(final Random random) {
       final BbanStructure structure = BbanStructure.forCountry(countryCode);
 

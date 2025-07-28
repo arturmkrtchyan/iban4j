@@ -17,7 +17,11 @@ package org.iban4j;
 
 import static org.iban4j.BicFormatException.BicFormatViolation.*;
 
-/** Bic Utility Class */
+/**
+ * Utility class for validating and extracting information from Business Identifier Codes (BICs).
+ * <p>
+ * This class provides static methods to ensure BIC strings conform to the ISO 9362 standard.
+ */
 public class BicUtil {
 
   private static final int BIC8_LENGTH = 8;
@@ -32,12 +36,19 @@ public class BicUtil {
   private static final int BRANCH_CODE_INDEX = LOCATION_CODE_INDEX + LOCATION_CODE_LENGTH;
   private static final int BRANCH_CODE_LENGTH = 3;
 
+  // hidden constructor of utility class
+  private BicUtil() {
+  }
+
   /**
-   * Validates bic.
+   * Validates a given Business Identifier Code (BIC) string according to the ISO 9362 standard.
+   * This method performs checks on the BIC's length, character casing, and the format of its
+   * various components (bank code, country code, location code, and optional branch code).
    *
-   * @param bic to be validated.
-   * @throws BicFormatException if bic is invalid. UnsupportedCountryException if bic's country is
-   *     not supported.
+   * @param bic The BIC string to be validated. Must not be {@code null} or empty.
+   * @throws BicFormatException If the provided BIC string does not conform to the expected format rules.
+   * Specific violations are indicated by {@link BicFormatException.BicFormatViolation}.
+   * @throws UnsupportedCountryException If the country code embedded in the BIC is not a supported country.
    */
   public static void validate(final String bic)
       throws BicFormatException, UnsupportedCountryException {
@@ -135,22 +146,59 @@ public class BicUtil {
     }
   }
 
+  /**
+   * Extracts the bank code (first 4 characters) from the given BIC string.
+   *
+   * @param bic The BIC string from which to extract the bank code.
+   * @return A {@link String} representing the bank code.
+   */
   public static String getBankCode(final String bic) {
     return bic.substring(BANK_CODE_INDEX, BANK_CODE_INDEX + BANK_CODE_LENGTH);
   }
 
+  /**
+   * Extracts the country code (characters 5 and 6) from the given BIC string.
+   * This code identifies the country where the bank is located.
+   *
+   * @param bic The BIC string from which to extract the country code.
+   * @return A {@link String} representing the two-letter country code.
+   */
   public static String getCountryCode(final String bic) {
     return bic.substring(COUNTRY_CODE_INDEX, COUNTRY_CODE_INDEX + COUNTRY_CODE_LENGTH);
   }
 
+  /**
+   * Extracts the location code (characters 7 and 8) from the given BIC string.
+   * This code identifies the city or location of the bank.
+   *
+   * @param bic The BIC string from which to extract the location code.
+   * @return A {@link String} representing the two-character location code.
+   */
   public static String getLocationCode(final String bic) {
     return bic.substring(LOCATION_CODE_INDEX, LOCATION_CODE_INDEX + LOCATION_CODE_LENGTH);
   }
 
+  /**
+   * Extracts the branch code (characters 9 to 11, if present) from the given BIC string.
+   * This code is optional and identifies a specific branch of the bank.
+   * If the BIC is 8 characters long, this method will return an empty string or throw an exception
+   * depending on the substring behavior for out-of-bounds indices, thus it's typically
+   * used in conjunction with {@link #hasBranchCode(String)}.
+   *
+   * @param bic The BIC string from which to extract the branch code.
+   * @return A {@link String} representing the three-character branch code, or an empty string if not present in an 8-character BIC.
+   */
   public static String getBranchCode(final String bic) {
     return bic.substring(BRANCH_CODE_INDEX, BRANCH_CODE_INDEX + BRANCH_CODE_LENGTH);
   }
 
+  /**
+   * Checks if the given BIC string includes an optional branch code.
+   * A BIC has a branch code if its total length is 11 characters.
+   *
+   * @param bic The BIC string to check.
+   * @return {@code true} if the BIC has a branch code (length is 11), {@code false} otherwise (length is 8).
+   */
   public static boolean hasBranchCode(final String bic) {
     return bic.length() == BIC11_LENGTH;
   }

@@ -19,7 +19,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-/** Bban Structure Entry representation. */
+/**
+ * BBAN Structure Entry representation.
+ */
 public class BbanStructureEntry {
 
   private static final Map<EntryCharacterType, char[]> charByCharacterType;
@@ -52,11 +54,25 @@ public class BbanStructureEntry {
     this.length = length;
   }
 
+  /**
+   * <p>bankCode.</p>
+   *
+   * @param length a int
+   * @param characterType a char
+   * @return a {@link org.iban4j.bban.BbanStructureEntry} object
+   */
   public static BbanStructureEntry bankCode(final int length, final char characterType) {
     return new BbanStructureEntry(
         BbanEntryType.bank_code, EntryCharacterType.valueOf(String.valueOf(characterType)), length);
   }
 
+  /**
+   * <p>bankCodeExt.</p>
+   *
+   * @param length a int
+   * @param characterType a char
+   * @return a {@link org.iban4j.bban.BbanStructureEntry} object
+   */
   public static BbanStructureEntry bankCodeExt(final int length, final char characterType) {
     return new BbanStructureEntry(
         BbanEntryType.bank_code_ext,
@@ -64,6 +80,13 @@ public class BbanStructureEntry {
         length);
   }
 
+  /**
+   * <p>branchCode.</p>
+   *
+   * @param length a int
+   * @param characterType a char
+   * @return a {@link org.iban4j.bban.BbanStructureEntry} object
+   */
   public static BbanStructureEntry branchCode(final int length, final char characterType) {
     return new BbanStructureEntry(
         BbanEntryType.branch_code,
@@ -71,6 +94,13 @@ public class BbanStructureEntry {
         length);
   }
 
+  /**
+   * <p>accountNumber.</p>
+   *
+   * @param length a int
+   * @param characterType a char
+   * @return a {@link org.iban4j.bban.BbanStructureEntry} object
+   */
   public static BbanStructureEntry accountNumber(final int length, final char characterType) {
     return new BbanStructureEntry(
         BbanEntryType.account_number,
@@ -78,6 +108,13 @@ public class BbanStructureEntry {
         length);
   }
 
+  /**
+   * <p>nationalCheckDigit.</p>
+   *
+   * @param length a int
+   * @param characterType a char
+   * @return a {@link org.iban4j.bban.BbanStructureEntry} object
+   */
   public static BbanStructureEntry nationalCheckDigit(final int length, final char characterType) {
     return new BbanStructureEntry(
         BbanEntryType.national_check_digit,
@@ -85,6 +122,13 @@ public class BbanStructureEntry {
         length);
   }
 
+  /**
+   * <p>accountType.</p>
+   *
+   * @param length a int
+   * @param characterType a char
+   * @return a {@link org.iban4j.bban.BbanStructureEntry} object
+   */
   public static BbanStructureEntry accountType(final int length, final char characterType) {
     return new BbanStructureEntry(
         BbanEntryType.account_type,
@@ -92,6 +136,13 @@ public class BbanStructureEntry {
         length);
   }
 
+  /**
+   * <p>ownerAccountNumber.</p>
+   *
+   * @param length a int
+   * @param characterType a char
+   * @return a {@link org.iban4j.bban.BbanStructureEntry} object
+   */
   public static BbanStructureEntry ownerAccountNumber(final int length, final char characterType) {
     return new BbanStructureEntry(
         BbanEntryType.owner_account_number,
@@ -99,6 +150,13 @@ public class BbanStructureEntry {
         length);
   }
 
+  /**
+   * <p>identificationNumber.</p>
+   *
+   * @param length a int
+   * @param characterType a char
+   * @return a {@link org.iban4j.bban.BbanStructureEntry} object
+   */
   public static BbanStructureEntry identificationNumber(
       final int length, final char characterType) {
     return new BbanStructureEntry(
@@ -107,22 +165,48 @@ public class BbanStructureEntry {
         length);
   }
 
+  /**
+   * <p>Getter for the field <code>entryType</code>.</p>
+   *
+   * @return a {@link org.iban4j.bban.BbanEntryType} object
+   */
   public BbanEntryType getEntryType() {
     return entryType;
   }
 
+  /**
+   * <p>Getter for the field <code>characterType</code>.</p>
+   *
+   * @return a {@link org.iban4j.bban.BbanStructureEntry.EntryCharacterType} object
+   */
   public EntryCharacterType getCharacterType() {
     return characterType;
   }
 
+  /**
+   * <p>Getter for the field <code>length</code>.</p>
+   *
+   * @return a int
+   */
   public int getLength() {
     return length;
   }
 
+  /**
+   * <p>getRandom.</p>
+   *
+   * @return a {@link java.lang.String} object
+   */
   public String getRandom() {
     return getRandom(new Random());
   }
 
+  /**
+   * <p>getRandom.</p>
+   *
+   * @param random a {@link java.util.Random} object
+   * @return a {@link java.lang.String} object
+   */
   public String getRandom(Random random) {
 
     // Create a new seeded Random, so it doesn't matter how this Random is used, it won't affect
@@ -146,6 +230,7 @@ public class BbanStructureEntry {
     return s.toString();
   }
 
+  /** {@inheritDoc} */
   @Override
   public String toString() {
     return "BbanStructureEntry{"

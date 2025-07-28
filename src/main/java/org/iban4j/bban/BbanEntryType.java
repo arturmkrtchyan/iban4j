@@ -16,7 +16,9 @@
 
 package org.iban4j.bban;
 
-/** Basic Bank Account Number Entry Types. */
+/**
+ * Basic Bank Account Number Entry Types.
+ */
 public enum BbanEntryType {
   bank_code,
   bank_code_ext,
