@@ -1,109 +1,180 @@
-iban4j 
+iban4j
 ======
+
+A Java library for the generation, validation, and parsing of
+International Bank Account Numbers (IBAN) and Business Identifier Codes (BIC).
 
 [![Build Status](https://github.com/arturmkrtchyan/iban4j/actions/workflows/java-ci.yml/badge.svg)](https://github.com/arturmkrtchyan/iban4j/actions/workflows/java-ci.yml) [![Coverage Status](https://img.shields.io/coveralls/arturmkrtchyan/iban4j.svg)](https://coveralls.io/r/arturmkrtchyan/iban4j) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.iban4j/iban4j/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.iban4j/iban4j)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://raw.githubusercontent.com/arturmkrtchyan/iban4j/master/LICENSE.txt)
 
-A Java library for generation and validation of the International Bank Account
-Numbers (<a href="http://en.wikipedia.org/wiki/ISO_13616" target="_blank">IBAN ISO_13616</a>) and Business Identifier
-Codes (<a href="http://en.wikipedia.org/wiki/ISO_9362" target="_blank">BIC ISO_9362</a>).
+---
 
+### Features
 
-#### Iban quick examples:
+- **IBAN Generation and Validation**:
+  Supports creating valid IBANs and verifying their format and check digits.
+- **BIC Validation**:
+  Checks the validity of Business Identifier Codes.
+- **Multiple Formats**:
+  Handles both standard and formatted string representations.
+- **Customizable Padding**:
+  Offers options for zero-padding account and bank codes.
 
-```java
- // How to generate Iban
- Iban iban = new Iban.Builder()
-                .countryCode(CountryCode.AT)
-                .bankCode("19043")
-                .accountNumber("00234573201")
-                .build();
+---
 
+## Getting Started
 
- // How to create Iban object from String
- Iban iban = Iban.valueOf("DE89370400440532013000");
+### Maven Dependency
 
- // How to create Iban object from formatted String
- Iban iban = Iban.valueOf("DE89 3704 0044 0532 0130 00", IbanFormat.Default);
-
- // How to generate random Iban
- Iban iban = Iban.random(CountryCode.AT);
- Iban iban = Iban.random();
- Iban iban = new Iban.Builder()
-                 .countryCode(CountryCode.AT)
-                 .bankCode("19043")
-                 .buildRandom();
-
- // How to validate Iban 
- try {
-     IbanUtil.validate("AT611904300234573201");
-     IbanUtil.validate("DE89 3704 0044 0532 0130 00", IbanFormat.Default);
-     // valid
- } catch (IbanFormatException |
-          InvalidCheckDigitException |
-          UnsupportedCountryException e) {
-     // invalid
- }
-```
-
-#### Bic quick examples:
-
-```java
- //How to create Bic object from String
- Bic bic = Bic.valueOf("DEUTDEFF");
-
-
-         //How to validate Bic
-         try{
-         BicUtil.validate("DEUTDEFF500");
-         // valid
-         }catch(BicFormatException e){
-         // invalid
-         }
-```
-
-#### Enable left padding examples:
-
-```java
- //How to left pad('account number', 'bank code' and 'branch code') with zero
- Iban iban1=new Iban.Builder()
-         .leftPadding(true)
-         .countryCode(CountryCode.DE)
-         .bankCode("66280099")
-         .accountNumber("123456700")
-         .build();
-
- //How to change default padding character ('0') with other
- Iban iban2=new Iban.Builder()
-         .leftPadding(true)
-         .paddingCharacter('1')
-         .countryCode(CountryCode.DE)
-         .bankCode("66280099")
-         .accountNumber("123456700")
-         .build();
-```
-
-#### Maven dependency:
+To use **iban4j** in your Maven project, add the following dependency to your `pom.xml`:
 
 ```xml
-
 <dependency>
     <groupId>org.iban4j</groupId>
     <artifactId>iban4j</artifactId>
-  <version>3.2.11-RELEASE</version>
+    <version>3.2.11-RELEASE</version>
 </dependency>
+````
+
+#### Gradle Dependency
+
+To include **iban4j** into your Gradle project, add the following dependency to your `build.gradle` or `build.gradle.kts` file.
+
+For a **Groovy DSL** (`build.gradle`) file:
+
+```groovy
+dependencies {
+    implementation 'org.iban4j:iban4j:3.2.11-RELEASE'
+}
 ```
 
-![Compatibility Badge](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
+For a **Kotlin DSL** (`build.gradle.kts`) file:
 
-#### References
+```kotlin
+dependencies {
+    implementation("org.iban4j:iban4j:3.2.11-RELEASE")
+}
+```
 
-- http://en.wikipedia.org/wiki/ISO_13616
-- http://en.wikipedia.org/wiki/ISO_9362
-- https://www.ecb.europa.eu/paym/retpaym/paymint/sepa/shared/pdf/iban_registry.pdf
+After adding the dependency, run `gradle build`. Gradle will automatically download the library and include it in your project.
 
-## License
+-----
+
+### Usage Examples
+
+#### IBAN Examples
+
+##### Generate an IBAN
+
+```java
+// Using the Builder pattern
+Iban iban = new Iban.Builder()
+    .countryCode(CountryCode.AT)
+    .bankCode("19043")
+    .accountNumber("00234573201")
+    .build();
+```
+
+##### Create an `Iban` object from a string
+
+```java
+// From a raw IBAN string
+Iban iban = Iban.valueOf("DE89370400440532013000");
+
+// From a formatted IBAN string
+Iban iban = Iban.valueOf("DE89 3704 0044 0532 0130 00", IbanFormat.Default);
+```
+
+##### Generate a random IBAN
+
+```java
+// For a specific country
+Iban iban = Iban.random(CountryCode.AT);
+
+// For a random country
+Iban iban = Iban.random();
+
+// Using the builder for more control
+Iban iban = new Iban.Builder()
+    .countryCode(CountryCode.AT)
+    .bankCode("19043")
+    .buildRandom();
+```
+
+##### Validate an IBAN
+
+```java
+try {
+    // Validate a raw IBAN
+    IbanUtil.validate("AT611904300234573201");
+    // Validate a formatted IBAN
+
+    IbanUtil.validate("DE89 3704 0044 0532 0130 00", IbanFormat.Default);
+    System.out.println("IBAN is valid");
+} catch (IbanFormatException | InvalidCheckDigitException | UnsupportedCountryException ex) {
+    System.err.println("IBAN is invalid: " + ex.getMessage());
+}
+```
+
+##### Enable left-padding for generated IBANs
+
+```java
+// Left-pad account number, bank code, and branch code with zeros
+Iban iban = new Iban.Builder()
+    .leftPadding(true)
+    .countryCode(CountryCode.DE)
+    .bankCode("66280099")
+    .accountNumber("123456700")
+    .build();
+
+// Change the default padding character from '0' to '1'
+Iban ibanWithCustomPadding = new Iban.Builder()
+    .leftPadding(true)
+    .paddingCharacter('1')
+    .countryCode(CountryCode.DE)
+    .bankCode("66280099")
+    .accountNumber("123456700")
+    .build();
+```
+
+#### BIC Examples
+
+##### Create a `Bic` object from a string
+
+```java
+Bic bic = Bic.valueOf("DEUTDEFF");
+```
+
+##### Validate a BIC
+
+```java
+try {
+    BicUtil.validate("DEUTDEFF500");
+    System.out.println("BIC is valid");
+} catch (BicFormatException ex) {
+    System.err.println("BIC is invalid: " + ex.getMessage());
+}
+```
+
+-----
+
+### Compatibility
+
+This library requires [Java 11](https://adoptium.net/temurin/releases/?version=11) or higher.
+
+-----
+
+### References
+
+ - [ISO 13616 International Bank Account Number (IBAN)](http://en.wikipedia.org/wiki/ISO_13616)
+ - [ISO 9362 Business Identifier Codes (BIC)](http://en.wikipedia.org/wiki/ISO_9362)
+ - [ECB IBAN Registry](https://www.ecb.europa.eu/paym/retpaym/paymint/sepa/shared/pdf/iban_registry.pdf)
+
+-----
+
+### License
+
 Copyright 2015 Artur Mkrtchyan.
 
-Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
+Licensed under the Apache License, Version 2.0: [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
