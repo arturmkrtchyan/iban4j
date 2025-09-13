@@ -381,8 +381,8 @@ public final class IbanUtil {
         final String checkDigit = getCheckDigit(iban);
 
         // check digits
-        if(!Character.isDigit(checkDigit.charAt(0)) ||
-           !Character.isDigit(checkDigit.charAt(1))) {
+        if(!CharacterUtil.isAsciiDigit(checkDigit.charAt(0)) ||
+           !CharacterUtil.isAsciiDigit(checkDigit.charAt(1))) {
             throw new IbanFormatException(CHECK_DIGIT_ONLY_DIGITS, checkDigit,
                     "Iban's check digit should contain only digits.");
         }
