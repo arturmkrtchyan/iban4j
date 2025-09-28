@@ -25,6 +25,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Optional;
 import org.iban4j.CountryCode;
+import org.iban4j.CharacterUtil;
 import org.iban4j.IbanFormatException;
 import org.iban4j.UnsupportedCountryException;
 
@@ -711,7 +712,7 @@ public class BbanStructure {
     switch (entry.getCharacterType()) {
       case a:
         for (char ch: entryValue.toCharArray()) {
-          if (!Character.isUpperCase(ch)) {
+          if (!CharacterUtil.isAsciiUppercaseLetter(ch)) {
             throw new IbanFormatException(BBAN_ONLY_UPPER_CASE_LETTERS,
                     entry.getEntryType(), entryValue, ch,
                     String.format(ASSERT_UPPER_LETTERS, entryValue));
@@ -720,7 +721,7 @@ public class BbanStructure {
         break;
       case c:
         for (char ch: entryValue.toCharArray()) {
-          if (!Character.isLetterOrDigit(ch)) {
+          if (!CharacterUtil.isValidAlphanumeric(ch)) {
             throw new IbanFormatException(BBAN_ONLY_DIGITS_OR_LETTERS,
                     entry.getEntryType(), entryValue, ch,
                     String.format(ASSERT_DIGITS_AND_LETTERS, entryValue));
@@ -729,7 +730,7 @@ public class BbanStructure {
         break;
       case n:
         for (char ch: entryValue.toCharArray()) {
-          if (!Character.isDigit(ch)) {
+          if (!CharacterUtil.isAsciiDigit(ch)) {
             throw new IbanFormatException(BBAN_ONLY_DIGITS,
                     entry.getEntryType(), entryValue, ch,
                     String.format(ASSERT_DIGITS, entryValue));

@@ -132,4 +132,43 @@ public class BicUtilTest {
             BicUtil.validate("1234DEFFXXX");
         }
 
+        @Test
+        @DisplayName("validate BIC with Arabic zero should throw exception")
+        public void bicValidationWithArabicZeroShouldThrowException() {
+            BicFormatException thrown = assertThrows(
+                    BicFormatException.class,
+                    () -> BicUtil.validate("DE០TDEFF001"),
+                    defaultExceptionMessage);
+            assertThat(thrown.getMessage(), containsString("Bank code must contain only alphanumeric"));
+        }
+
+        @Test
+        @DisplayName("validate BIC with Arabic zero in branch code should throw exception")
+        public void bicValidationWithArabicZeroInBranchCodeShouldThrowException() {
+            BicFormatException thrown = assertThrows(
+                    BicFormatException.class,
+                    () -> BicUtil.validate("DEUTDEFF០01"),
+                    defaultExceptionMessage);
+            assertThat(thrown.getMessage(), containsString("Branch code must contain only letters or digits."));
+        }
+
+        @Test
+        @DisplayName("validate BIC with Cyrillic E in country code should throw exception")
+        public void bicValidationWithCyrillicEInCountryCodeShouldThrowException() {
+            BicFormatException thrown = assertThrows(
+                    BicFormatException.class,
+                    () -> BicUtil.validate("DEUTDЕFF"),
+                    defaultExceptionMessage);
+            assertThat(thrown.getMessage(), containsString("Bic country code must contain upper case letters"));    
+        }
+
+        @Test
+        @DisplayName("validate BIC with Cyrillic E in bank code should throw exception")
+        public void bicValidationWithCyrillicEInBankCodeShouldThrowException() {
+            BicFormatException thrown = assertThrows(
+                    BicFormatException.class,
+                    () -> BicUtil.validate("DЕUTDEFF"),
+                    defaultExceptionMessage);
+            assertThat(thrown.getMessage(), containsString("Bank code must contain only alphanumeric"));    
+        }
 }

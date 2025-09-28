@@ -98,7 +98,7 @@ public class BicUtil {
   private static void validateBankCode(final String bic) {
     String bankCode = getBankCode(bic);
     for (final char ch : bankCode.toCharArray()) {
-      if (!Character.isLetterOrDigit(ch)) {
+      if (!CharacterUtil.isValidAlphanumeric(ch)) {
         throw new BicFormatException(
             BANK_CODE_ONLY_ALPHANUMERIC, ch, "Bank code must contain only alphanumeric.");
       }
@@ -107,14 +107,13 @@ public class BicUtil {
 
   private static void validateCountryCode(final String bic) {
     final String countryCode = getCountryCode(bic);
-    if (countryCode.trim().length() < COUNTRY_CODE_LENGTH
-        || !countryCode.equals(countryCode.toUpperCase())
-        || !Character.isLetter(countryCode.charAt(0))
-        || !Character.isLetter(countryCode.charAt(1))) {
-      throw new BicFormatException(
-          COUNTRY_CODE_ONLY_UPPER_CASE_LETTERS,
-          countryCode,
-          "Bic country code must contain upper case letters");
+    for (int i = 0; i < COUNTRY_CODE_LENGTH; i++) {
+      if (!CharacterUtil.isAsciiUppercaseLetter(countryCode.charAt(i))) {
+        throw new BicFormatException(
+            COUNTRY_CODE_ONLY_UPPER_CASE_LETTERS,
+            countryCode,
+            "Bic country code must contain upper case letters");
+      }
     }
 
     if (CountryCode.getByCode(countryCode) == null) {
@@ -125,7 +124,7 @@ public class BicUtil {
   private static void validateLocationCode(final String bic) {
     final String locationCode = getLocationCode(bic);
     for (char ch : locationCode.toCharArray()) {
-      if (!Character.isLetterOrDigit(ch)) {
+      if (!CharacterUtil.isValidAlphanumeric(ch)) {
         throw new BicFormatException(
             LOCATION_CODE_ONLY_LETTERS_OR_DIGITS,
             ch,
@@ -137,7 +136,7 @@ public class BicUtil {
   private static void validateBranchCode(final String bic) {
     final String branchCode = getBranchCode(bic);
     for (final char ch : branchCode.toCharArray()) {
-      if (!Character.isLetterOrDigit(ch)) {
+      if (!CharacterUtil.isValidAlphanumeric(ch)) {
         throw new BicFormatException(
             BRANCH_CODE_ONLY_LETTERS_OR_DIGITS,
             ch,

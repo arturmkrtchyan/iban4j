@@ -101,4 +101,14 @@ public class InvalidIbanIsValidTest {
   public void formattedIbanValidationWithNoneFormattingShouldThrowException() {
     assertFalse(IbanUtil.isValid("AT61 1904 3002 3457 3201"));
   }
+
+  @Test
+  public void ibanValidationWithArabicZeroShouldReturnFalse() {
+    assertFalse(IbanUtil.isValid("DE8937០400440532013000"));
+  }
+
+  @Test
+  public void ibanValidationWithCyrillicShouldReturnFalse() {
+    assertFalse(IbanUtil.isValid("DЕ89370400440532013000"));
+  }
 }
