@@ -184,8 +184,7 @@ public class BbanStructure {
         CountryCode.EE,
         new BbanStructure(
             BbanStructureEntry.bankCode(2, 'n'),
-            BbanStructureEntry.branchCode(2, 'n'),
-            BbanStructureEntry.accountNumber(11, 'n'),
+            BbanStructureEntry.accountNumber(13, 'n'),
             BbanStructureEntry.nationalCheckDigit(1, 'n')));
 
     structures.put(
@@ -528,7 +527,9 @@ public class BbanStructure {
     structures.put(
         CountryCode.SE,
         new BbanStructure(
-            BbanStructureEntry.bankCode(3, 'n'), BbanStructureEntry.accountNumber(17, 'n')));
+            BbanStructureEntry.bankCode(3, 'n'),
+            BbanStructureEntry.accountNumber(16, 'n'),
+            BbanStructureEntry.nationalCheckDigit(1, 'n')));
 
     structures.put(
         CountryCode.CH,
