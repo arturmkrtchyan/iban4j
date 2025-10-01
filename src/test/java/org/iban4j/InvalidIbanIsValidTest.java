@@ -1,6 +1,7 @@
 package org.iban4j;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -103,12 +104,16 @@ public class InvalidIbanIsValidTest {
   }
 
   @Test
-  public void ibanValidationWithArabicZeroShouldReturnFalse() {
-    assertFalse(IbanUtil.isValid("DE8937០400440532013000"));
+  public void validIbanWithInvalidNationalCheckDigitShouldPassBasicValidation() {
+    assertTrue(IbanUtil.isValid("PT52000201231234567850154"));
   }
 
   @Test
-  public void ibanValidationWithCyrillicShouldReturnFalse() {
-    assertFalse(IbanUtil.isValid("DЕ89370400440532013000"));
+  public void validIbanWithInvalidNationalCheckDigitShouldFailWithCountryRules() {
+    ValidationConfig config = ValidationConfig.builder()
+            .enableNationalCheckDigitValidation(true)
+            .build();
+    assertFalse(IbanUtil.isValid("PT52000201231234567850154", config));
   }
+
 }

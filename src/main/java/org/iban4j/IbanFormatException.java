@@ -252,6 +252,8 @@ public class IbanFormatException extends Iban4jException {
     /** The account number portion of the BBAN was {@code null} or empty. */
     ACCOUNT_NUMBER_NOT_NULL,
     /** The national check digit portion of the BBAN was {@code null} or empty. */
-    NATIONAL_CHECK_DIGIT_NOT_NULL
+    NATIONAL_CHECK_DIGIT_NOT_NULL,
+    /** The country-specific rules validation failed. */
+    COUNTRY_RULES_FAILED
   }
 }
