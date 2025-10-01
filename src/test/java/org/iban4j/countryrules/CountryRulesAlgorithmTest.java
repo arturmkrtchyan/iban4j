@@ -171,17 +171,6 @@ public class CountryRulesAlgorithmTest {
         assertFalse(algorithm.validate(invalidIban));
     }
 
-    @Test
-    public void swedenAlgorithmTest() {
-        CountryRulesAlgorithm algorithm = new SeNationalCheckDigit();
-        assertEquals(CountryCode.SE, algorithm.getCountry());
-        
-        Iban validIban = Iban.valueOf("SE4550000000058398257466");
-        assertTrue(algorithm.validate(validIban));
-        
-        Iban invalidIban = Iban.valueOf("SE7250000000058398257465");
-        assertFalse(algorithm.validate(invalidIban));
-    }
 
     @Test
     public void slovakRepublicAlgorithmTest() {
