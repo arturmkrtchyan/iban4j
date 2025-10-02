@@ -188,13 +188,12 @@ final class TestDataHelper {
             "DO28BAGR00000001212453611324"
           },
           {
-            new Iban.Builder()
-                .countryCode(CountryCode.EE)
-                .bankCode("22")
-                .branchCode("00")
-                .accountNumber("22102014568")
-                .nationalCheckDigit("5")
-                .build(),
+        new Iban.Builder()
+            .countryCode(CountryCode.EE)
+            .bankCode("22")
+            .accountNumber("0022102014568")
+            .nationalCheckDigit("5")
+            .build(),
             "EE382200221020145685"
           },
           {
@@ -723,11 +722,12 @@ final class TestDataHelper {
             "ES9121000418450200051332"
           },
           {
-            new Iban.Builder()
-                .countryCode(CountryCode.SE)
-                .bankCode("500")
-                .accountNumber("00000058398257466")
-                .build(),
+        new Iban.Builder()
+            .countryCode(CountryCode.SE)
+            .bankCode("500")
+            .accountNumber("0000005839825746")
+            .nationalCheckDigit("6")
+            .build(),
             "SE4550000000058398257466"
           },
           {
