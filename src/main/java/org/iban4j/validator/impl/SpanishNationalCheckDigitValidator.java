@@ -30,17 +30,14 @@ import org.iban4j.validator.NationalCheckDigitValidator;
  *   <li><strong>A</strong> = Account number (10 digits)
  * </ul>
  *
- * <p>The CCC algorithm calculates two check digits:
+ * <p>The CCC algorithm calculates two check digits using MOD-11:
  *
  * <ol>
- *   <li><strong>First digit</strong>: MOD-11 of bank code + branch code (8 digits) using weights
- *       [1,2,4,8,5,10,9,7]
- *   <li><strong>Second digit</strong>: MOD-11 of account number (10 digits) using weights
- *       [1,2,4,8,5,10,9,7,3,6]
+ *   <li><strong>First digit</strong>: MOD-11 of "00" + bank code + branch code (10 digits)
+ *   <li><strong>Second digit</strong>: MOD-11 of account number (10 digits)
  * </ol>
  *
- * <p><strong>Corrected Algorithm:</strong> The Spanish CCC does NOT prepend "00". It uses the bank
- * code + branch code directly (8 digits) for the first calculation.
+ * <p>Both calculations use the same weights [1,2,4,8,5,10,9,7,3,6] applied left-to-right.
  *
  * @author iban4j contributors
  * @since 3.3.0
@@ -48,13 +45,10 @@ import org.iban4j.validator.NationalCheckDigitValidator;
 public class SpanishNationalCheckDigitValidator implements NationalCheckDigitValidator {
 
   /**
-   * Weight array for bank code and branch code validation (8 digits). Applied directly to bank code
-   * + branch code.
+   * Weight array for MOD-11 calculation (10 digits). Applied left-to-right to both "00" + bank +
+   * branch (for first digit) and account number (for second digit).
    */
-  private static final int[] BANK_BRANCH_WEIGHTS = {1, 2, 4, 8, 5, 10, 9, 7};
-
-  /** Weight array for account number validation (10 digits). */
-  private static final int[] ACCOUNT_WEIGHTS = {1, 2, 4, 8, 5, 10, 9, 7, 3, 6};
+  private static final int[] WEIGHTS = {1, 2, 4, 8, 5, 10, 9, 7, 3, 6};
 
   private static final int SPANISH_BBAN_LENGTH = 20;
   private static final int CHECK_DIGIT_LENGTH = 2;
@@ -88,12 +82,12 @@ public class SpanishNationalCheckDigitValidator implements NationalCheckDigitVal
     String branchCode = bban.substring(4, 8); // Branch: positions 4-7
     String accountNumber = bban.substring(10, 20); // Account: positions 10-19
 
-    // First check digit: MOD-11 of bank + branch (8 digits total)
-    String bankBranchInput = bankCode + branchCode; // "2100" + "0418" = "21000418"
-    int firstDigit = calculateCheckDigit(bankBranchInput, BANK_BRANCH_WEIGHTS);
+    // First check digit: MOD-11 of "00" + bank + branch (10 digits total)
+    String bankBranchInput = "00" + bankCode + branchCode; // "00" + "2100" + "0418" = "0021000418"
+    int firstDigit = calculateCheckDigit(bankBranchInput, WEIGHTS);
 
     // Second check digit: MOD-11 of account number (10 digits)
-    int secondDigit = calculateCheckDigit(accountNumber, ACCOUNT_WEIGHTS);
+    int secondDigit = calculateCheckDigit(accountNumber, WEIGHTS);
 
     return String.format("%d%d", firstDigit, secondDigit);
   }
@@ -135,15 +129,11 @@ public class SpanishNationalCheckDigitValidator implements NationalCheckDigitVal
     }
 
     int remainder = sum % MODULUS;
-
-    // Spanish MOD-11 special rules
-    if (remainder <= 1) {
-      return 0;
-    }
-
     int result = MODULUS - remainder;
 
-    // Handle special cases
+    // Spanish MOD-11 special rules:
+    // If result is 10, use 1 instead
+    // If result is 11, use 0 instead
     if (result == 10) {
       return 1;
     } else if (result == 11) {

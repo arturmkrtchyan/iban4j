@@ -48,7 +48,8 @@ class IbanValidationUtilTest {
         "Should throw InvalidNationalCheckDigitException for Spanish IBAN with invalid national check digit")
     void testValidateWithInvalidNationalCheckDigitSpain() {
       // Spanish IBAN with incorrect national check digit (changed 45 to 46)
-      String invalidSpanishIban = "ES9121000418460200051332";
+      // IBAN check digit recalculated to 29 for BBAN with national check 46
+      String invalidSpanishIban = "ES2921000418460200051332";
 
       InvalidNationalCheckDigitException exception =
           assertThrows(
@@ -135,7 +136,7 @@ class IbanValidationUtilTest {
     @DisplayName("Should return true for valid IBANs with national check digits")
     @CsvSource({
       "ES9121000418450200051332, true", // Valid Spanish
-      "ES9121000418460200051332, false", // Invalid Spanish national check digit
+      "ES2921000418460200051332, false", // Invalid Spanish national check digit
       "FR1420041010050500013M02606, true", // Valid French
       "DE89370400440532013000, true" // Valid German (no national check digit)
     })
@@ -219,7 +220,7 @@ class IbanValidationUtilTest {
     @DisplayName(
         "Should demonstrate that standard validation passes but enhanced fails for invalid national check digit")
     void testStandardPassesEnhancedFails() {
-      String invalidNationalCheckDigit = "ES9121000418460200051332"; // Wrong national check digit
+      String invalidNationalCheckDigit = "ES2921000418460200051332"; // Wrong national check digit
 
       // Standard validation should pass (only checks IBAN check digit)
       assertTrue(
@@ -262,7 +263,7 @@ class IbanValidationUtilTest {
     @Test
     @DisplayName("Should provide detailed error information in exceptions")
     void testDetailedErrorInformation() {
-      String invalidSpanishIban = "ES9121000418460200051332";
+      String invalidSpanishIban = "ES2921000418460200051332";
 
       InvalidNationalCheckDigitException exception =
           assertThrows(
