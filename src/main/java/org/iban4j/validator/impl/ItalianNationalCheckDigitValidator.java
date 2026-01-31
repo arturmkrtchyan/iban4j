@@ -19,30 +19,25 @@ import org.iban4j.CountryCode;
 import org.iban4j.validator.NationalCheckDigitValidator;
 
 /**
- * Italian national check digit validator using CIN (Codice di Controllo Interno Nazionale)
- * algorithm.
+ * Italian national check digit validator using CIN (Codice Identificativo Nazionale) algorithm.
  *
  * <p>The Italian BBAN format is: <strong>XBBBBBSSSSSCCCCCCCCCCC</strong> where:
  *
  * <ul>
- *   <li><strong>X</strong> = Check digit (1 letter A-Z) - validated by this class
- *   <li><strong>B</strong> = Bank code (5 digits)
- *   <li><strong>S</strong> = Branch code (5 digits)
+ *   <li><strong>X</strong> = CIN check character (1 letter A-Z) - validated by this class
+ *   <li><strong>B</strong> = ABI bank code (5 digits)
+ *   <li><strong>S</strong> = CAB branch code (5 digits)
  *   <li><strong>C</strong> = Account number (12 alphanumeric characters)
  * </ul>
  *
- * <p>The CIN algorithm uses a weighted sum calculation where each character is converted to a
- * numeric value and different weights are applied based on the character's position (even vs odd).
- *
- * <h3>Algorithm Steps:</h3>
+ * <p>The CIN algorithm uses position-based lookup tables:
  *
  * <ol>
- *   <li>Extract bank code, branch code, and account number
- *   <li>For each character, convert to numeric value (digits stay as-is, letters: A=10, B=11, etc.)
- *   <li>Apply position-based weights (even positions: value, odd positions: value * 2, subtract 9
- *       if > 9)
- *   <li>Sum all weighted values
- *   <li>Take modulo 26 to get index into letter array A-Z
+ *   <li>Extract ABI + CAB + account number (22 characters)
+ *   <li>For even positions (0-based): use simple conversion (A/0=0, B/1=1, ..., Z=25)
+ *   <li>For odd positions (0-based): use special lookup table
+ *   <li>Sum all values
+ *   <li>Take modulo 26 to get the CIN letter (0=A, 1=B, ..., 25=Z)
  * </ol>
  *
  * <h3>Example:</h3>
@@ -61,7 +56,6 @@ import org.iban4j.validator.NationalCheckDigitValidator;
  * <ul>
  *   <li><a href="https://www.bancaditalia.it/">Banca d'Italia</a>
  *   <li>ABI (Associazione Bancaria Italiana) CIN documentation
- *   <li>Circolare della Banca d'Italia n. 166 del 18 novembre 1987
  * </ul>
  *
  * @author iban4j contributors
@@ -71,10 +65,57 @@ import org.iban4j.validator.NationalCheckDigitValidator;
  */
 public class ItalianNationalCheckDigitValidator implements NationalCheckDigitValidator {
 
-  /** Available check digit characters (A-Z). */
-  private static final char[] CHECK_DIGIT_CHARS = {
+  /** CIN result characters (0=A, 1=B, ..., 25=Z). */
+  private static final char[] CIN_CHARS = {
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
     'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+  };
+
+  /**
+   * Lookup table for ODD positions (0-based indexing). Index 0-9 for digits '0'-'9', index 10-35
+   * for letters 'A'-'Z'. Values: 0=1, 1=0, 2=5, 3=7, 4=9, 5=13, 6=15, 7=17, 8=19, 9=21, A=1, B=0,
+   * C=5, D=7, E=9, F=13, G=15, H=17, I=19, J=21, K=2, L=4, M=18, N=20, O=11, P=3, Q=6, R=8, S=12,
+   * T=14, U=16, V=10, W=22, X=25, Y=24, Z=23
+   */
+  private static final int[] ODD_POSITION_VALUES = {
+    // Digits 0-9
+    1,
+    0,
+    5,
+    7,
+    9,
+    13,
+    15,
+    17,
+    19,
+    21,
+    // Letters A-Z (A=index 10, B=index 11, ..., Z=index 35)
+    1,
+    0,
+    5,
+    7,
+    9,
+    13,
+    15,
+    17,
+    19,
+    21, // A-J (same as 0-9)
+    2,
+    4,
+    18,
+    20,
+    11,
+    3,
+    6,
+    8,
+    12,
+    14,
+    16,
+    10,
+    22,
+    25,
+    24,
+    23 // K-Z
   };
 
   private static final int EXPECTED_BBAN_LENGTH = 23;
@@ -104,32 +145,27 @@ public class ItalianNationalCheckDigitValidator implements NationalCheckDigitVal
     validateBbanFormat(bban);
 
     // Italian BBAN format: XBBBBBSSSSSCCCCCCCCCCC
-    // Extract components (skip the check digit at position 0)
-    String bankCode = bban.substring(1, 6);
-    String branchCode = bban.substring(6, 11);
-    String accountNumber = bban.substring(11, 23);
-
-    String controlString = bankCode + branchCode + accountNumber;
+    // Extract ABI + CAB + account number (skip the check digit at position 0)
+    String controlString = bban.substring(1, 23);
 
     int sum = 0;
     for (int i = 0; i < controlString.length(); i++) {
-      char c = controlString.charAt(i);
-      int value = getCharacterValue(c);
+      char c = Character.toUpperCase(controlString.charAt(i));
+      int charIndex = getCharacterIndex(c);
 
-      // Apply different weights based on position (0-based indexing)
-      if (i % 2 == 0) { // Even position
-        sum += value;
-      } else { // Odd position
-        int weightedValue = value * 2;
-        if (weightedValue > 9) {
-          weightedValue -= 9; // Subtract 9 if result is two digits
-        }
-        sum += weightedValue;
+      // Algorithm uses 1-based positions: odd positions (1,3,5...) use special table
+      // In 0-based indexing: position 0,2,4... (even) = 1-based odd = special table
+      if (i % 2 == 0) {
+        // 0-based even = 1-based odd: use special lookup table
+        sum += ODD_POSITION_VALUES[charIndex];
+      } else {
+        // 0-based odd = 1-based even: use simple conversion (0-25)
+        sum += charIndex;
       }
     }
 
-    int checkIndex = sum % MODULUS;
-    return String.valueOf(CHECK_DIGIT_CHARS[checkIndex]);
+    int cinIndex = sum % MODULUS;
+    return String.valueOf(CIN_CHARS[cinIndex]);
   }
 
   @Override
@@ -182,26 +218,24 @@ public class ItalianNationalCheckDigitValidator implements NationalCheckDigitVal
   }
 
   /**
-   * Java 11 compatible method to get character value.
+   * Gets the index for a character in the lookup tables.
    *
-   * <p>Converts characters to numeric values for CIN calculation:
+   * <p>Converts characters to indices:
    *
    * <ul>
-   *   <li>Digits (0-9): numeric value (0-9)
-   *   <li>Letters (A-Z): A=10, B=11, ..., Z=35
+   *   <li>Digits (0-9): index 0-9
+   *   <li>Letters (A-Z): index 10-35
    * </ul>
    *
-   * @param c the character to convert
-   * @return numeric value of the character
+   * @param c the character to convert (must be uppercase)
+   * @return index for lookup tables (0-35)
    * @throws IllegalArgumentException if character is invalid
    */
-  private int getCharacterValue(char c) {
-    if (Character.isDigit(c)) {
-      return Character.getNumericValue(c);
-    } else if (Character.isLetter(c)) {
-      // Java 11 compatible uppercase conversion
-      char upperChar = Character.toUpperCase(c);
-      return upperChar - 'A' + 10; // A=10, B=11, ..., Z=35
+  private int getCharacterIndex(char c) {
+    if (c >= '0' && c <= '9') {
+      return c - '0'; // 0-9
+    } else if (c >= 'A' && c <= 'Z') {
+      return c - 'A' + 10; // 10-35
     } else {
       throw new IllegalArgumentException("Invalid character in Italian BBAN: " + c);
     }

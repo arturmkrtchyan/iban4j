@@ -92,25 +92,39 @@ public class PortugueseNationalCheckDigitValidator implements NationalCheckDigit
   public String calculate(String bban) {
     validateBbanFormat(bban);
 
-    // Portuguese BBAN format: BBBBSSSSCCCCCCCCCCDD
+    // Portuguese BBAN format: BBBBSSSSCCCCCCCCCCCDD
     String bankCode = bban.substring(0, 4);
     String branchCode = bban.substring(4, 8);
     String accountNumber = bban.substring(8, 19);
 
-    String numberToCheck = bankCode + branchCode + accountNumber;
+    // Append "00" for the check digit calculation (similar to IBAN calculation)
+    String numberToCheck = bankCode + branchCode + accountNumber + "00";
 
-    try {
-      long number = Long.parseLong(numberToCheck);
-      int remainder = (int) (number % MODULUS);
+    // Use chunk-wise mod 97 to handle large numbers
+    int remainder = mod97(numberToCheck);
 
-      // Portuguese algorithm: 98 - remainder
-      int checkDigit = 98 - remainder;
-
-      return String.format("%02d", checkDigit);
-    } catch (NumberFormatException e) {
-      throw new IllegalArgumentException(
-          "Invalid number format in Portuguese BBAN: " + numberToCheck, e);
+    // Portuguese algorithm: 98 - remainder
+    int checkDigit = 98 - remainder;
+    if (checkDigit == 98) {
+      checkDigit = 0;
     }
+
+    return String.format("%02d", checkDigit);
+  }
+
+  /**
+   * Calculates mod 97 of a numeric string using chunk-wise processing.
+   *
+   * @param number the numeric string
+   * @return the remainder when divided by 97
+   */
+  private int mod97(String number) {
+    int remainder = 0;
+    for (int i = 0; i < number.length(); i++) {
+      int digit = Character.getNumericValue(number.charAt(i));
+      remainder = (remainder * 10 + digit) % MODULUS;
+    }
+    return remainder;
   }
 
   @Override

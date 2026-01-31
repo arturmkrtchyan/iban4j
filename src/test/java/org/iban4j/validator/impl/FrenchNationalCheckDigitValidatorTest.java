@@ -56,8 +56,8 @@ class FrenchNationalCheckDigitValidatorTest {
     @DisplayName("Should validate multiple valid French check digits")
     @CsvSource({
       "20041010050500013M02606, 06", // Original test case
-      "30002005009999999A01234, 34", // Different bank/branch/account
-      "10203040506070809B09876, 87" // Edge case with different pattern
+      "30002005009999999A01287, 87", // Different bank/branch/account
+      "10203040506070809B09848, 48" // Edge case with different pattern
     })
     void testMultipleValidFrenchCheckDigits(String bban, String expectedCheckDigit) {
       assertTrue(
@@ -120,8 +120,8 @@ class FrenchNationalCheckDigitValidatorTest {
     @DisplayName("Should calculate check digits for multiple test cases")
     @CsvSource({
       "20041010050500013M02606, 06", // Standard case
-      "30002005009999999A01234, 34", // Different pattern
-      "10203040506070809B09876, 87" // Edge case
+      "30002005009999999A01287, 87", // Different pattern
+      "10203040506070809B09848, 48" // Edge case
     })
     void testCalculateMultipleCheckDigits(String bban, String expectedCheckDigit) {
       String calculated = validator.calculate(bban);

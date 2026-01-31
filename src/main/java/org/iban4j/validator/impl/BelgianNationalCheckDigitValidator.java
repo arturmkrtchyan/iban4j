@@ -21,11 +21,11 @@ import org.iban4j.validator.NationalCheckDigitValidator;
 /**
  * Belgian national check digit validator using MOD 97 algorithm.
  *
- * <p>The Belgian BBAN format is: <strong>BBBCCCCCCCCCDD</strong> where:
+ * <p>The Belgian BBAN format is: <strong>BBBCCCCCCCDD</strong> where:
  *
  * <ul>
  *   <li><strong>B</strong> = Bank code (3 digits)
- *   <li><strong>C</strong> = Account number (9 digits)
+ *   <li><strong>C</strong> = Account number (7 digits)
  *   <li><strong>D</strong> = Check digits (2 digits) - validated by this class
  * </ul>
  *
@@ -35,7 +35,7 @@ import org.iban4j.validator.NationalCheckDigitValidator;
  * <h3>Algorithm:</h3>
  *
  * <ol>
- *   <li>Concatenate bank code (3 digits) + account number (9 digits)
+ *   <li>Concatenate bank code (3 digits) + account number (7 digits)
  *   <li>Calculate the number modulo 97
  *   <li>If remainder is 0, check digit is 97; otherwise check digit is the remainder
  * </ol>
@@ -45,7 +45,7 @@ import org.iban4j.validator.NationalCheckDigitValidator;
  * <pre>{@code
  * // IBAN: BE68539007547034
  * // BBAN: 539007547034
- * // Bank: 539, Account: 007547034, Check: 34
+ * // Bank: 539, Account: 0075470, Check: 34
  *
  * BelgianNationalCheckDigitValidator validator = new BelgianNationalCheckDigitValidator();
  * boolean isValid = validator.validate("539007547034", "34");
@@ -91,9 +91,9 @@ public class BelgianNationalCheckDigitValidator implements NationalCheckDigitVal
   public String calculate(String bban) {
     validateBbanFormat(bban);
 
-    // Belgian BBAN format: BBBCCCCCCCCCDD
+    // Belgian BBAN format: BBBCCCCCCCDD (3 bank + 7 account + 2 check = 12)
     String bankCode = bban.substring(0, 3);
-    String accountNumber = bban.substring(3, 12);
+    String accountNumber = bban.substring(3, 10);
 
     String numberToCheck = bankCode + accountNumber;
 

@@ -15,11 +15,12 @@
  */
 package org.iban4j.validator.impl;
 
+import java.math.BigInteger;
 import org.iban4j.CountryCode;
 import org.iban4j.validator.NationalCheckDigitValidator;
 
 /**
- * French national check digit validator using MOD 97 algorithm.
+ * French national check digit validator using the RIB (Relevé d'Identité Bancaire) algorithm.
  *
  * <p>The French BBAN format is: <strong>BBBBBGGGGGCCCCCCCCCCCDD</strong> where:
  *
@@ -27,12 +28,11 @@ import org.iban4j.validator.NationalCheckDigitValidator;
  *   <li><strong>B</strong> = Bank code (5 digits)
  *   <li><strong>G</strong> = Branch code (Guichet - 5 digits)
  *   <li><strong>C</strong> = Account number (11 alphanumeric characters)
- *   <li><strong>D</strong> = Check digits (2 digits) - validated by this class
+ *   <li><strong>D</strong> = Check digits (Clé RIB - 2 digits) - validated by this class
  * </ul>
  *
- * <p>The algorithm uses MOD 97 calculation on the numeric representation of: bank code + branch
- * code + converted account number, where letters in the account number are converted to numbers
- * (A=1, B=2, ..., Z=26).
+ * <p>The algorithm uses the formula: Clé RIB = 97 - ((89 × bank + 15 × branch + 3 × account) mod
+ * 97)
  *
  * <h3>Example:</h3>
  *
@@ -45,18 +45,25 @@ import org.iban4j.validator.NationalCheckDigitValidator;
  * boolean isValid = validator.validate("20041010050500013M02606", "06");
  * }</pre>
  *
- * <h3>Character Conversion (Java 11 Compatible):</h3>
+ * <h3>Character Conversion (French Banking Standard):</h3>
  *
  * <ul>
  *   <li>Digits (0-9): remain unchanged
- *   <li>Letters (A-Z): converted to 1-26 respectively
- *   <li>Case insensitive: 'a' and 'A' both convert to 1
+ *   <li>A, J = 1
+ *   <li>B, K, S = 2
+ *   <li>C, L, T = 3
+ *   <li>D, M, U = 4
+ *   <li>E, N, V = 5
+ *   <li>F, O, W = 6
+ *   <li>G, P, X = 7
+ *   <li>H, Q, Y = 8
+ *   <li>I, R, Z = 9
  * </ul>
  *
  * <h3>References:</h3>
  *
  * <ul>
- *   <li><a href="https://www.banque-france.fr/">Banque de France</a>
+ *   <li><a href="https://fr.wikipedia.org/wiki/Cl%C3%A9_RIB">Wikipedia - Clé RIB</a>
  *   <li>CFONB (Comité Français d'Organisation et de Normalisation Bancaires) standards
  * </ul>
  *
@@ -98,22 +105,21 @@ public class FrenchNationalCheckDigitValidator implements NationalCheckDigitVali
     String branchCode = bban.substring(5, 10);
     String accountNumber = bban.substring(10, 21);
 
-    // Convert account number to numeric for calculation
+    // Convert account number letters to numbers using French banking standard
     String numericAccount = convertAlphaToNumeric(accountNumber);
-    String fullNumber = bankCode + branchCode + numericAccount;
 
-    // Calculate MOD 97
-    try {
-      // Handle large numbers by using BigInteger arithmetic via string parsing
-      long number = Long.parseLong(fullNumber);
-      int remainder = (int) (number % MODULUS);
-      int checkDigit = MODULUS - remainder;
+    // Concatenate bank + branch + account + "00" and calculate mod 97
+    // The clé RIB formula: key = 97 - ((bank || branch || account || "00") mod 97)
+    String fullNumber = bankCode + branchCode + numericAccount + "00";
+    BigInteger bigNumber = new BigInteger(fullNumber);
+    int remainder = bigNumber.mod(BigInteger.valueOf(MODULUS)).intValue();
 
-      return String.format("%02d", checkDigit);
-    } catch (NumberFormatException e) {
-      throw new IllegalArgumentException(
-          "Invalid numeric conversion in French BBAN: " + fullNumber, e);
+    int checkDigit = MODULUS - remainder;
+    if (checkDigit == MODULUS) {
+      checkDigit = 0;
     }
+
+    return String.format("%02d", checkDigit);
   }
 
   @Override
@@ -132,10 +138,10 @@ public class FrenchNationalCheckDigitValidator implements NationalCheckDigitVali
       throw new IllegalArgumentException("French BBAN cannot be null");
     }
 
-    if (bban.length() < EXPECTED_BBAN_LENGTH) {
+    if (bban.length() != EXPECTED_BBAN_LENGTH) {
       throw new IllegalArgumentException(
           String.format(
-              "French BBAN must be at least %d characters, got %d",
+              "French BBAN must be exactly %d characters, got %d",
               EXPECTED_BBAN_LENGTH, bban.length()));
     }
 
@@ -162,10 +168,21 @@ public class FrenchNationalCheckDigitValidator implements NationalCheckDigitVali
   }
 
   /**
-   * Converts alphanumeric string to numeric using Java 11 compatible methods.
+   * Converts alphanumeric string to numeric using French banking standard.
    *
-   * <p><strong>Java 11 Compatibility:</strong> This method uses {@code Character.toUpperCase(char)}
-   * instead of newer APIs to ensure compatibility with Java 11 environments.
+   * <p>French banking letter conversion table:
+   *
+   * <ul>
+   *   <li>A, J = 1
+   *   <li>B, K, S = 2
+   *   <li>C, L, T = 3
+   *   <li>D, M, U = 4
+   *   <li>E, N, V = 5
+   *   <li>F, O, W = 6
+   *   <li>G, P, X = 7
+   *   <li>H, Q, Y = 8
+   *   <li>I, R, Z = 9
+   * </ul>
    *
    * @param alphanumeric the alphanumeric string to convert
    * @return numeric string representation
@@ -184,16 +201,9 @@ public class FrenchNationalCheckDigitValidator implements NationalCheckDigitVali
       if (Character.isDigit(c)) {
         numeric.append(c);
       } else if (Character.isLetter(c)) {
-        // Java 11 compatible way to convert to uppercase and then to number
-        char upperChar = Character.toUpperCase(c); // Available in Java 11
-        int numericValue = upperChar - 'A' + 1; // A=1, B=2, ..., Z=26
-
-        if (numericValue >= 1 && numericValue <= 26) {
-          numeric.append(numericValue);
-        } else {
-          throw new IllegalArgumentException(
-              String.format("Invalid character in French account number: %c", c));
-        }
+        char upperChar = Character.toUpperCase(c);
+        int numericValue = convertLetterToDigit(upperChar);
+        numeric.append(numericValue);
       } else {
         throw new IllegalArgumentException(
             String.format(
@@ -203,5 +213,54 @@ public class FrenchNationalCheckDigitValidator implements NationalCheckDigitVali
     }
 
     return numeric.toString();
+  }
+
+  /**
+   * Converts a letter to its French banking digit equivalent.
+   *
+   * @param c the uppercase letter to convert
+   * @return the digit equivalent (1-9)
+   */
+  private int convertLetterToDigit(char c) {
+    switch (c) {
+      case 'A':
+      case 'J':
+        return 1;
+      case 'B':
+      case 'K':
+      case 'S':
+        return 2;
+      case 'C':
+      case 'L':
+      case 'T':
+        return 3;
+      case 'D':
+      case 'M':
+      case 'U':
+        return 4;
+      case 'E':
+      case 'N':
+      case 'V':
+        return 5;
+      case 'F':
+      case 'O':
+      case 'W':
+        return 6;
+      case 'G':
+      case 'P':
+      case 'X':
+        return 7;
+      case 'H':
+      case 'Q':
+      case 'Y':
+        return 8;
+      case 'I':
+      case 'R':
+      case 'Z':
+        return 9;
+      default:
+        throw new IllegalArgumentException(
+            String.format("Invalid character in French account number: %c", c));
+    }
   }
 }
