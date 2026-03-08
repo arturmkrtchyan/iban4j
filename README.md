@@ -4,7 +4,7 @@ iban4j
 A Java library for the generation, validation, and parsing of
 International Bank Account Numbers (IBAN) and Business Identifier Codes (BIC).
 
-[![Build Status](https://github.com/arturmkrtchyan/iban4j/actions/workflows/java-ci.yml/badge.svg)](https://github.com/arturmkrtchyan/iban4j/actions/workflows/java-ci.yml) [![Coverage Status](https://img.shields.io/coveralls/arturmkrtchyan/iban4j.svg)](https://coveralls.io/r/arturmkrtchyan/iban4j) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.iban4j/iban4j/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.iban4j/iban4j)
+[![Build Status](https://github.com/arturmkrtchyan/iban4j/actions/workflows/java-ci.yml/badge.svg)](https://github.com/arturmkrtchyan/iban4j/actions/workflows/java-ci.yml) [![Coverage Status](https://img.shields.io/coveralls/arturmkrtchyan/iban4j.svg)](https://coveralls.io/r/arturmkrtchyan/iban4j) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.iban4j/iban4j/badge.svg)](https://img.shields.io/maven-central/v/org.iban4j/iban4j)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://raw.githubusercontent.com/arturmkrtchyan/iban4j/master/LICENSE.txt)
 
 ---
