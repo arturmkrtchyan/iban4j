@@ -17,4 +17,9 @@ module org.iban4j {
   exports org.iban4j; // makes the public types in org.iban4j available to other modules
 
   opens org.iban4j;   // allows reflective access to all types (public and non-public) in org.iban4j for other modules
+
+  // Country rules
+  exports org.iban4j.countryrules;
+  exports org.iban4j.countryrules.algorithms;
+  exports org.iban4j.countryrules.util;
 }

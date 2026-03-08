@@ -116,6 +116,37 @@ try {
 }
 ```
 
+##### Validate with country-specific rules (opt-in)
+
+By default, only the standard IBAN checks are performed. You can optionally enable country-specific rules (e.g., national check digit) per call or via a reusable validator:
+
+```java
+// Per-call opt-in using a config
+ValidationConfig config = ValidationConfig.builder()
+    .enableNationalCheckDigitValidation(true) // enable country rules
+    .build();
+
+boolean valid = IbanUtil.isValid("FR1420041010050500013M02606", config);
+
+// Or throw on failure via the instance-based validator
+IbanValidator validator = IbanValidator.builder()
+    .enableCountryRules() // equivalent to enabling national check digit rules
+    .build();
+
+validator.validate("FR1420041010050500013M02606");
+```
+
+Convenience helpers are also available when you always want country rules enabled:
+
+```java
+IbanUtil.validateWithCountryRules("FR1420041010050500013M02606");
+boolean valid = IbanUtil.isValidWithCountryRules("FR1420041010050500013M02606");
+```
+
+Notes:
+- Country-specific rules are opt-in and disabled by default to preserve existing behavior.
+- When enabled and a country rule fails, `IbanFormatException` with violation `COUNTRY_RULES_FAILED` is thrown by `IbanValidator.validate(...)`.
+
 ##### Enable left-padding for generated IBANs
 
 ```java

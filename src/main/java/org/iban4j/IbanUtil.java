@@ -98,6 +98,27 @@ public final class IbanUtil {
         return true;
     }
 
+  /**
+   * Validates iban with optional national check digit validation via {@link ValidationConfig}.
+   *
+   * Behavior:
+   * - Always performs base IBAN validation.
+   * - If config.isEnabled(), validates national check digit using registered algorithms.
+   *
+   * @param iban the IBAN string
+   * @param config validation configuration
+   * @return true if valid (including national check digit when enabled), false otherwise
+   */
+  public static boolean isValid(final String iban, final ValidationConfig config) {
+    try {
+      validate(iban);
+      final Iban ibanObj = Iban.valueOf(iban);
+      return org.iban4j.countryrules.CountrySpecificRules.isValid(ibanObj, config);
+    } catch (Exception e) {
+      return false;
+    }
+  }
+
     /**
      * Validates iban.
      *
@@ -489,4 +510,30 @@ public final class IbanUtil {
         return pad.substring(str.length()) + str;
     }
 
+    // Cached validator for country rules validation
+    private static final IbanValidator COUNTRY_RULES_VALIDATOR = 
+        IbanValidator.builder().enableCountryRules().build();
+    
+    /**
+     * Validates IBAN with country-specific rules enabled.
+     * 
+     * @param iban the IBAN string to validate
+     * @throws IbanFormatException if the IBAN is invalid
+     * @throws InvalidCheckDigitException if the IBAN has invalid check digit
+     * @throws UnsupportedCountryException if the IBAN's country is not supported
+     */
+    public static void validateWithCountryRules(String iban) throws IbanFormatException,
+            InvalidCheckDigitException, UnsupportedCountryException {
+        COUNTRY_RULES_VALIDATOR.validate(iban);
+    }
+    
+    /**
+     * Checks if IBAN is valid with country-specific rules enabled.
+     * 
+     * @param iban the IBAN string to validate
+     * @return true if the IBAN is valid, false otherwise
+     */
+    public static boolean isValidWithCountryRules(String iban) {
+        return COUNTRY_RULES_VALIDATOR.isValid(iban);
+    }
 }
