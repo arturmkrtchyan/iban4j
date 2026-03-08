@@ -53,17 +53,6 @@
         <url>scm:git:https://github.com/arturmkrtchyan/iban4j/</url>
     </scm>
 
-    <distributionManagement>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>11</maven.compiler.release>
@@ -357,15 +346,14 @@
             </plugin>
 
             <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>${dep.plugin.nexus-staging.version}</version>
-                <extensions>true</extensions>
+                <artifactId>central-publishing-maven-plugin</artifactId>
                 <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    <autoPublish>true</autoPublish>
+                    <publishingServerId>central</publishingServerId>
                 </configuration>
+                <groupId>org.sonatype.central</groupId>
+                <extensions>true</extensions>
+                <version>0.7.0</version>
             </plugin>
 
         </plugins>
@@ -401,6 +389,7 @@
             <id>release</id>
             <properties>
                 <skipSigning>false</skipSigning>
+                <gpg.keyname>82B7596E2EEC6B45</gpg.keyname>
             </properties>
         </profile>
     </profiles>
