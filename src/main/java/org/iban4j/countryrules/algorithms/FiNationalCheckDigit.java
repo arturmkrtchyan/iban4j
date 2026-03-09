@@ -7,6 +7,8 @@ import org.iban4j.countryrules.CountryRulesAlgorithm;
 /** Finland: Mod 10 with weights 2,1,2,1 from right to left over bank+account. */
 public final class FiNationalCheckDigit implements CountryRulesAlgorithm {
 
+  private static final int[] WEIGHTS = {2, 1, 2, 1};
+
   @Override
   public CountryCode getCountry() {
     return CountryCode.FI;
@@ -16,11 +18,10 @@ public final class FiNationalCheckDigit implements CountryRulesAlgorithm {
   public boolean validate(Iban iban) {
     final String dataDigits = iban.getBankCode() + iban.getAccountNumber();
     final String ncd = iban.getNationalCheckDigit();
-    final int[] weights = {2, 1, 2, 1};
     int sum = 0;
     for (int i = 0; i < dataDigits.length(); i++) {
       char digit = dataDigits.charAt(dataDigits.length() - 1 - i);
-      int weight = weights[i % 4];
+      int weight = WEIGHTS[i % 4];
       int product = Character.getNumericValue(digit) * weight;
       if (product >= 10) product = (product / 10) + (product % 10);
       sum += product;

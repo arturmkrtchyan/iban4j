@@ -23,7 +23,7 @@ public final class Iso7064 {
         return -1;
       }
       remainder = remainder * 10 + (ch - '0');
-      remainder = remainder % 97;
+      remainder %= 97;
     }
     return remainder;
   }
