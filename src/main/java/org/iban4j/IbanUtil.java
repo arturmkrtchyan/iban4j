@@ -20,6 +20,7 @@ import static org.iban4j.IbanFormatException.IbanFormatViolation.*;
 import org.iban4j.bban.BbanEntryType;
 import org.iban4j.bban.BbanStructure;
 import org.iban4j.bban.BbanStructureEntry;
+import org.iban4j.countryrules.CountrySpecificRules;
 
 /**
  * Iban Utility Class
@@ -113,7 +114,7 @@ public final class IbanUtil {
     try {
       validate(iban);
       final Iban ibanObj = Iban.valueOf(iban);
-      return org.iban4j.countryrules.CountrySpecificRules.isValid(ibanObj, config);
+      return CountrySpecificRules.isValid(ibanObj, config);
     } catch (Exception e) {
       return false;
     }

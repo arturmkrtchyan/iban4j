@@ -11,15 +11,12 @@ public class CountryRulesRegistryTest {
 
     @Test
     public void ensureInitializedRegistersBuiltins() {
-        CountryRulesAlgorithms.ensureInitialized();
         assertNotNull(CountryRulesRegistry.get(CountryCode.BE));
         assertNotNull(CountryRulesRegistry.get(CountryCode.ES));
     }
 
     @Test
     public void registerOverridesExistingAndCanBeRestored() {
-        CountryRulesAlgorithms.ensureInitialized();
-
         final CountryRulesAlgorithm original = CountryRulesRegistry.get(CountryCode.BE);
         final CountryRulesAlgorithm custom = new CountryRulesAlgorithm() {
             @Override
