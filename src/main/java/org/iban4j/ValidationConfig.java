@@ -65,6 +65,8 @@ public class ValidationConfig {
      */
     public static class Builder {
         private boolean enableNationalCheckDigitValidation = false;
+
+        private Builder() {}
         
         /**
          * Enables or disables national check digit validation.
@@ -77,10 +79,14 @@ public class ValidationConfig {
             return this;
         }
 
-        // Alias to avoid API churn during rename
+        /**
+         * Enables or disables country specific rules
+         * @see Builder#enableNationalCheckDigitValidation
+         * @param enabled true to enable validation
+         * @return this builder
+         */
         public Builder enableCountryRules(boolean enabled) {
-            this.enableNationalCheckDigitValidation = enabled;
-            return this;
+            return enableNationalCheckDigitValidation(enabled);
         }
         
         /**

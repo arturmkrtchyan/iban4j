@@ -3,9 +3,16 @@ package org.iban4j.countryrules;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.iban4j.countryrules.algorithms.*;
 
+/**
+ * Helper class to register default country specific rules
+ */
 public final class CountryRulesAlgorithms {
   private static final AtomicBoolean INITIALIZED = new AtomicBoolean(false);
   private CountryRulesAlgorithms() {}
+
+  /**
+   * Ensures that default country specific rules are registered in {@link CountryRulesRegistry}
+   */
   public static void ensureInitialized() {
     if (INITIALIZED.compareAndSet(false, true)) {
       CountryRulesRegistry.register(new BeNationalCheckDigit());

@@ -6,6 +6,11 @@ import org.iban4j.countryrules.CountryRulesAlgorithm;
 
 /** Slovak Republic: Mod 11 two-part validation on account number (prefix and basic). */
 public final class SkNationalCheckDigit implements CountryRulesAlgorithm {
+  /**
+   * Created instance of Slovak Republic national check digit validator
+   */
+  public SkNationalCheckDigit() {
+  }
 
   @Override
   public CountryCode getCountry() { return CountryCode.SK; }

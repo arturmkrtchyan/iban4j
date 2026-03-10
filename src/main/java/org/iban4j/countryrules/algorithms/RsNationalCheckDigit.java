@@ -7,6 +7,12 @@ import org.iban4j.countryrules.CountryRulesAlgorithm;
 
 /** Serbia: ISO 7064 MOD 97-10 over BBAN. */
 public final class RsNationalCheckDigit implements CountryRulesAlgorithm {
+  /**
+   * Created instance of Serbia national check digit validator
+   */
+  public RsNationalCheckDigit() {
+  }
+
   @Override
   public CountryCode getCountry() { return CountryCode.RS; }
   @Override

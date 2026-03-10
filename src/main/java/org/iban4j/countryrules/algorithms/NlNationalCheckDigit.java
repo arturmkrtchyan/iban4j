@@ -6,6 +6,11 @@ import org.iban4j.countryrules.CountryRulesAlgorithm;
 
 /** Netherlands: Mod 11 with weights 10..1 on account number; allow Postbank starting with 000. */
 public final class NlNationalCheckDigit implements CountryRulesAlgorithm {
+  /**
+   * Created instance of Netherlands national check digit validator
+   */
+  public NlNationalCheckDigit() {
+  }
 
   @Override
   public CountryCode getCountry() { return CountryCode.NL; }

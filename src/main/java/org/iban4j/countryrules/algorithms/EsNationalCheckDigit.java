@@ -9,6 +9,12 @@ public final class EsNationalCheckDigit implements CountryRulesAlgorithm {
 
   private static final int[] WEIGHTS = {1, 2, 4, 8, 5, 10, 9, 7, 3, 6};
 
+  /**
+   * Created instance of Spain national check digit validator
+   */
+  public EsNationalCheckDigit() {
+  }
+
   @Override
   public CountryCode getCountry() {
     return CountryCode.ES;
