@@ -21,7 +21,7 @@ public final class FiNationalCheckDigit implements CountryRulesAlgorithm {
     int sum = 0;
     for (int i = 0; i < dataDigits.length(); i++) {
       char digit = dataDigits.charAt(dataDigits.length() - 1 - i);
-      int weight = WEIGHTS[i % 4];
+      int weight = WEIGHTS[i % WEIGHTS.length];
       int product = Character.getNumericValue(digit) * weight;
       if (product >= 10) product = (product / 10) + (product % 10);
       sum += product;

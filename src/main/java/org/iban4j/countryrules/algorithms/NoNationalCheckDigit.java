@@ -15,6 +15,8 @@ public final class NoNationalCheckDigit implements CountryRulesAlgorithm {
   public boolean validate(Iban iban) {
     final String data = iban.getBankCode() + iban.getAccountNumber();
     final String ncd = iban.getNationalCheckDigit();
+    // Check for weights boundaries before iterating over account number digits
+    if (data.length() > WEIGHTS.length) return false;
     int sum = 0;
     for (int i = 0; i < data.length(); i++) {
       char d = data.charAt(i);

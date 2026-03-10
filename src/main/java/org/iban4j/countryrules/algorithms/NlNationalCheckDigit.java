@@ -16,6 +16,8 @@ public final class NlNationalCheckDigit implements CountryRulesAlgorithm {
   public boolean validate(Iban iban) {
     final String accountNumber = iban.getAccountNumber();
     if (accountNumber.startsWith("000")) return true; // Postbank heuristic
+    // Check for weights boundaries before iterating over account number digits
+    if (accountNumber.length() > WEIGHTS.length) return false;
     int sum = 0;
     for (int i = 0; i < accountNumber.length(); i++) {
       char d = accountNumber.charAt(i);
