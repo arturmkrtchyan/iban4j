@@ -6,6 +6,11 @@ import org.iban4j.countryrules.CountryRulesAlgorithm;
 
 /** Italy: odd/even positional value mapping over bank+branch+account produces a letter. */
 public final class ItNationalCheckDigit implements CountryRulesAlgorithm {
+  /**
+   * Created instance of Italy national check digit validator
+   */
+  public ItNationalCheckDigit() {
+  }
 
   @Override
   public CountryCode getCountry() {

@@ -33,6 +33,8 @@ public final class CharacterUtil {
     /**
      * Checks if character is ASCII digit (0-9 only).
      * Rejects Unicode digits like Arabic-Indic digits (٠-٩) or other Unicode digit characters.
+     * @param ch character to check
+     * @return {@code true} if {@code ch} is an ASCII digit, otherwise {@code false}
      */
     public static boolean isAsciiDigit(char ch) {
         return ch >= '0' && ch <= '9';
@@ -41,6 +43,8 @@ public final class CharacterUtil {
     /**
      * Checks if character is ASCII uppercase letter (A-Z only).
      * Rejects Unicode letters like Cyrillic (А, Е) or other Unicode letter characters.
+     * @param ch character to check
+     * @return {@code true} if {@code ch} is an ASCII uppercase latter, otherwise {@code false}
      */
     public static boolean isAsciiUppercaseLetter(char ch) {
         return ch >= 'A' && ch <= 'Z';
@@ -49,6 +53,8 @@ public final class CharacterUtil {
     /**
      * Checks if character is valid for financial code alphanumeric fields (A-Z, 0-9).
      * Used for IBAN and BIC validation where only ASCII alphanumeric characters are allowed.
+     * @param ch character to check
+     * @return {@code true} if {@code ch} is an ASCII uppercase latter or an ASCII digit, otherwise {@code false}
      */
     public static boolean isValidAlphanumeric(char ch) {
         return isAsciiUppercaseLetter(ch) || isAsciiDigit(ch);

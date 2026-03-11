@@ -7,6 +7,11 @@ import org.iban4j.countryrules.util.Iso7064;
 
 /** France: Mod 97 RIB with letter conversion. */
 public final class FrNationalCheckDigit implements CountryRulesAlgorithm {
+  /**
+   * Created instance of France national check digit validator
+   */
+  public FrNationalCheckDigit() {
+  }
 
   @Override
   public CountryCode getCountry() {
@@ -19,21 +24,26 @@ public final class FrNationalCheckDigit implements CountryRulesAlgorithm {
     final String branch = iban.getBranchCode();
     final String account = iban.getAccountNumber();
     final String expected = iban.getNationalCheckDigit();
-    final String numericRIB = convert(bank) + convert(branch) + convert(account);
-    final String computed = ribCheckDigits(numericRIB);
+    final StringBuilder builder = new StringBuilder();
+    convert(bank, builder);
+    convert(branch, builder);
+    convert(account, builder);
+    final String computed = ribCheckDigits(builder.toString());
     return computed != null && computed.equals(expected);
   }
 
   private static String ribCheckDigits(String numeric) { return Iso7064.ribCheckDigits(numeric); }
 
-  private static String convert(String input) {
-    StringBuilder result = new StringBuilder();
-    for (char c : input.toCharArray()) {
-      if (Character.isDigit(c)) result.append(c);
-      else if (Character.isLetter(c)) result.append(getFrenchLetterValue(Character.toUpperCase(c)));
-      else result.append(c);
+  private static void convert(String input, StringBuilder builder) {
+      for (char c : input.toCharArray()) {
+      if (Character.isDigit(c)) {
+          builder.append(c);
+      } else if (Character.isLetter(c)) {
+          builder.append(getFrenchLetterValue(Character.toUpperCase(c)));
+      } else {
+          builder.append(c);
+      }
     }
-    return result.toString();
   }
 
   private static int getFrenchLetterValue(char letter) {

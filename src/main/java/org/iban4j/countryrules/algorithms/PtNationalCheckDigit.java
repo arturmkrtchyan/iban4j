@@ -7,6 +7,12 @@ import org.iban4j.countryrules.CountryRulesAlgorithm;
 
 /** Portugal: ISO 7064 MOD 97-10 over BBAN. */
 public final class PtNationalCheckDigit implements CountryRulesAlgorithm {
+  /**
+   * Created instance of Portugal national check digit validator
+   */
+  public PtNationalCheckDigit() {
+  }
+
   @Override
   public CountryCode getCountry() { return CountryCode.PT; }
   @Override

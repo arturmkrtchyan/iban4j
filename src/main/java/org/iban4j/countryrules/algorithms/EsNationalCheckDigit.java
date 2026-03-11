@@ -9,6 +9,12 @@ public final class EsNationalCheckDigit implements CountryRulesAlgorithm {
 
   private static final int[] WEIGHTS = {1, 2, 4, 8, 5, 10, 9, 7, 3, 6};
 
+  /**
+   * Created instance of Spain national check digit validator
+   */
+  public EsNationalCheckDigit() {
+  }
+
   @Override
   public CountryCode getCountry() {
     return CountryCode.ES;
@@ -26,26 +32,35 @@ public final class EsNationalCheckDigit implements CountryRulesAlgorithm {
     }
 
     final String firstData = "00" + branchCode;
-    final int firstSum = weightedSum(firstData);
-    if (firstSum < 0) {
-      return false;
+    final int firstCd = calculateCheckDigit(firstData);
+    if (firstCd < 0) {
+        return false;
     }
-    int firstRem = firstSum % 11;
-    int firstCd = (firstRem == 0) ? 0 : (11 - firstRem);
-    if (firstCd == 10) firstCd = 1;
-    if (firstCd == 11) firstCd = 0;
 
-    final int secondSum = weightedSum(accountNumber);
-    if (secondSum < 0) {
-      return false;
+    final int secondCd = calculateCheckDigit(accountNumber);
+    if (secondCd < 0) {
+        return false;
     }
-    int secondRem = secondSum % 11;
-    int secondCd = (secondRem == 0) ? 0 : (11 - secondRem);
-    if (secondCd == 10) secondCd = 1;
-    if (secondCd == 11) secondCd = 0;
 
     final String expected = String.format("%d%d", firstCd, secondCd);
     return expected.equals(checkDigits);
+  }
+
+  private static int calculateCheckDigit(String firstData) {
+    final int firstSum = weightedSum(firstData);
+    if (firstSum < 0) {
+      return -1;
+    }
+    int firstRem = firstSum % 11;
+    int firstCd = (firstRem == 0) ? 0 : (11 - firstRem);
+    switch (firstCd) {
+      case 10:
+        return 1;
+      case 11:
+        return 2;
+      default:
+        return firstCd;
+    }
   }
 
   private static int weightedSum(final String digits) {

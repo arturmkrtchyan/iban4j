@@ -80,6 +80,8 @@ public final class IbanValidator {
      */
     public static final class Builder {
         private ValidationConfig config = ValidationConfig.builder().build();
+
+        private Builder(){}
         
         /**
          * Sets the validation config for the validator.
