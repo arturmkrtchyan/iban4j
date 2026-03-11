@@ -12,6 +12,9 @@ public final class SkNationalCheckDigit implements CountryRulesAlgorithm {
   public SkNationalCheckDigit() {
   }
 
+  private static final int[] FIRST_PART_WEIGHTS = {10, 5, 8, 4, 2, 1};
+  private static final int[] SECOND_PART_WEIGHTS = {6, 3, 7, 9, 10, 5, 8, 4, 2, 1};
+
   @Override
   public CountryCode getCountry() { return CountryCode.SK; }
 
@@ -20,9 +23,9 @@ public final class SkNationalCheckDigit implements CountryRulesAlgorithm {
     final String accountNumber = iban.getAccountNumber();
     final String first = accountNumber.substring(0, 6);
     final String second = accountNumber.substring(6);
-    final int firstRem = mod11WithWeights(first, new int[]{10, 5, 8, 4, 2, 1});
+    final int firstRem = mod11WithWeights(first, FIRST_PART_WEIGHTS);
     if (firstRem != 0) return false;
-    final int secondRem = mod11WithWeights(second, new int[]{6, 3, 7, 9, 10, 5, 8, 4, 2, 1});
+    final int secondRem = mod11WithWeights(second, SECOND_PART_WEIGHTS);
     return secondRem == 0;
   }
 
