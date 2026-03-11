@@ -31,11 +31,7 @@ public final class CountrySpecificRules {
    */
   public static void validate(final Iban iban, final ValidationConfig config) {
     if (!isValid(iban, config)) {
-      throw new IbanFormatException(
-              IbanFormatViolation.COUNTRY_RULES_FAILED,
-              iban,
-              "Country-specific rules validation failed for " + iban
-      );
+      throw new IllegalArgumentException("Country-specific rules check failed for " + iban);
     }
   }
 }

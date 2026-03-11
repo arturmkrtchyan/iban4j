@@ -15,6 +15,7 @@
  */
 package org.iban4j;
 
+import org.iban4j.IbanFormatException.IbanFormatViolation;
 import org.iban4j.countryrules.CountrySpecificRules;
 
 /**
@@ -57,7 +58,13 @@ public final class IbanValidator {
         Iban ibanObj = Iban.valueOf(iban);
 
         // Validate country specific rules if enabled by configuration
-        CountrySpecificRules.validate(ibanObj, config);
+        if (!CountrySpecificRules.isValid(ibanObj, config)) {
+            throw new IbanFormatException(
+                    IbanFormatViolation.COUNTRY_RULES_FAILED,
+                    iban,
+                    "Country-specific rules validation failed for " + iban
+            );
+        }
     }
     
     /**
