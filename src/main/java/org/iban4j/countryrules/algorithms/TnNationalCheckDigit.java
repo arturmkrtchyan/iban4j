@@ -7,6 +7,12 @@ import org.iban4j.countryrules.util.Iso7064;
 
 /** Tunisia: RIB check-digits (numeric RIB from bank+branch+account). */
 public final class TnNationalCheckDigit implements CountryRulesAlgorithm {
+  /**
+   * Created instance of Tunisia national check digit validator
+   */
+  public TnNationalCheckDigit() {
+  }
+
   @Override
   public CountryCode getCountry() { return CountryCode.TN; }
 

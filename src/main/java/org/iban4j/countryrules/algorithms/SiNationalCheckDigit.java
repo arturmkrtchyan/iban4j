@@ -7,6 +7,12 @@ import org.iban4j.countryrules.CountryRulesAlgorithm;
 
 /** Slovenia: ISO 7064 MOD 97-10 over BBAN. */
 public final class SiNationalCheckDigit implements CountryRulesAlgorithm {
+  /**
+   * Created instance of Slovenia national check digit validator
+   */
+  public SiNationalCheckDigit() {
+  }
+
   @Override
   public CountryCode getCountry() { return CountryCode.SI; }
   @Override

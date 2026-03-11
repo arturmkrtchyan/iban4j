@@ -7,6 +7,11 @@ import org.iban4j.countryrules.util.Iso7064;
 
 /** Bosnia and Herzegovina: ISO 7064 MOD 97-10 over entire BBAN. */
 public final class BaNationalCheckDigit implements CountryRulesAlgorithm {
+  /**
+   * Created instance of Bosnia and Herzegovina national check digit validator
+   */
+  public BaNationalCheckDigit() {
+  }
 
   @Override
   public CountryCode getCountry() {

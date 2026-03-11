@@ -6,6 +6,11 @@ import org.iban4j.countryrules.CountryRulesAlgorithm;
 
 /** Slovak Republic: Mod 11 two-part validation on account number (prefix and basic). */
 public final class SkNationalCheckDigit implements CountryRulesAlgorithm {
+  /**
+   * Created instance of Slovak Republic national check digit validator
+   */
+  public SkNationalCheckDigit() {
+  }
 
   private static final int[] FIRST_PART_WEIGHTS = {10, 5, 8, 4, 2, 1};
   private static final int[] SECOND_PART_WEIGHTS = {6, 3, 7, 9, 10, 5, 8, 4, 2, 1};

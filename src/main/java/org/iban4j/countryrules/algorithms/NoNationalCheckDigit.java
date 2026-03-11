@@ -8,6 +8,11 @@ import org.iban4j.countryrules.CountryRulesAlgorithm;
 public final class NoNationalCheckDigit implements CountryRulesAlgorithm {
 
   private static final int[] WEIGHTS = {5, 4, 3, 2, 7, 6, 5, 4, 3, 2};
+  /**
+   * Created instance of Norway national check digit validator
+   */
+  public NoNationalCheckDigit() {
+  }
 
   @Override
   public CountryCode getCountry() { return CountryCode.NO; }
