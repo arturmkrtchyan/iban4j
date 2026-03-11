@@ -7,6 +7,11 @@ import org.iban4j.countryrules.util.Iso7064;
 
 /** France: Mod 97 RIB with letter conversion. */
 public final class FrNationalCheckDigit implements CountryRulesAlgorithm {
+  /**
+   * Created instance of France national check digit validator
+   */
+  public FrNationalCheckDigit() {
+  }
 
   @Override
   public CountryCode getCountry() {

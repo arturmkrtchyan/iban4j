@@ -7,6 +7,12 @@ import org.iban4j.countryrules.CountryRulesAlgorithm;
 
 /** Macedonia: ISO 7064 MOD 97-10 over BBAN. */
 public final class MkNationalCheckDigit implements CountryRulesAlgorithm {
+  /**
+   * Created instance of Macedonia national check digit validator
+   */
+  public MkNationalCheckDigit() {
+  }
+
   @Override
   public CountryCode getCountry() { return CountryCode.MK; }
   @Override

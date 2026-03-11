@@ -6,6 +6,11 @@ import org.iban4j.countryrules.CountryRulesAlgorithm;
 
 /** Belgium: modulus 97 check on bankCode+accountNumber, 00 => 97 rule. */
 public final class BeNationalCheckDigit implements CountryRulesAlgorithm {
+  /**
+   * Created instance of Belgium national check digit validator
+   */
+  public BeNationalCheckDigit() {
+  }
 
   @Override
   public CountryCode getCountry() {
