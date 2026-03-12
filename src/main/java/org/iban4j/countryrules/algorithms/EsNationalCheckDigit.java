@@ -4,7 +4,7 @@ import org.iban4j.CountryCode;
 import org.iban4j.Iban;
 import org.iban4j.countryrules.CountryRulesAlgorithm;
 
-/** Spain: dual modulus 11 with weights 1,2,4,8,5,10,9,7,3,6 over 00+branch and account. */
+/** Spain: dual modulus 11 with weights 1,2,4,8,5,10,9,7,3,6 over 00+bank+branch and account. */
 public final class EsNationalCheckDigit implements CountryRulesAlgorithm {
 
   private static final int[] WEIGHTS = {1, 2, 4, 8, 5, 10, 9, 7, 3, 6};
@@ -31,7 +31,7 @@ public final class EsNationalCheckDigit implements CountryRulesAlgorithm {
       return false;
     }
 
-    final String firstData = "00" + branchCode;
+    final String firstData = "00" + bankCode + branchCode;
     final int firstCd = calculateCheckDigit(firstData);
     if (firstCd < 0) {
         return false;
