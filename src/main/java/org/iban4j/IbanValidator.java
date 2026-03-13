@@ -15,9 +15,8 @@
  */
 package org.iban4j;
 
-import org.iban4j.countryrules.CountryRulesAlgorithm;
-import org.iban4j.countryrules.CountryRulesAlgorithms;
-import org.iban4j.countryrules.CountryRulesRegistry;
+import org.iban4j.IbanFormatException.IbanFormatViolation;
+import org.iban4j.countryrules.CountrySpecificRules;
 
 /**
  * Non-static, reusable IBAN validator with configurable validation options.
@@ -55,24 +54,16 @@ public final class IbanValidator {
      */
     public void validate(String iban) throws IbanFormatException, 
             InvalidCheckDigitException, UnsupportedCountryException {
-        // Perform base IBAN validation
-        IbanUtil.validate(iban);
-        
-        // Perform country-specific rules validation if enabled
-        if (config != null && config.isEnabled()) {
-            CountryRulesAlgorithms.ensureInitialized();
-            Iban ibanObj = Iban.valueOf(iban);
-            CountryRulesAlgorithm algorithm = CountryRulesRegistry.get(ibanObj.getCountryCode());
-            
-            if (algorithm != null && !algorithm.validate(ibanObj)) {
-                // Note: COUNTRY_RULES_FAILED is currently only applicable to national check digit validation
-                // since that's the only country-specific rule implemented at this time
-                throw new IbanFormatException(
-                    IbanFormatException.IbanFormatViolation.COUNTRY_RULES_FAILED,
+        // Perform base IBAN validation and get IBAN object
+        Iban ibanObj = Iban.valueOf(iban);
+
+        // Validate country specific rules if enabled by configuration
+        if (!CountrySpecificRules.isValid(ibanObj, config)) {
+            throw new IbanFormatException(
+                    IbanFormatViolation.COUNTRY_RULES_FAILED,
                     iban,
                     "Country-specific rules validation failed for " + iban
-                );
-            }
+            );
         }
     }
     
