@@ -32,7 +32,7 @@ To use **iban4j** in your Maven project, add the following dependency to your `p
 <dependency>
     <groupId>org.iban4j</groupId>
     <artifactId>iban4j</artifactId>
-  <version>3.2.12-RELEASE</version>
+  <version>3.2.13-RELEASE</version>
 </dependency>
 ````
 
@@ -44,7 +44,7 @@ For a **Groovy DSL** (`build.gradle`) file:
 
 ```groovy
 dependencies {
-  implementation 'org.iban4j:iban4j:3.2.12-RELEASE'
+  implementation 'org.iban4j:iban4j:3.2.13-RELEASE'
 }
 ```
 
@@ -52,7 +52,7 @@ For a **Kotlin DSL** (`build.gradle.kts`) file:
 
 ```kotlin
 dependencies {
-  implementation("org.iban4j:iban4j:3.2.12-RELEASE")
+  implementation("org.iban4j:iban4j:3.2.13-RELEASE")
 }
 ```
 
