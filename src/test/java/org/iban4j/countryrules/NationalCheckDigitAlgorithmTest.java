@@ -58,7 +58,10 @@ public class NationalCheckDigitAlgorithmTest {
         
         Iban validIban = Iban.valueOf("ES9121000418450200051332");
         assertTrue(algorithm.validate(validIban));
-        
+
+        Iban validIban2 = Iban.valueOf("ES4000495525592810597769");
+        assertTrue(algorithm.validate(validIban2));
+
         Iban invalidIban = Iban.valueOf("ES4221000418450200061332");
         assertFalse(algorithm.validate(invalidIban));
     }
