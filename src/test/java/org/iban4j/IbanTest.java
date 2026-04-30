@@ -323,9 +323,9 @@ final class IbanTest {
   @Test
   public void ibanConstructionSeeded() {
     assertAll(
-        () -> assertIbanUtilRandomWithSeedEquals("MK63 191K KDAP M6AH N19", 1),
-        () -> assertIbanUtilRandomWithSeedEquals("BG62 QKBB 0988 22VU ML3Q 43", 2),
-        () -> assertIbanUtilRandomWithSeedEquals("PS42 WQSM 0IQS BEKI KVPC 2LMT U6RX C", 3));
+        () -> assertIbanUtilRandomWithSeedEquals("RU85 1918 2013 8083 691H JENI SJS3 39QZ G", 1),
+        () -> assertIbanUtilRandomWithSeedEquals("ES36 0679 0988 2250 2198 4797", 2),
+        () -> assertIbanUtilRandomWithSeedEquals("AX37 0882 8528 0418 00", 3));
   }
 
   private void assertIbanUtilRandomWithSeedEquals(final String expected, final int seed) {
@@ -339,9 +339,9 @@ final class IbanTest {
   @Test
   public void ibanBuilderConstructionSeeded() {
     assertAll(
-        () -> assertIbanBuilderRandomWithSeedEquals("MK63 191K KDAP M6AH N19", 1),
-        () -> assertIbanBuilderRandomWithSeedEquals("BG62 QKBB 0988 22VU ML3Q 43", 2),
-        () -> assertIbanBuilderRandomWithSeedEquals("PS42 WQSM 0IQS BEKI KVPC 2LMT U6RX C", 3));
+        () -> assertIbanBuilderRandomWithSeedEquals("RU85 1918 2013 8083 691H JENI SJS3 39QZ G", 1),
+        () -> assertIbanBuilderRandomWithSeedEquals("ES36 0679 0988 2250 2198 4797", 2),
+        () -> assertIbanBuilderRandomWithSeedEquals("AX37 0882 8528 0418 00", 3));
   }
 
   @Test
