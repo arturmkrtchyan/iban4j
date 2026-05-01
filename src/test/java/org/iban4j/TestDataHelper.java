@@ -418,6 +418,15 @@ final class TestDataHelper {
           },
           {
             new Iban.Builder()
+                .countryCode(CountryCode.LY)
+                .bankCode("002")
+                .branchCode("048")
+                .accountNumber("000020100120361")
+                .build(),
+            "LY83002048000020100120361"
+          },
+          {
+            new Iban.Builder()
                 .countryCode(CountryCode.MA)
                 .bankCode("011")
                 .branchCode("51900")
@@ -638,6 +647,14 @@ final class TestDataHelper {
                 .accountType("USD")
                 .build(),
             "SC18SSCB11010000000000001497USD"
+          },
+          {
+            new Iban.Builder()
+                .countryCode(CountryCode.SD)
+                .bankCode("29")
+                .accountNumber("000000123456")
+                .build(),
+            "SD3529000000123456"
           },
           {
             new Iban.Builder()

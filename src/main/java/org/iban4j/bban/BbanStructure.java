@@ -346,6 +346,13 @@ public class BbanStructure {
             BbanStructureEntry.bankCode(3, 'n'), BbanStructureEntry.accountNumber(13, 'c')));
 
     structures.put(
+        CountryCode.LY,
+        new BbanStructure(
+            BbanStructureEntry.bankCode(3, 'n'),
+            BbanStructureEntry.branchCode(3, 'n'),
+            BbanStructureEntry.accountNumber(15, 'n')));
+
+    structures.put(
             CountryCode.MA,
             new BbanStructure(
                     BbanStructureEntry.bankCode(3, 'n'),
@@ -463,6 +470,12 @@ public class BbanStructure {
             BbanStructureEntry.branchCode(2, 'n'),
             BbanStructureEntry.accountNumber(16, 'n'),
             BbanStructureEntry.accountType(3, 'a')));
+
+    structures.put(
+        CountryCode.SD,
+        new BbanStructure(
+            BbanStructureEntry.bankCode(2, 'n'),
+            BbanStructureEntry.accountNumber(12, 'n')));
 
     structures.put(
         CountryCode.SM,
