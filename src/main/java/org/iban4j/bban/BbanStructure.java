@@ -472,6 +472,12 @@ public class BbanStructure {
             BbanStructureEntry.accountType(3, 'a')));
 
     structures.put(
+        CountryCode.SD,
+        new BbanStructure(
+            BbanStructureEntry.bankCode(2, 'n'),
+            BbanStructureEntry.accountNumber(12, 'n')));
+
+    structures.put(
         CountryCode.SM,
         new BbanStructure(
             BbanStructureEntry.nationalCheckDigit(1, 'a'),

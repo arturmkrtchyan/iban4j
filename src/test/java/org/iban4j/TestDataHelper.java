@@ -650,6 +650,14 @@ final class TestDataHelper {
           },
           {
             new Iban.Builder()
+                .countryCode(CountryCode.SD)
+                .bankCode("29")
+                .accountNumber("000000123456")
+                .build(),
+            "SD3529000000123456"
+          },
+          {
+            new Iban.Builder()
                 .countryCode(CountryCode.SM)
                 .bankCode("03225")
                 .branchCode("09800")
