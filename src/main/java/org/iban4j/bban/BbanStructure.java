@@ -689,6 +689,21 @@ public class BbanStructure {
                     String.format(INVALID_ENTRY_TYPE,
                             entryType.name(), countryCode)));
 
+    validateBbanEntry(entry, entryValue);
+  }
+
+  /**
+   * Validates a BBAN entry value against a known {@link BbanStructureEntry} definition.
+   * <p>
+   * Use this overload when you already hold the entry (e.g. while iterating
+   * {@link #getEntries()}) to avoid the country-and-entry-type lookup performed by
+   * {@link #validateBbanEntry(CountryCode, BbanEntryType, String)}.
+   *
+   * @param entry      the BBAN structure entry defining length and character type.
+   * @param entryValue the value to validate.
+   * @throws IbanFormatException if the value's length or character type is invalid.
+   */
+  public static void validateBbanEntry(final BbanStructureEntry entry, final String entryValue) {
     validateBbanEntryLength(entry, entryValue);
     validateBbanEntryCharacterType(entry, entryValue);
   }

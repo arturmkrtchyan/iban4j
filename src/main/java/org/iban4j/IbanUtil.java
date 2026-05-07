@@ -71,10 +71,8 @@ public final class IbanUtil {
             validateCountryCode(iban);
             validateCheckDigitPresence(iban);
 
-            final BbanStructure structure = getBbanStructure(iban);
-
-            validateBbanLength(iban, structure);
-            validateBbanEntries(iban, structure);
+            final CountryCode countryCode = CountryCode.getByCode(getCountryCode(iban));
+            validateBban(countryCode, getBban(iban));
 
             validateCheckDigit(iban);
         } catch (Iban4jException e) {
@@ -82,6 +80,85 @@ public final class IbanUtil {
         } catch (RuntimeException e) {
             throw new IbanFormatException(UNKNOWN, e.getMessage());
         }
+    }
+
+    /**
+     * Validates a BBAN against the structure of the given country.
+     * <p>
+     * Performs BBAN length and per-entry character-class checks. Does <em>not</em>
+     * run the IBAN mod-97 check, since a raw BBAN has no country/check-digit prefix.
+     *
+     * @param country the country whose BBAN structure to validate against.
+     * @param bban the raw BBAN to validate.
+     * @throws IbanFormatException if {@code country} or {@code bban} is null,
+     *         if the BBAN length does not match the country's expected length,
+     *         or if any BBAN entry has an invalid character.
+     * @throws UnsupportedCountryException if the country has no registered BBAN structure.
+     */
+    public static void validateBban(final CountryCode country, final String bban)
+            throws IbanFormatException, UnsupportedCountryException {
+        if (country == null) {
+            throw new IbanFormatException("Country must not be null.");
+        }
+        if (bban == null) {
+            throw new IbanFormatException("BBAN must not be null.");
+        }
+        final BbanStructure structure = BbanStructure.forCountry(country);
+        if (structure == null) {
+            throw new UnsupportedCountryException(country.toString(),
+                    "Country code is not supported.");
+        }
+        validateBbanLength(bban, structure);
+        int offset = 0;
+        for (final BbanStructureEntry entry : structure.getEntries()) {
+            final int entryLength = entry.getLength();
+            final String entryValue = bban.substring(offset, offset + entryLength);
+            offset += entryLength;
+            BbanStructure.validateBbanEntry(entry, entryValue);
+        }
+    }
+
+    /**
+     * Extracts the value of the given BBAN entry type from a raw BBAN.
+     * <p>
+     * Validates only the BBAN length and that {@code entryType} exists for {@code country};
+     * the returned slice is <em>not</em> character-validated (mirrors {@link #getBankCode(String)}
+     * behavior). Call {@link #validateBban(CountryCode, String)} first if you need to be sure the
+     * slice conforms to the entry's character class.
+     *
+     * @param country the country whose BBAN structure to use.
+     * @param bban the raw BBAN to extract from.
+     * @param entryType the entry to extract.
+     * @return the BBAN slice corresponding to {@code entryType}.
+     * @throws IbanFormatException if any argument is null, if the BBAN length is wrong,
+     *         or if the country's BBAN structure does not include {@code entryType}.
+     * @throws UnsupportedCountryException if the country has no registered BBAN structure.
+     */
+    public static String extractBbanEntry(final CountryCode country, final String bban,
+                                          final BbanEntryType entryType)
+            throws IbanFormatException, UnsupportedCountryException {
+        if (country == null) {
+            throw new IbanFormatException("Country must not be null.");
+        }
+        if (bban == null) {
+            throw new IbanFormatException("BBAN must not be null.");
+        }
+        if (entryType == null) {
+            throw new IbanFormatException("Entry type must not be null.");
+        }
+        final BbanStructure structure = BbanStructure.forCountry(country);
+        if (structure == null) {
+            throw new UnsupportedCountryException(country.toString(),
+                    "Country code is not supported.");
+        }
+        validateBbanLength(bban, structure);
+        final String value = findBbanEntry(structure, bban, entryType);
+        if (value == null) {
+            throw new IbanFormatException(BBAN_INVALID_ENTRY_TYPE,
+                    String.format("Entry type [%s] does not exist for country [%s]",
+                            entryType.name(), country));
+        }
+        return value;
     }
 
     /**
@@ -410,33 +487,15 @@ public final class IbanUtil {
         }
     }
 
-    private static void validateBbanLength(final String iban,
+    private static void validateBbanLength(final String bban,
                                            final BbanStructure structure) {
         final int expectedBbanLength = structure.getBbanLength();
-        final String bban = getBban(iban);
         final int bbanLength = bban.length();
         if (expectedBbanLength != bbanLength) {
             throw new IbanFormatException(BBAN_LENGTH,
                     bbanLength, expectedBbanLength,
                     String.format("[%s] length is %d, expected BBAN length is: %d",
                             bban, bbanLength, expectedBbanLength));
-        }
-    }
-
-    private static void validateBbanEntries(final String iban,
-                                            final BbanStructure structure) {
-        final String bban = getBban(iban);
-        final CountryCode countryCode = CountryCode.getByCode(getCountryCode(iban));
-        int bbanEntryOffset = 0;
-
-        for (final BbanStructureEntry entry : structure.getEntries()) {
-            final int entryLength = entry.getLength();
-            final String entryValue = bban.substring(bbanEntryOffset,
-                    bbanEntryOffset + entryLength);
-
-            bbanEntryOffset += entryLength;
-
-            BbanStructure.validateBbanEntry(countryCode, entry.getEntryType(), entryValue);
         }
     }
 
@@ -477,18 +536,18 @@ public final class IbanUtil {
     }
 
     private static String extractBbanEntry(final String iban, final BbanEntryType entryType) {
-        final String bban = getBban(iban);
-        final BbanStructure structure = getBbanStructure(iban);
-        int bbanEntryOffset = 0;
-        for(final BbanStructureEntry entry : structure.getEntries()) {
-            final int entryLength = entry.getLength();
-            final String entryValue = bban.substring(bbanEntryOffset,
-                    bbanEntryOffset + entryLength);
+        return findBbanEntry(getBbanStructure(iban), getBban(iban), entryType);
+    }
 
-            bbanEntryOffset = bbanEntryOffset + entryLength;
+    private static String findBbanEntry(final BbanStructure structure, final String bban,
+                                        final BbanEntryType entryType) {
+        int offset = 0;
+        for (final BbanStructureEntry entry : structure.getEntries()) {
+            final int entryLength = entry.getLength();
             if (entry.getEntryType() == entryType) {
-                return entryValue;
+                return bban.substring(offset, offset + entryLength);
             }
+            offset += entryLength;
         }
         return null;
     }
