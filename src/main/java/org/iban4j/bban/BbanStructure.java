@@ -171,6 +171,14 @@ public class BbanStructure {
             BbanStructureEntry.bankCode(4, 'n'), BbanStructureEntry.accountNumber(16, 'n')));
 
     structures.put(
+        CountryCode.DJ,
+        new BbanStructure(
+            BbanStructureEntry.bankCode(5, 'n'),
+            BbanStructureEntry.branchCode(5, 'n'),
+            BbanStructureEntry.accountNumber(11, 'n'),
+            BbanStructureEntry.nationalCheckDigit(2, 'n')));
+
+    structures.put(
         CountryCode.DK,
         new BbanStructure(
             BbanStructureEntry.bankCode(4, 'n'), BbanStructureEntry.accountNumber(10, 'n')));

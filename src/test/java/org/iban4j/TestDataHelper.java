@@ -173,6 +173,16 @@ final class TestDataHelper {
           },
           {
             new Iban.Builder()
+                .countryCode(CountryCode.DJ)
+                .bankCode("00010")
+                .branchCode("00000")
+                .accountNumber("01540011001")
+                .nationalCheckDigit("06")
+                .build(),
+            "DJ9400010000000154001100106"
+          },
+          {
+            new Iban.Builder()
                 .countryCode(CountryCode.DK)
                 .bankCode("0040")
                 .accountNumber("0440116243")
