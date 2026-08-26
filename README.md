@@ -15,6 +15,8 @@ International Bank Account Numbers (IBAN) and Business Identifier Codes (BIC).
   Supports creating valid IBANs and verifying their format and check digits.
 - **BIC Validation**:
   Checks the validity of Business Identifier Codes.
+- **EPC QR Code Payloads**:
+  Generates EPC069-12 (Girocode) text payloads for SEPA Credit Transfers.
 - **Multiple Formats**:
   Handles both standard and formatted string representations.
 - **Customizable Padding**:
@@ -168,6 +170,22 @@ Iban ibanWithCustomPadding = new Iban.Builder()
     .build();
 ```
 
+#### Generate an EPC QR Code payload
+
+```java
+String payload = EpcQrCode.builder()
+    .beneficiaryName("Franz Mustermann")
+    .iban(Iban.valueOf("DE71110220330123456789"))
+    .amount(new BigDecimal("12.30"))
+    .purposeCode("GDDS")
+    .remittanceReference("RF18539007547034")
+    .buildPayload();
+```
+
+The builder generates the plain-text payload only. Pass the result to the QR encoder of your
+choice if you need an image. Version `002` and UTF-8 are used by default; a BIC is required for
+version `001` and for beneficiary PSPs outside the EEA.
+
 #### BIC Examples
 
 ##### Create a `Bic` object from a string
@@ -200,6 +218,7 @@ This library requires [Java 11](https://adoptium.net/temurin/releases/?version=1
  - [ISO 13616 International Bank Account Number (IBAN)](http://en.wikipedia.org/wiki/ISO_13616)
  - [ISO 9362 Business Identifier Codes (BIC)](http://en.wikipedia.org/wiki/ISO_9362)
  - [ECB IBAN Registry](https://www.ecb.europa.eu/paym/retpaym/paymint/sepa/shared/pdf/iban_registry.pdf)
+ - [EPC069-12 Quick Response Code Guidelines](https://www.europeanpaymentscouncil.eu/document-library/guidance-documents/quick-response-code-guidelines-enable-data-capture-initiation-sepa)
 
 -----
 
@@ -208,4 +227,3 @@ This library requires [Java 11](https://adoptium.net/temurin/releases/?version=1
 Copyright 2015 Artur Mkrtchyan.
 
 Licensed under the Apache License, Version 2.0: [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
-
