@@ -218,7 +218,7 @@ This library requires [Java 11](https://adoptium.net/temurin/releases/?version=1
  - [ISO 13616 International Bank Account Number (IBAN)](http://en.wikipedia.org/wiki/ISO_13616)
  - [ISO 9362 Business Identifier Codes (BIC)](http://en.wikipedia.org/wiki/ISO_9362)
  - [ECB IBAN Registry](https://www.ecb.europa.eu/paym/retpaym/paymint/sepa/shared/pdf/iban_registry.pdf)
- - [EPC069-12 Quick Response Code Guidelines](https://www.europeanpaymentscouncil.eu/document-library/guidance-documents/quick-response-code-guidelines-enable-data-capture-initiation-sepa)
+ - [EPC069-12 Quick Response Code Guidelines](https://www.europeanpaymentscouncil.eu/document-library/guidance-documents/quick-response-code-guidelines-enable-data-capture-initiation)
 
 -----
 
