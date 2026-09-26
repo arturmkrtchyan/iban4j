@@ -102,6 +102,6 @@ public final class ItNationalCheckDigit implements CountryRulesAlgorithm {
 
   private static int evenValue(char c) {
     if (Character.isDigit(c)) return Character.getNumericValue(c);
-    return c - 'A' + 10;
+    return c - 'A';
   }
 }
