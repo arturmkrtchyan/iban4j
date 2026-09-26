@@ -100,6 +100,13 @@ public class NationalCheckDigitAlgorithmTest {
         
         Iban invalidIban = Iban.valueOf("IT33X0542811101000000123457");
         assertFalse(algorithm.validate(invalidIban));
+
+        // A letter on an even position is valued as A = 0, not A = 10.
+        Iban wrongLetter = Iban.valueOf("IT56H05428111010A0000123456");
+        assertFalse(algorithm.validate(wrongLetter));
+
+        Iban officialLetter = Iban.valueOf("IT17X05428111010A0000123456");
+        assertTrue(algorithm.validate(officialLetter));
     }
 
     @Test
