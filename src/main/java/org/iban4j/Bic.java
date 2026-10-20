@@ -15,12 +15,22 @@
  */
 package org.iban4j;
 
+import java.io.InvalidObjectException;
+import java.io.Serializable;
+
 /**
  * Business Identifier Codes (also known as SWIFT-BIC, BIC code, SWIFT ID or SWIFT code).
  *
  * <p><a href="http://en.wikipedia.org/wiki/ISO_9362">ISO_9362</a>.
  */
-public final class Bic {
+public final class Bic implements Serializable {
+
+  /**
+   * Pins the serialized form so that incidental refactorings (new methods, helper fields)
+   * do not change the compiler-generated UID and break deserialization of previously
+   * stored instances. Only bump this if the serialized form itself changes incompatibly.
+   */
+  private static final long serialVersionUID = 1L;
 
   private final String value;
 
@@ -97,5 +107,25 @@ public final class Bic {
   @Override
   public String toString() {
     return value;
+  }
+
+  /**
+   * Re-validates the BIC on deserialization. Deserialization bypasses the private
+   * constructor, so without this a tampered or hand-crafted byte stream could produce
+   * a {@code Bic} instance holding an invalid value, breaking the class invariant
+   * that every instance is a validated BIC.
+   *
+   * @return A validated {@code Bic} instance holding the deserialized value.
+   * @throws InvalidObjectException If the deserialized value is not a valid BIC.
+   */
+  private Object readResolve() throws InvalidObjectException {
+    try {
+      return Bic.valueOf(value);
+    } catch (Iban4jException e) {
+      InvalidObjectException invalidObjectException =
+          new InvalidObjectException("Deserialized BIC is invalid: " + e.getMessage());
+      invalidObjectException.initCause(e);
+      throw invalidObjectException;
+    }
   }
 }
