@@ -17,6 +17,10 @@ package org.iban4j;
 
 import static org.iban4j.IbanFormatException.IbanFormatViolation.*;
 
+import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Random;
 import org.iban4j.bban.BbanStructure;
@@ -32,7 +36,14 @@ import org.iban4j.countryrules.CountryRulesRegistry;
  * the <a href="http://en.wikipedia.org/wiki/ISO_13616">ISO 13616</a> standard.
  * It is an immutable class.</p>
  */
-public final class Iban {
+public final class Iban implements Serializable {
+
+  /**
+   * Pins the stream UID so incidental refactorings do not break deserialization of
+   * previously stored instances. The value itself is still re-validated on
+   * deserialization; see {@code readObject}.
+   */
+  private static final long serialVersionUID = 1L;
 
   /**
    * Default check digit used for temporary IBAN construction before actual check digit calculation.
@@ -270,6 +281,22 @@ public final class Iban {
   @Override
   public int hashCode() {
     return value.hashCode();
+  }
+
+  /**
+   * Re-validates the IBAN, since deserialization bypasses the private constructor.
+   * Validation uses the current version's rules, so a value serialized under an older
+   * release may fail after an upgrade.
+   *
+   * @throws InvalidObjectException If the deserialized value is not a valid IBAN.
+   */
+  private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {
+    in.defaultReadObject();
+    try {
+      IbanUtil.validate(value);
+    } catch (Iban4jException e) {
+      throw SerializationUtil.invalidValue("IBAN", e);
+    }
   }
 
   /**
