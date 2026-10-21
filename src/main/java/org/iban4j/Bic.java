@@ -15,7 +15,9 @@
  */
 package org.iban4j;
 
+import java.io.IOException;
 import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 
 /**
@@ -26,9 +28,9 @@ import java.io.Serializable;
 public final class Bic implements Serializable {
 
   /**
-   * Pins the serialized form so that incidental refactorings (new methods, helper fields)
-   * do not change the compiler-generated UID and break deserialization of previously
-   * stored instances. Only bump this if the serialized form itself changes incompatibly.
+   * Pins the stream UID so incidental refactorings do not break deserialization of
+   * previously stored instances. The value itself is still re-validated on
+   * deserialization; see {@code readObject}.
    */
   private static final long serialVersionUID = 1L;
 
@@ -110,22 +112,18 @@ public final class Bic implements Serializable {
   }
 
   /**
-   * Re-validates the BIC on deserialization. Deserialization bypasses the private
-   * constructor, so without this a tampered or hand-crafted byte stream could produce
-   * a {@code Bic} instance holding an invalid value, breaking the class invariant
-   * that every instance is a validated BIC.
+   * Re-validates the BIC, since deserialization bypasses the private constructor.
+   * Validation uses the current version's rules, so a value serialized under an older
+   * release may fail after an upgrade.
    *
-   * @return A validated {@code Bic} instance holding the deserialized value.
    * @throws InvalidObjectException If the deserialized value is not a valid BIC.
    */
-  private Object readResolve() throws InvalidObjectException {
+  private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {
+    in.defaultReadObject();
     try {
-      return Bic.valueOf(value);
+      BicUtil.validate(value);
     } catch (Iban4jException e) {
-      InvalidObjectException invalidObjectException =
-          new InvalidObjectException("Deserialized BIC is invalid: " + e.getMessage());
-      invalidObjectException.initCause(e);
-      throw invalidObjectException;
+      throw SerializationUtil.invalidValue("BIC", e);
     }
   }
 }
