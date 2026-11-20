@@ -938,6 +938,72 @@ final class TestDataHelper {
           },
           {
             new Iban.Builder()
+                .countryCode(CountryCode.UA)
+                .bankCode("322313")
+                .accountNumber("0000026007233566A01")
+                .build(),
+            "UA063223130000026007233566A01"
+          },
+          {
+            new Iban.Builder()
+                .countryCode(CountryCode.PK)
+                .bankCode("SCBL")
+                .accountNumber("0000001123A56702")
+                .build(),
+            "PK86SCBL0000001123A56702"
+          },
+          {
+            new Iban.Builder()
+                .countryCode(CountryCode.FK)
+                .bankCode("SC")
+                .accountNumber("123456789012")
+                .build(),
+            "FK88SC123456789012"
+          },
+          {
+            new Iban.Builder()
+                .countryCode(CountryCode.HN)
+                .bankCode("CABF")
+                .accountNumber("00000000000250005469")
+                .build(),
+            "HN88CABF00000000000250005469"
+          },
+          {
+            new Iban.Builder()
+                .countryCode(CountryCode.MN)
+                .bankCode("1234")
+                .accountNumber("123456789123")
+                .build(),
+            "MN121234123456789123"
+          },
+          {
+            new Iban.Builder()
+                .countryCode(CountryCode.NI)
+                .bankCode("BAPR")
+                .accountNumber("00000013000003558124")
+                .build(),
+            "NI45BAPR00000013000003558124"
+          },
+          {
+            new Iban.Builder()
+                .countryCode(CountryCode.SO)
+                .bankCode("1000")
+                .branchCode("001")
+                .accountNumber("001000100141")
+                .build(),
+            "SO211000001001000100141"
+          },
+          {
+            new Iban.Builder()
+                .countryCode(CountryCode.YE)
+                .bankCode("CBYE")
+                .branchCode("0001")
+                .accountNumber("018861234567891234")
+                .build(),
+            "YE15CBYE0001018861234567891234"
+          },
+          {
+            new Iban.Builder()
                 .countryCode(CountryCode.YT)
                 .bankCode("12345")
                 .branchCode("12345")
