@@ -105,6 +105,16 @@ public class IbanUtilBbanTest {
         }
 
         @Test
+        @DisplayName("rejects PK BBAN with a digit in the bank code")
+        void rejectsDigitInPakistanBankCode() {
+            // PK BBAN is 4!a16!c, so the bank code holds letters only
+            IbanFormatException ex = assertThrows(IbanFormatException.class,
+                    () -> IbanUtil.validateBban(CountryCode.PK, "12AB0000001123456702"));
+            assertEquals(IbanFormatException.IbanFormatViolation.BBAN_ONLY_UPPER_CASE_LETTERS,
+                    ex.getFormatViolation());
+        }
+
+        @Test
         @DisplayName("rejects BBAN with non-alphanumeric in 'c' slot")
         void rejectsNonAlphanumericInCSlot() {
             // BR ownerAccountNumber is 'c' — last char. Replace with '!'.
