@@ -306,6 +306,10 @@ public final class Iban implements Serializable {
    */
   public static final class Builder {
 
+    // Upper bound on how many country rule checks one random IBAN may use. It keeps the cost
+    // small for rules a random value can never satisfy.
+    private static final int MAX_RULE_CHECKS = 2000;
+
     private final Random random;
     private CountryCode countryCode;
     private String bankCode;
@@ -654,6 +658,12 @@ public final class Iban implements Serializable {
      * Fills any missing BBAN fields with randomly generated values based on the
      * BBAN structure of the selected country.
      *
+     * <p>If the country has a registered {@link CountryRulesAlgorithm}, the random fields are
+     * drawn again until the result satisfies it (up to {@link #MAX_RULE_CHECKS} rule checks). This
+     * matters for countries where the national check is part of the account number (e.g. the
+     * Netherlands or Slovakia), or where some bank/account pairs have no valid check digit
+     * (e.g. Norway). Fields set on the builder are never changed.
+     *
      * @param random The {@link Random} instance to use for generating random values.
      * @throws UnsupportedCountryException If the country code is not supported, and its BBAN structure cannot be retrieved.
      */
@@ -665,6 +675,40 @@ public final class Iban implements Serializable {
             countryCode.toString(), "Country code is not supported.");
       }
 
+      final CountryRulesAlgorithm algorithm = CountryRulesRegistry.get(countryCode);
+      final String givenBankCode = bankCode;
+      final String givenBankCodeExt = bankCodeExt;
+      final String givenBranchCode = branchCode;
+      final String givenAccountNumber = accountNumber;
+      final String givenNationalCheckDigit = nationalCheckDigit;
+      final String givenAccountType = accountType;
+      final String givenOwnerAccountType = ownerAccountType;
+      final String givenIdentificationNumber = identificationNumber;
+
+      int ruleChecks = 0;
+      while (true) {
+        ruleChecks += fillMissingFields(structure, random, algorithm) + 1;
+        if (algorithm == null || satisfies(algorithm) || ruleChecks >= MAX_RULE_CHECKS) {
+          return;
+        }
+        bankCode = givenBankCode;
+        bankCodeExt = givenBankCodeExt;
+        branchCode = givenBranchCode;
+        accountNumber = givenAccountNumber;
+        nationalCheckDigit = givenNationalCheckDigit;
+        accountType = givenAccountType;
+        ownerAccountType = givenOwnerAccountType;
+        identificationNumber = givenIdentificationNumber;
+      }
+    }
+
+    /**
+     * Fills the missing fields once and returns how many rule checks it used.
+     */
+    private int fillMissingFields(
+        final BbanStructure structure,
+        final Random random,
+        final CountryRulesAlgorithm algorithm) {
       final boolean nationalCheckDigitProvided = nationalCheckDigit != null;
       BbanStructureEntry nationalCheckDigitEntry = null;
 
@@ -717,8 +761,17 @@ public final class Iban implements Serializable {
       // The check digit above was filled with an arbitrary value. If the country has a
       // registered country-specific rule, replace it with one that actually satisfies that
       // rule, so random IBANs remain valid when country-specific validation is enabled.
-      if (!nationalCheckDigitProvided && nationalCheckDigitEntry != null) {
-        resolveNationalCheckDigit(nationalCheckDigitEntry);
+      if (algorithm != null && !nationalCheckDigitProvided && nationalCheckDigitEntry != null) {
+        return resolveNationalCheckDigit(nationalCheckDigitEntry, algorithm);
+      }
+      return 0;
+    }
+
+    private boolean satisfies(final CountryRulesAlgorithm algorithm) {
+      try {
+        return algorithm.validate(build(false));
+      } catch (RuntimeException e) {
+        return false;
       }
     }
 
@@ -729,25 +782,26 @@ public final class Iban implements Serializable {
      * candidate values satisfy it.
      *
      * @param entry The BBAN structure entry describing the national check digit's shape.
+     * @param algorithm The country's registered rule.
+     * @return how many rule checks were used.
      */
-    private void resolveNationalCheckDigit(final BbanStructureEntry entry) {
-      final CountryRulesAlgorithm algorithm = CountryRulesRegistry.get(countryCode);
-      if (algorithm == null) {
-        return;
-      }
-
+    private int resolveNationalCheckDigit(
+        final BbanStructureEntry entry, final CountryRulesAlgorithm algorithm) {
       final String fallback = nationalCheckDigit;
+      int ruleChecks = 0;
       for (final String candidate : entry.enumerateValues()) {
         nationalCheckDigit = candidate;
+        ruleChecks++;
         try {
           if (algorithm.validate(build(false))) {
-            return;
+            return ruleChecks;
           }
         } catch (RuntimeException ignored) {
           // candidate produced an invalid BBAN/IBAN; keep searching
         }
       }
       nationalCheckDigit = fallback;
+      return ruleChecks;
     }
   }
 }
